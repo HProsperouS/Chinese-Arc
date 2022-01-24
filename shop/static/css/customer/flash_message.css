@@ -1,0 +1,37 @@
+.flash {
+    width: 100%;
+    position: fixed;
+    background: crimson;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 0;
+    transition: ease-out 0.3s;
+    z-index: 100;
+    
+  }
+.flash--visible {
+    height: 40px;
+    transition: ease-in 0.3s;
+}
+
+.flash_2 {
+  width: 100%;
+  position: fixed;
+  background: rgb(91, 209, 184);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 0;
+  transition: ease-out 0.3s;
+  z-index: 100;
+  
+}
+.flash--visible_2 {
+  height: 40px;
+  transition: ease-in 0.3s;
+}
+
+

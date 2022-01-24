@@ -1,0 +1,26 @@
+.empty {
+    font-weight: 700;
+}
+.aside img{
+    height: 120px;
+}
+
+.qnty,.button-minus,.button-plus,.button-delete,.countOfProduct{
+    margin-left: auto;
+    border: none;
+    border-radius: 2px;
+}
+
+.price-wrap{
+    margin-left: auto;
+    
+}
+
+.remove{
+    margin-left: 600px;
+    flex-shrink: inherit;
+}
+
+.table tr{
+    padding-left: 50px;
+}

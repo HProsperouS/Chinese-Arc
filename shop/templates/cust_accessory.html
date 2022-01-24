@@ -1,0 +1,167 @@
+{% extends "base_home.html" %}
+{% block title %}The Chinese Arc{% endblock %}
+
+{% block content %}
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+<div class="container">
+
+
+<!-- ============================  FILTER TOP  ================================= -->
+<div class="card mb-3">
+	<div class="card-body">
+<div class="row">
+	<div class="col-md-2"> Your are here: </div> <!-- col.// -->
+	<nav class="col-md-8">
+	<ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href="{{ url_for('home_page') }}">Home</a></li>
+	    <li class="breadcrumb-item active" aria-current="page">Women</li>
+	</ol>
+	</nav> <!-- col.// -->
+</div> <!-- row.// -->
+<hr>
+<div class="row">
+	<div class="col-md-2">Filter by:</div> <!-- col.// -->
+	<div class="col-md-10">
+		<ul class="list-inline">
+	      <li class="list-item mr-3 dropdown">
+	      	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Product Type</a>
+            <div class="dropdown-menu p-3">
+		      <label class="form-check"> 	 <input type="checkbox" class="form-check-input">Formal Tops</label>
+		      <label class="form-check">   	 <input type="checkbox" class="form-check-input">Dresses</label>
+		      <label class="form-check">    <input type="checkbox" class="form-check-input">Cheongsams</label>
+		      <label class="form-check">  <input type="checkbox" class="form-check-input">Trousers</label>
+            </div> <!-- dropdown-menu.// -->
+	      </li>
+			<li class="list-item mr-3 dropdown">
+	      	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Size</a>
+            <div class="dropdown-menu p-3">
+		      <label class="form-check"> 	 <input type="checkbox" class="form-check-input">Extra Small</label>
+		      <label class="form-check">   	 <input type="checkbox" class="form-check-input">Small</label>
+		      <label class="form-check">    <input type="checkbox" class="form-check-input">Medium</label>
+		      <label class="form-check">  <input type="checkbox" class="form-check-input">Large</label>
+				<label class="form-check">  <input type="checkbox" class="form-check-input">Extra Large</label>
+
+				</div> <!-- dropdown-menu.// -->
+	      	</li>
+
+		<li class="list-item mr-3 dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#collapse_3"> Price range </a>
+			<div class="filter-content collapse show" id="collapse_3">
+				<div class="inner">
+					<input type="range" class="custom-range" min="0" max="100" name="">
+					<div class="form-row">
+					<div class="form-group col-md-6">
+					  <label>Min</label>
+					  <input class="form-control" placeholder="$0" type="number">
+					</div>
+					<div class="form-group text-right col-md-6">
+					  <label>Max</label>
+					  <input class="form-control" placeholder="$1,0000" type="number">
+					</div>
+					</div> <!-- form-row.// -->
+					<button class="btn btn-block btn-dark">Apply</button>
+				</div> <!-- inner.// -->
+			</div>
+		</li>
+
+		</ul>
+	</div> <!-- col.// -->
+</div> <!-- row.// -->
+	</div> <!-- card-body .// -->
+</div> <!-- card.// -->
+<!-- ============================ FILTER TOP END.// ================================= -->
+
+<header class="mb-3">
+		<div class="form-inline">
+			{% if count2 != 0 %}
+			<strong class="mr-md-auto">{{ count2 }} Items found </strong>
+			{% endif %}
+			<select class="mr-2 form-control">
+				<option>Popularity</option>
+				<option>Lowest Price</option>
+				<option>Highest Price</option>
+			</select>
+		</div>
+</header><!-- sect-heading -->
+<!--=========== PRODUCTS SECTION ===============-->
+<div class="row">
+	{% for productinfo in productinfo_list %}
+	<div class="col-md-3">
+		<figure class="card card-product-grid">
+			<div class="img-wrap product-image">
+				<img src="../static/images/Accessories/{{ productinfo.get_product_image() }}">
+			</div> <!-- img-wrap.// -->
+			<figcaption class="info-wrap">
+					<div class="product-summary">
+						<h4 class="productName" style="height: 50px;">{{ productinfo.get_product_name() }}</h4>
+						<a href="#" class="title mb-2">{{ productinfo.get_product_category() }}</a>
+
+						<div class="price-wrap">
+							<h6 class="price">
+								$<span class="priceValue">{{ productinfo.get_product_price() }}</span>
+							</h6>
+						</div> <!-- price-wrap.// -->
+					</div>
+
+
+					<div class="rating-wrap mb-2">
+					<ul class="rating-stars">
+						<li style="width:100%" class="stars-active">
+							<i class="fa fa-star"></i> <i class="fa fa-star"></i>
+							<i class="fa fa-star"></i> <i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+						</li>
+						<li>
+							<i class="fa fa-star"></i> <i class="fa fa-star"></i>
+							<i class="fa fa-star"></i> <i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<div class="label-rating">5/5</div>
+				</div> <!-- rating-wrap.// -->
+
+					<hr>
+
+					<p class="mb-3">
+					<span class="tag"> <i class="fa fa-check"></i> Free Return</span>
+					<span class="tag"><i class="far fa-clock"></i> Next Day Delivery</span>
+					<span class="tag"> 80 reviews </span>
+					</p>
+
+				<p class="mb-3" style="height: 80px;">
+					{{ productinfo.get_product_description() }}
+				</p>
+
+
+					<label class="custom-control mb-3 custom-checkbox">
+					  <input type="checkbox" class="custom-control-input">
+					  <div class="custom-control-label">Add to compare
+					  </div>
+					</label>
+
+				<div class="mt-3">
+					<div class="row">
+						<button class="btn btn-outline-danger addToCart" data-product-id="1"> <i class="fa fa-cart-plus"></i> Add to cart </button>
+						<a href="#" class="btn btn-light"><i class="fa fa-heart"></i> Wishlist </a>
+					</div>
+				</div>
+			</figcaption>
+		</figure>
+	</div> <!-- col.// -->
+	{% endfor %}
+</div> <!-- row end.// -->
+
+
+<nav class="mb-4" aria-label="Page navigation sample">
+  <ul class="pagination">
+    <li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-arrow-left"></i></a></li>
+    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#"><i class="fas fa-arrow-right"></i></a></li>
+  </ul>
+</nav>
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+{% endblock %}

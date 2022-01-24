@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Retrieve Customer Orders{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Customer Orders</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no orders.</p>
+  {% elif count == 1 %}
+  <p>There is 1 order.</p>
+  {% else %}
+  <p>There are {{ count }} orders.</p>
+  {% endif %}
+</div>
+<div class="wrapper">
+    
+  <input type="radio" name="slider" checked id="home">
+  <input type="radio" name="slider" id="blog">
+  <input type="radio" name="slider" id="code">
+  <input type="radio" name="slider" id="help">
+  
+  <nav>
+    <label for="home" class="home"><i class="fas fa-tags"></i>All Vouchers</label>
+    <label for="blog" class="blog"><i class="fas fa-check-circle"></i></i>Active</label>
+    <label for="code" class="code"><i class="fas fa-times-circle"></i>Expired</label>
+    <label for="help" class="help"><i class="fas fa-exclamation-triangle"></i>N/A</label>
+    
+    <div class="slider"></div>
+  </nav>
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Contact <br> Number</th>
+            <th>Card <br>Holder Name</th>
+            <th>Card Type</th>
+            <th>Card Number</th>
+            <th>CVV</th>
+            <th>City</th>
+            <th>Postal <br>Code</th>
+            <th>Unit <br>Number</th>
+            <th>Order <br>Date</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+          {% for cust_orders in cust_order_list %}
+      <tr>
+        <td style="font-size: x-small;">{{ cust_orders.get_custOrder_id() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_first_name() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_last_name() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_email() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_holder_name() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_card_type() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_card_num() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_cvv() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_city() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_postal_code() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_unit_number() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_create_date() }}</td>
+        <td style="font-size: 14px;">{{ cust_orders.get_status() }}</td>
+
+        <td>
+          <form action="{{url_for('delete_cust_order', id=cust_orders.get_custOrder_id())}}" method="POST">
+            <input type="submit" value="Delete" class="btn btn-danger"
+                onclick="return confirm('Are you sure you want to delete {{cust_orders.get_first_name()}} {{cust_orders.get_last_name()}}?');">
+          </form>
+        
+        
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+<style>
+   
+  ::selection{
+    background: rgba(23, 98, 184, 0.3);
+  }
+  .wrapper{
+    
+    width: 100%;
+    height: 100%;
+    padding: 25px 30px 30px 30px;
+    border-radius: 5px;
+    background: #fff;
+   
+  }
+  .wrapper header{
+    font-size: 30px;
+    font-weight: 600;
+    padding-bottom: 20px;
+  }
+  .wrapper nav{
+    position: relative;
+    width: 80%;
+    height: 50px;
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+  }
+  .wrapper nav label{
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    color: #0f87d8;
+    font-size: 17px;
+    border-radius: 5px;
+    margin: 0 5px;
+    
+    transition: all 0.3s ease;
+  }
+  .wrapper nav label:hover{
+    margin-bottom: 10px;
+    background:#1253a7;
+  }
+  #home:checked ~ nav label.home,
+  #blog:checked ~ nav label.blog,
+  #code:checked ~ nav label.code,
+  #help:checked ~ nav label.help,
+    #about:checked ~ nav label.about{
+    color: #fff;
+  }
+  nav label i{
+    padding-right: 7px;
+  }
+  nav .slider{
+    position: absolute;
+    height: 100%;
+    width: 24%;
+    left: 0;
+    bottom: 0;
+    z-index: 0;
+    border-radius: 5px;
+    background: #175db8;
+    transition: all 0.3s ease;
+   
+  }
+  input[type="radio"]{
+    display: none;
+  }
+  #blog:checked ~ nav .slider{
+    left: 25%;
+  }
+  #code:checked ~ nav .slider{
+    left: 50%;
+  }
+  #help:checked ~ nav .slider{
+    left: 75%;
+  }
+  #about:checked ~ nav .slider{
+    left: 100%;
+  }
+  section .content{
+    display: none;
+    background: #fff;
+  }
+  #home:checked ~ section .content-1,
+  #blog:checked ~ section .content-2,
+  #code:checked ~ section .content-3,
+  #help:checked ~ section .content-4,
+  #about:checked ~ section .content-5{
+    display: block;
+  }
+  section .content .title{
+    font-size: 21px;
+    font-weight: 500;
+    margin: 30px 0 10px 0;
+  }
+  section .content p{
+  text-align: justify;
+  }
+    </style>
+{% endblock %}

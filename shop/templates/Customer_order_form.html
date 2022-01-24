@@ -1,0 +1,81 @@
+{% extends "base_home.html" %}
+{% block title %}Payment & Checkout{% endblock %}
+
+{% block content %}
+{% from "_formHelper.html" import render_field %} 
+
+
+
+<div class="row">
+  <section class="section-content padding-y">
+  <div class="container" style="max-width: 720px;">
+    <h1 class="display-4 text-center" >Payment & Checkout</h1>
+    <br>
+    <form method="POST" action="" >
+      <div class="container" style="background-color: rgba(233, 216, 216, 0.251); border-radius: 10px; width: max-width; padding-bottom: 20px;">
+
+        <h5 class="fst-italic" style="color:rgb(122, 51, 51); padding-top: 15px; padding-left: 20px;">Personal Details</h5>
+        <br>
+        <div class="form-row">
+          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+            {{ render_field(form.first_name, class="form-control", required="", placeholder="Eg: Mary") }}
+          </div>
+          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+            {{ render_field(form.last_name, class="form-control", required="", placeholder="Eg: Koh") }}
+          </div>
+        </div>
+        <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+          {{ render_field(form.email, class="form-control", required="", placeholder="Eg: 12345678") }}
+        </div>
+        <br>
+      
+        <h5 class="fst-italic" style="color:rgb(122, 51, 51); padding-left: 20px;">Billing Details</h5>
+        <br>
+        <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+          {{ render_field(form.holder_name, class="form-control", required="", placeholder="Eg: Mary Koh") }}
+        </div>       
+        <div class="form-row" >
+          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+            {{ render_field(form.card_type, class="form-control", required="") }}
+          </div>
+          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+            {{ render_field(form.card_num, class="form-control", required="", placeholder="Eg: 1234...16") }}
+          </div>
+          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+            {{ render_field(form.cvv, class="form-control", required="") }}
+          </div>
+        </div>  
+        <br>
+        <h5 class="fst-italic" style="color:rgb(122, 51, 51); padding-left: 20px;">Shipping details</h5>
+        <br>
+        <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+          {{ render_field(form.city, class="form-control", required="") }}
+        </div>
+        <div class="form-row">
+          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+            {{ render_field(form.unit_number, class="form-control", required="", placeholder="Eg: #00-00") }}
+          </div>
+          <div class="form-group" style= "padding-right:20px; padding-left: 20px;"> 
+            {{ render_field(form.postal_code, class="form-control", required="", placeholder="Eg: 000 000") }}
+          </div>
+        </div>
+        <div class="form-group" style="display: none;"  >
+          {{ render_field(form.create_date, class="form-control") }}
+        </div>
+        <div class="form-group" style="display: none;"   >
+          {{ render_field(form.modified_date, class="form-control") }}
+        </div>
+        <div class="form-group" style="display: none;" >
+          {{ render_field(form.modified_by, class="form-control") }}
+        </div>
+
+        
+        <hr>
+       
+        <input type="submit" value="Checkout" class="btn btn-primary text-center-mb-2" style="background-color:green;  border: none; width: 200px; text-align: center;margin-left: 15rem;" />
+      </form>
+    
+</div>
+</div>
+<script></script>
+{% endblock %}

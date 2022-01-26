@@ -298,47 +298,24 @@
                     
                 </div>
                 <!-- Card Body -->
+                {% for admin in admins_list %}
                 <div class="card-body">
                     <ol class="list-group ">
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Zhe Yin</div>
-                            Admin Management
-                          </div>
-                          <span class="badge bg-primary rounded-pill">14</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Jia Jun</div>
-                            Admin Management
-                          </div>
-                          <span class="badge bg-primary rounded-pill">14</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Sabihah</div>
-                            Front-end Management
-                          </div>
-                          <span class="badge bg-primary rounded-pill">14</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                              <div class="fw-bold">Natthida</div>
-                              Front-end Management
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ admin.get_username() }}</h5>
+                                <p class="card-text">{{ admin.get_roles() }}</p>
+                                {% if admin.get_status() == 'Enabled' %}
+                                    <p  class="badge badge-pill badge-info" >{{ admin.get_status() }}</p>
+                                {% else %}
+                                    <p  class="badge badge-pill badge-danger" >{{ admin.get_status() }}</p>
+                                {% endif %}
                             </div>
-                            <span class="badge bg-primary rounded-pill">14</span>
-                          </li>
-                          <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                              <div class="fw-bold">Nathaneal</div>
-                              Front-end Management
-                            </div>
-                            <span class="badge bg-primary rounded-pill">14</span>
-                          </li>
-                      </ol>
-                    
-                    
+                        </div>
+                    </ol>    
                 </div>
+                {% endfor %}
+                <br>
             </div>
         </div>
     </div>

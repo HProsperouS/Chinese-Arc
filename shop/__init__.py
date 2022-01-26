@@ -50,7 +50,6 @@ import os
 import ProductInfo
 from ProductInfo import ProductInfo
 from email.message import EmailMessage
-from Admin import Admin
 import Customer
 import urllib.request
 import smtplib, ssl
@@ -231,6 +230,97 @@ def logout_admin():
     session.clear()
     return redirect(url_for('login_admin'))
     
+@app.route('/profile_admin')
+def profile_admin():
+    try:
+        admins_dict = {}
+        db = shelve.open('Admin.db', 'r')
+        admins_dict = db['Admin']
+    except:
+        print("An error occured when retrieving data from Admin.db")
+    finally:
+        db.close()
+
+    admins_list = []
+    for key in admins_dict:
+        admin = admins_dict.get(key)
+        admins_list.append(admin)
+        
+    return render_template('base.html', 
+                            count1 = len(admins_list), 
+                            admins_list=admins_list
+                            )
+    
+
+@app.route('/DisableAdmin/<int:id>/', methods=['GET', 'POST'])
+def DisableAdmin(id):
+    try:
+        admins_dict = {}
+        db = shelve.open('Admin.db', 'w')
+        admins_dict = db['Admin']
+    except IOError:
+        print("An error occurred trying to read ProductInfo.db")
+
+    admin = admins_dict.get(id)
+    admin.set_status('Disabled')
+    db['Admin'] = admins_dict
+    db.close()
+
+    return redirect(url_for('RetrieveAdmin'))
+
+@app.route('/EnableAdmin/<int:id>/', methods=['GET', 'POST'])
+def EnableAdmin(id):
+    try:
+        admins_dict = {}
+        db = shelve.open('Admin.db', 'w')
+        admins_dict = db['Admin']
+    except IOError:
+        print("An error occurred trying to read ProductInfo.db")
+
+    admin = admins_dict.get(id)
+    admin.set_status('Enabled')
+    db['Admin'] = admins_dict
+    db.close()
+    flash('Hi'+ " "+', You have successfully disabled ' + admin.get_username() + 'success')
+    return redirect(url_for('RetrieveAdmin'))
+
+@app.route('/DeleteAdmin/<int:id>', methods=['POST'])
+def DeleteAdmin(id):
+    try:
+        admins_dict = {}
+        db = shelve.open('Admin.db', 'w')
+        admins_dict = db['Admin']
+    except IOError:
+        print("An error occurred trying to read Admin.db")
+    admins_dict.pop(id)
+    print(id)
+
+    db['Admin'] = admins_dict
+    db.close()
+
+    return redirect(url_for('RetrieveAdmin'))
+
+@app.route('/RetrieveAdmin')
+@login_required
+def RetrieveAdmin():
+    try:
+        admins_dict = {}
+        db = shelve.open('Admin.db', 'r')
+        admins_dict = db['Admin']
+    except:
+        print("An error occured when retrieving data from Admin.db")
+    finally:
+        db.close()
+
+    admins_list = []
+    for key in admins_dict:
+        admin = admins_dict.get(key)
+        admins_list.append(admin)
+        
+    return render_template('RetrieveAdmin.html', 
+                            count1 = len(admins_list), 
+                            admins_list=admins_list
+                            )
 
 @app.route('/register_page', methods=['POST', 'GET'])
 def register_page():
@@ -589,11 +679,32 @@ def dashboard():
     for key in product_dict:
         product = product_dict.get(key)
         product_list.append(product)
-    return render_template('dashboard.html', count=len(order_list), order_list=order_list)
+
+    try:
+        admins_dict = {}
+        db = shelve.open('Admin.db', 'r')
+        admins_dict = db['Admin']
+    except:
+        print("An error occured when retrieving data from Admin.db")
+    finally:
+        db.close()
+
+    admins_list = []
+    for key in admins_dict:
+        admin = admins_dict.get(key)
+        admins_list.append(admin)
+        
+    return render_template('dashboard.html', 
+                            count=len(order_list),
+                            count1 = len(admins_list), 
+                            order_list=order_list,
+                            admins_list=admins_list
+                            )
 
 
 
 @app.route('/chart')
+
 def chart():
     return render_template('chart.html')
 

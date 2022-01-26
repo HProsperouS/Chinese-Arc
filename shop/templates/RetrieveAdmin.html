@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block title %}Admin Page{% endblock %}
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<!-- Custom fonts for this template-->
+<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+<body>
+{% block content %}
+{% for message in get_flashed_messages() %}
+
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  {{message}}
+  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+</div>
+
+{% endfor %}
+<h1 class="display-4">Admin Accounts</h1>
+<div>
+  {% if count1 == 0 %}
+  <p>There are no Admin Account</p>
+  {% elif count == 1 %}
+  <p>There is 1 Admin Account</p>
+  {% else %}
+  <p>There are {{ count }} Admin Accounts</p>
+  {% endif %}
+</div>
+<form>
+  <div class="d-none d-sm-inline-block form-inline navbar-search " style='padding-bottom: 20px;'>
+  <div class="input-group">
+      <input type="text" class="form-control bg-light border-0 small" placeholder="Admin ID..."
+         aria-label="Search" aria-describedby="basic-addon2">
+     <div class="input-group-append">
+          <button class="btn btn-primary" type="button">
+              <i class="fas fa-search fa-sm"></i>
+          </button>
+     </div>
+  </div>
+  </div>
+</form>
+
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Admin ID</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email Address</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Account Status</th>
+                {% if session.get('loggedIn') == 'ChineseArc' %}
+                    <th scope="col" colspan="2" >Opearation</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for admin in admins_list %}
+            <tr>
+                <th scope="row">{{ admin.get_id() }}</th>
+                <td>{{ admin.get_username() }}</td>
+                <td>{{ admin.get_email() }}</td>
+                <td>{{ admin.get_roles() }}</td>
+                {% if admin.get_status() == 'Enabled' %}
+                    <td><p class="badge badge-pill badge-info" >{{ admin.get_status() }}</p></td>
+                        {% if session.get('loggedIn') == 'ChineseArc' %}
+                            <td>
+                                <form action="{{url_for('DisableAdmin', id = admin.get_id())}}"  method="POST">
+                                
+                                    <!-- Button to Open the Modal -->
+                                    <button type="button"  class="btn btn-danger "  title="Disable" data-bs-toggle="modal" data-bs-target="#myModal_{{admin.get_id()}}">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                    
+                                    <!-- The Modal -->
+                                    <div class="modal" id="myModal_{{admin.get_id()}}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Disable Confirmation</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+                                
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    Are you sure you want to disable {{admin.get_username()}}?
+                                                </div>
+                                
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+                                                    <input type="submit" value="Disable" class="btn btn-danger">
+                                                    
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                        {% endif %}
+                {% else %}
+                    <td><p class="badge badge-pill badge-danger" >{{ admin.get_status() }}</p></td>
+                        {% if session.get('loggedIn') == 'ChineseArc' %}
+                            <td>
+                                <form action="{{ url_for('EnableAdmin', id = admin.get_id()) }}"  method="POST">
+                                    <button type="submit" title="Enable" class="btn btn-success">
+                                        <i class="fas fa-unlock"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        {% endif %}
+                {% endif %}
+                    {% if session.get('loggedIn') == 'ChineseArc' %}
+                        <td>
+                            <form action="{{url_for('DeleteAdmin', id = admin.get_id())}}"  method="POST">
+                            
+                                <!-- Button to Open the Modal -->
+                                <button type="button" title="Delete" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#myModal_{{admin.get_id()}}">
+                                <i class="fas fa-trash-alt"></i>
+                                </button>
+                                
+                                <!-- The Modal -->
+                                <div class="modal" id="myModal_{{admin.get_id()}}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                        
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Delete Confirmation</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                            
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                                Are you sure you want to delete {{admin.get_username()}}?
+                                            </div>
+                            
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Delete" class="btn btn-danger">
+                                                
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </form>
+                        </td>
+                    {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+</div>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/jquery/jquery.slim.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+    <!-- <script src='../static/js/status.js'></script> -->
+
+</body>
+
+{% endblock %}

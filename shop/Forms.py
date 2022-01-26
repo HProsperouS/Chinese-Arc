@@ -79,7 +79,7 @@ class Register_AdminForm(Form):
     username =  StringField('User Name', [validators.Length(min=1, max=10), validators.DataRequired()])
     email = StringField('Email address', [validators.DataRequired(),validators.Length(min=4, max=150, message='Please enter a valid email'),validators.Email()])
     gender = RadioField('Gender', [validators.DataRequired()], choices=[('F', 'Female'), ('M', 'Male')], default='F')
-    roles =  SelectField('Roles', [validators.DataRequired(message='Please choose your roles')], choices=[('', 'N/A'), ('Inventory Manegement', 'Inventory Manegement'), ('Order Manegement', 'Order Manegement'),('Super Admin', 'Super Admin')], default='')
+    roles =  SelectField('Roles', [validators.DataRequired(message='Please choose your roles')], choices=[('', 'N/A'), ('Front-End Management', 'Front-End Management'),('Inventory Manegement', 'Inventory Manegement'), ('Order Manegement', 'Order Manegement'),('Super Admin', 'Super Admin')], default='')
     status = SelectField('Account Status', [validators.DataRequired()], choices=[('Enable', 'Enable'), ('Disable', 'Disable')] ,default='Enable')
     create_date= DateField("Sign Up Date",[validators.DataRequired()],format="%Y-%m-%d", default=datetime.datetime.now())
     password = PasswordField('Password', [validators.InputRequired(), validators.Length(min=1,max=100),validators.EqualTo('confirm', message='passwords must match')])

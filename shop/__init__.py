@@ -154,69 +154,43 @@ def user_loader(user_id):
 
 @app.route('/register_admin', methods=['POST', 'GET'])
 def register_admin():
-    register_admin_form = Register_AdminForm(request.form)
-    try:
-        admins_dict = {}
-        db = shelve.open('Admin.db', 'r')
-        admins_dict = db['Admin']
-    except IOError:
-        print("An Error occured when retrieving data from Admin.db")
-    
+    register_admin_form = Register_AdminForm(request.form)    
     if request.method == 'POST' and register_admin_form.validate():
         try:
             admins_dict = {}
-            db = shelve.open('Admin.db', 'r')
+            db = shelve.open('Admin.db', 'c')
             admins_dict = db['Admin']
         except:
             print("Error in retrieving Users from Admin.db.")
-        finally:
-            db.close()
-
-        admins_list = []
-        for key in admins_dict:
-            admin = admins_dict.get(key)
-            admins_list.append(admin)
 
         email = register_admin_form.email.data
 
-        if email in admins_list:
+        if email in admins_dict:
             flash('You have already registered with the existing email.', 'Danger')
             return redirect(url_for('login_admin'))
         else:
-            try:
-                admins_dict = {}
-                db = shelve.open('Admin.db', 'c')
-                admins_dict = db['Admin']
-            except:
-                print("Error in retrieving Users from Admin.db.")
-
-            admins_list = []
-            for key in admins_dict:
-                admin = admins_dict.get(key)
-                admins_list.append(admin)
-
-                hashed_password = generate_password_hash(register_admin_form.password.data, method='sha256')
-                admin = Admin(
-                            register_admin_form.username.data,
-                            register_admin_form.email.data,
-                            register_admin_form.gender.data,
-                            register_admin_form.roles.data,
-                            register_admin_form.status.data,
-                            register_admin_form.create_date.data,
-                            hashed_password
-                            )
-                if len(admins_dict) == 0:
-                        currentid = 1
-                else:
-                    #  [-1] means the last element in a sequence
-                    last = list(admins_dict.keys())[-1]
-                    currentid = last + 1
-                admin.set_id(currentid)
-                admins_dict[admin.get_id()] = admin
-                db['Admin'] = admins_dict
-                db.close()
-                flash('Hi'+ " " + admin.get_username() +', You have successfully registered','success')
-                return redirect(url_for('login_admin'))
+            hashed_password = generate_password_hash(register_admin_form.password.data, method='sha256')
+            admin = Admin(
+                        register_admin_form.username.data,
+                        register_admin_form.email.data,
+                        register_admin_form.gender.data,
+                        register_admin_form.roles.data,
+                        register_admin_form.status.data,
+                        register_admin_form.create_date.data,
+                        hashed_password
+                        )
+            if len(admins_dict) == 0:
+                    currentid = 1
+            else:
+                #  [-1] means the last element in a sequence
+                last = list(admins_dict.keys())[-1]
+                currentid = last + 1
+            admin.set_id(currentid)
+            admins_dict[admin.get_id()] = admin
+            db['Admin'] = admins_dict
+            db.close()
+            flash('Hi'+ " " + admin.get_username() +', You have successfully registered','success')
+            return redirect(url_for('login_admin'))
     return render_template('register_admin.html', form=register_admin_form)
 
 @app.route('/login_admin', methods=['GET', 'POST'])

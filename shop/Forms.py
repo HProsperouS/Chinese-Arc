@@ -88,3 +88,13 @@ class Register_AdminForm(Form):
 class Login_AdminForm(Form):
     email = EmailField('', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Email Address"})
     password = StringField('', [validators.DataRequired()], widget=PasswordInput(hide_value=False), render_kw={"placeholder": "Password"})
+
+class UpdateAdminForm(Form):
+    username =  StringField('User Name', [validators.Length(min=1, max=10), validators.DataRequired()])
+    email = StringField('Email address', [validators.DataRequired(),validators.Length(min=4, max=150, message='Please enter a valid email'),validators.Email()])
+    gender = RadioField('Gender', [validators.DataRequired()], choices=[('F', 'Female'), ('M', 'Male')], default='F')
+    roles =  SelectField('Roles', [validators.DataRequired(message='Please choose your roles')], choices=[('', 'N/A'), ('Front-End Management', 'Front-End Management'),('Inventory Manegement', 'Inventory Manegement'), ('Order Manegement', 'Order Manegement'),('Super Admin', 'Super Admin')], default='')
+    password = PasswordField('Password', [validators.InputRequired(), validators.Length(min=1,max=100),validators.EqualTo('confirm', message='passwords must match')])
+    confirm = PasswordField("Confirm Password", validators=[validators.DataRequired(message="Please Fill This Field")])
+
+    

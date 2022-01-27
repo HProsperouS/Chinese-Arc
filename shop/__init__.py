@@ -1,5 +1,6 @@
 from email.policy import default
 from itertools import count
+from msilib import change_sequence
 from re import split, sub, template
 from venv import create
 from flask_wtf import FlaskForm
@@ -15,6 +16,7 @@ from HomeAnnouncement import HomeAnnouncement
 from FAQ import FAQ
 from Feedback import Feedback
 from cust_order import CustOrder
+from shop.Forms import Change_PasswordForm
 # from Forms import ApplyVoucher
 from voucher import Voucher
 from Subscriptions import Subscriptions
@@ -33,7 +35,7 @@ from EditProduct import UpdateProductForm, CreateProductForm, photos
 from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
-from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm
+from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm
 from DeliveryFeedback import DeliveryFeedback
 from Forms import Registration, CreateFAQForm,CreateDeliveryFeedbackForm, CreateFeedbackForm
 from Forms import Registration,  CreateFAQForm
@@ -230,11 +232,13 @@ def login_admin():
     return render_template('login_admin.html', form=login_admin_form)
 
 @app.route('/logout_admin')
+@login_required
 def logout_admin():
     session.clear()
     return redirect(url_for('login_admin'))
     
 @app.route('/profile_admin')
+@login_required
 def profile_admin():
     try:
         admins_dict = {}
@@ -259,6 +263,7 @@ def profile_admin():
     
 
 @app.route('/DisableAdmin/<int:id>/', methods=['GET', 'POST'])
+@login_required
 def DisableAdmin(id):
     try:
         admins_dict = {}
@@ -276,6 +281,7 @@ def DisableAdmin(id):
     return redirect(url_for('RetrieveAdmin'))
 
 @app.route('/EnableAdmin/<int:id>/', methods=['GET', 'POST'])
+@login_required
 def EnableAdmin(id):
     try:
         admins_dict = {}
@@ -292,6 +298,7 @@ def EnableAdmin(id):
     return redirect(url_for('RetrieveAdmin'))
 
 @app.route('/DeleteAdmin/<int:id>', methods=['POST'])
+@login_required
 def DeleteAdmin(id):
     try:
         admins_dict = {}
@@ -306,6 +313,7 @@ def DeleteAdmin(id):
     db.close()
 
     return redirect(url_for('RetrieveAdmin'))
+
 
 @app.route('/RetrieveAdmin')
 @login_required
@@ -328,6 +336,41 @@ def RetrieveAdmin():
                             count1 = len(admins_list), 
                             admins_list=admins_list
                             )
+
+# @app.route('/EditAdminProfile/<int:id>/', methods=['GET', 'POST'])
+# @login_required
+# def EditAdminProfile(id):
+#     EditAdminProfile = UpdateAdminForm(request.form)
+#     if request.method == 'POST' and EditAdminProfile.validate():
+#         try:
+#             admins_dict = {}
+#             db = shelve.open('Admin.db', 'w')
+#             admins_dict = db['Admin']
+#         except IOError:
+#             print("An error occured when retrieving from Admin.db")
+
+#         admin = admins_dict.get(id)
+#         admin.set_username(EditAdminProfile.username.data)
+#         admin.set_email(EditAdminProfile.email.data)
+#         admin.set_gender(EditAdminProfile.gender.data)
+#         admin.set_password(EditAdminProfile.password.data)
+#         db['Admin'] = admins_dict
+#         db.close()
+#         return redirect(url_for('profile_admin'))
+#     else:
+#         try:
+#             admins_dict = {}
+#             db = shelve.open('Admin.db','r')
+#             admins_dict = db['Admin']
+#         except IOError:
+#             print("An error occured when retrieving from Admin.db")
+#         finally:
+#             db.close()
+
+#         admin = admins_dict.get(id)
+
+#         return render_template('ChangePassword.html', form=EditAdminProfile)
+
 
 @app.route('/register_page', methods=['POST', 'GET'])
 def register_page():
@@ -712,7 +755,7 @@ def dashboard():
 
 
 @app.route('/chart')
-
+@login_required
 def chart():
     return render_template('chart.html')
 
@@ -826,6 +869,7 @@ def delete_voucher(id):
 
 
 @app.route('/settings')
+@login_required
 def settings():
     return render_template('settings.html')
 
@@ -836,6 +880,7 @@ def box():
 
 
 @app.route('/catalog')
+@login_required
 def catalog():
     try:
         product_dict = {}
@@ -906,6 +951,7 @@ def catalog():
                             )
 
 @app.route('/CreateProduct', methods=['GET', 'POST'])
+@login_required
 def CreateProduct():
     # WTForms provides a FileField to render a file type input.
     # It doesn't do anything special with the uploaded data.
@@ -976,6 +1022,7 @@ def CreateProduct():
 
 
 @app.route('/UpdateProduct/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update_product(id):
     UpdateProduct_Form = UpdateProductForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and UpdateProduct_Form.validate():
@@ -1041,6 +1088,7 @@ def update_product(id):
 
 
 @app.route('/DeleteProduct/<int:id>', methods=['POST'])
+@login_required
 def delete_product(id):
     try:
         product_dict = {}
@@ -1059,6 +1107,7 @@ def delete_product(id):
 
 
 @app.route('/Announcement')
+@login_required
 def Announcement():
     try:
         homeannouncement_dict = {}
@@ -1082,6 +1131,7 @@ def Announcement():
 #TO COMMEND OUT CREATEANNOUNCEMENT IS BECAUSE I ONLY WANT THE DATABASE TO STORE 1 ANNOUNCEMENT, AND ONLY ALLOW ADMIN TO UPDATE IT.
 
 @app.route('/CreateAnnouncement',methods=['GET','POST'])
+@login_required
 def CreateAnnouncement():
     CreateHomeAnnouncement_Form=CreateHomeAnnouncementForm(request.form)
     if request.method == 'POST' and CreateHomeAnnouncement_Form.validate():
@@ -1106,6 +1156,7 @@ def CreateAnnouncement():
     return render_template('CreateHomeAnnouncement.html', form=CreateHomeAnnouncement_Form)
 
 @app.route('/UpdateHomeAnnouncemnet/<int:id>/', methods=['GET', 'POST'])
+@login_required
 def UpdateHomeAnnouncement(id):
     UpdateHomeAnnouncement_Form = UpdateHomeAnnouncementForm(request.form)
 
@@ -1299,6 +1350,7 @@ def delete_deliveryfeedback(id):
     return redirect(url_for('RetrieveDeliveryFeedback'))
 
 @app.route('/RetrieveDeliveryFeedback',methods=['GET','POST'])
+@login_required
 def RetrieveDeliveryFeedback():
     try:
         deliveryfeedback_dict = {}

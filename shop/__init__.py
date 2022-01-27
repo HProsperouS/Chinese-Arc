@@ -183,7 +183,7 @@ def register_admin():
             else:
                 #  [-1] means the last element in a sequence
                 last = list(admins_dict.keys())[-1]
-                currentid = last + 1
+                currentid = int(last + 1)
             admin.set_id(currentid)
             admins_dict[admin.get_id()] = admin
             db['Admin'] = admins_dict
@@ -406,6 +406,7 @@ def update_profile_page():
         cust_list.append(customer)
     return render_template('profile.html', count=len(cust_list),
                            cust_list=cust_list)
+                           
 @app.route('/update_customer_info/<int:id>', methods=['GET', 'POST'])
 def update_cust_info(id):
     update_cust_form=Registration(request.form)

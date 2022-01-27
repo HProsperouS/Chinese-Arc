@@ -3,79 +3,135 @@
 
 {% block content %}
 {% from "_formHelper.html" import render_field %} 
+<style>
+.accordion-button::after {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-left: auto;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+    transition: transform .2s ease-in-out;
+}
+</style>
+<body onload="getCartSum()"></body>
 
 
 
-<div class="row">
-  <section class="section-content padding-y">
+<section class="section-content padding-y">
   <div class="container" style="max-width: 720px;">
     <h1 class="display-4 text-center" >Payment & Checkout</h1>
     <br>
+    <aside class="col-md-6 mx-auto" style="color: rgb(160, 28, 10); font-size: 18px; ">
+      <div class="card col-sm-10" style="text-align: center; border-radius: 7px;" >
+        <div class="card-body">
+                <div>
+                    <strong>Grand Total:
+                        <span class='float-right'>$<span class="sum-price " id="grandTotal"></span>
+                        
+                    </strong>
+                </div>
+                
+        </div> <!-- card-body.// -->
+      </div>  <!-- card .// -->
+    </aside>
+    <br>
     <form method="POST" action="" >
-      <div class="container" style="background-color: rgba(233, 216, 216, 0.251); border-radius: 10px; width: max-width; padding-bottom: 20px;">
-
-        <h5 class="fst-italic" style="color:rgb(122, 51, 51); padding-top: 15px; padding-left: 20px;">Personal Details</h5>
-        <br>
-        <div class="form-row">
-          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
-            {{ render_field(form.first_name, class="form-control", required="", placeholder="Eg: Mary") }}
-          </div>
-          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
-            {{ render_field(form.last_name, class="form-control", required="", placeholder="Eg: Koh") }}
+      <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+            <button class="accordion-button" style="background-color: #ffffff; color: rgb(137, 12, 12); font-weight: bold; font-size: large; border: 1px solid rgb(96, 21, 21) ;" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+              Personal Details
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseOne" style="background-color: #ffffff7e; color: rgb(0, 0, 0);" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+            <div class="accordion-body" >
+              <div class="form-row">
+                <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                  {{ render_field(form.first_name, class="form-control", required="", placeholder="Eg: Mary") }}
+                </div>
+                <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                  {{ render_field(form.last_name, class="form-control", required="", placeholder="Eg: Koh") }}
+                </div>
+              </div>
+              <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                {{ render_field(form.email, class="form-control", required="", placeholder="Eg: 12345678") }}
+              </div>
+              <br>
+            </div>
           </div>
         </div>
-        <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
-          {{ render_field(form.email, class="form-control", required="", placeholder="Eg: 12345678") }}
+        <br>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+            <button class="accordion-button collapsed" style="background-color: #ffffff; color: rgb(137, 12, 12); font-weight: bold; font-size: large; border: 1px solid rgb(96, 21, 21) ;" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+              Billing Details
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+            <div class="accordion-body">
+              <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                {{ render_field(form.holder_name, class="form-control", required="", placeholder="Eg: Mary Koh") }}
+              </div>       
+              <div class="form-row" >
+                <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                  {{ render_field(form.card_type, class="form-control", required="") }}
+                </div>
+                <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                  {{ render_field(form.card_num, class="form-control", required="", placeholder="Eg: 1234...16") }}
+                </div>
+                <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                  {{ render_field(form.cvv, class="form-control", required="") }}
+                </div>
+              </div>  
+              <br>
+            </div>
+          </div>
         </div>
         <br>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+            <button class="accordion-button collapsed" style="background-color: #ffffff; color: rgb(137, 12, 12); font-weight: bold; font-size: large; border: 1px solid rgb(96, 21, 21);" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+              Shipping Details
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+            <div class="accordion-body">
+              <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                {{ render_field(form.city, class="form-control", required="") }}
+              </div>
+              <div class="form-row">
+                <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                  {{ render_field(form.unit_number, class="form-control", required="", placeholder="Eg: #00-00") }}
+                </div>
+                <div class="form-group" style= "padding-right:20px; padding-left: 20px;"> 
+                  {{ render_field(form.postal_code, class="form-control", required="", placeholder="Eg: 000 000") }}
+                </div>
+              </div>
+              <div class="form-group" style="display: none;"  >
+                {{ render_field(form.create_date, class="form-control") }}
+              </div>
+              <div class="form-group" style="display: none;"   >
+                {{ render_field(form.modified_date, class="form-control") }}
+              </div>
+              <div class="form-group" style="display: none;" >
+                {{ render_field(form.modified_by, class="form-control") }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br> 
+      <input type="submit" value="Checkout" class="btn btn-primary text-center-mb-2" style="background-color:rgb(255, 255, 255); color:rgb(160, 28, 10); border-color:#650e0e; width: 200px; text-align: center;margin-left: 15rem;" />
       
-        <h5 class="fst-italic" style="color:rgb(122, 51, 51); padding-left: 20px;">Billing Details</h5>
-        <br>
-        <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
-          {{ render_field(form.holder_name, class="form-control", required="", placeholder="Eg: Mary Koh") }}
-        </div>       
-        <div class="form-row" >
-          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
-            {{ render_field(form.card_type, class="form-control", required="") }}
-          </div>
-          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
-            {{ render_field(form.card_num, class="form-control", required="", placeholder="Eg: 1234...16") }}
-          </div>
-          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
-            {{ render_field(form.cvv, class="form-control", required="") }}
-          </div>
-        </div>  
-        <br>
-        <h5 class="fst-italic" style="color:rgb(122, 51, 51); padding-left: 20px;">Shipping details</h5>
-        <br>
-        <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
-          {{ render_field(form.city, class="form-control", required="") }}
-        </div>
-        <div class="form-row">
-          <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
-            {{ render_field(form.unit_number, class="form-control", required="", placeholder="Eg: #00-00") }}
-          </div>
-          <div class="form-group" style= "padding-right:20px; padding-left: 20px;"> 
-            {{ render_field(form.postal_code, class="form-control", required="", placeholder="Eg: 000 000") }}
-          </div>
-        </div>
-        <div class="form-group" style="display: none;"  >
-          {{ render_field(form.create_date, class="form-control") }}
-        </div>
-        <div class="form-group" style="display: none;"   >
-          {{ render_field(form.modified_date, class="form-control") }}
-        </div>
-        <div class="form-group" style="display: none;" >
-          {{ render_field(form.modified_by, class="form-control") }}
-        </div>
+    </form>
+  </div>
+</section>
+<aside class="col-md-5 mx-auto" style="color: rgb(160, 28, 10); font-size: 14px;">
+  <a href="{{ url_for('fullpage_cart') }}" type="submit" value="Back to Cart" class="btn btn-primary text-center-mb-2" style="background-color:#ff6a00; border: none; width: 200px; text-align: center;margin-left: 15rem;">Back to Cart</a>         
+</aside>
+<script src="../static/js/customer/fullpage_cart.js" type="text/javascript"></script>
 
-        
-        <hr>
-       
-        <input type="submit" value="Checkout" class="btn btn-primary text-center-mb-2" style="background-color:green;  border: none; width: 200px; text-align: center;margin-left: 15rem;" />
-      </form>
-    
-</div>
-</div>
 <script></script>
 {% endblock %}

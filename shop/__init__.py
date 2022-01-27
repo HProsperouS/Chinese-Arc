@@ -692,10 +692,6 @@ def logout():
     return redirect(url_for('login'))
 
 
-
-
-
-
 @app.route('/profile_page')
 def profile_page():
     return render_template('page-profile-main.html')
@@ -1977,8 +1973,8 @@ def createCustOrder():
         db['CustOrder'] = cust_order_dict
 
 
-        # flash("Customer Order create successfully")
-        return redirect(url_for('home_page'))
+        flash("Order has been processed successfully! Thank you for shopping with Chinese Arc")
+        return redirect(url_for('order_confirm'))
     return render_template('Customer_order_form.html', form=create_custorder_form)
 
 @app.route('/order', methods=['GET','POST'])
@@ -2016,7 +2012,8 @@ def delete_cust_order(id):
     finally:
         db.close()
     
-    return redirect(url_for('retrieveCustOrders'))
+    return redirect(url_for('retrieve_cust_orders'))
+
 
 
 
@@ -2130,6 +2127,9 @@ def fullpage_cart():
    
     return render_template('fullpage_cart.html')
 
+@app.route('/order_confirm')
+def order_confirm():
+    return render_template('orderConfirm.html')
 
 
 if __name__ == '__main__':

@@ -82,15 +82,6 @@ const updateShoppingCartHTML = function () {  // 3
 
 		cartItemNumber.innerHTML = countTotalItem() ;
 
-		
-		
-
-		
-
-		
-
-
-
 	}
 	else {
 		document.querySelector('.checkout').classList.add('hidden');

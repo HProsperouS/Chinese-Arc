@@ -215,11 +215,15 @@ def login_admin():
             print(admin.get_email())
             print(admin.get_password())
             if login_admin_form.email.data == admin.email:
-                password = generate_password_hash(login_admin_form.password.data, method='sha256')
-                check_password_hash(admin.password, password)
-                session['login'] = admin.id
-                session['loggedIn'] = admin.username
-                return redirect(url_for('dashboard',userid=session['login']))
+                if admin.get_status() == 'Enabled':
+                    password = generate_password_hash(login_admin_form.password.data, method='sha256')
+                    check_password_hash(admin.password, password)
+                    session['login'] = admin.id
+                    session['loggedIn'] = admin.username
+                    flash("Hi," + session.get('loggedIn') + ", "+"Welcome to Chinese Arc ",'success')
+                    return redirect(url_for('dashboard',userid=session['login']))
+                else:
+                    flash("Hi, Your Account is disaled, Please Contact Chinese Arc for more information", 'info')
         else:
             flash('Please enter correct account or password','danger')
 
@@ -243,10 +247,12 @@ def profile_admin():
 
     admins_list = []
     for key in admins_dict:
-        admin = admins_dict.get(key)
-        admins_list.append(admin)
+        # To get current user
+        if key == session.get('login'):
+            admin = admins_dict.get(key)
+            admins_list.append(admin)
         
-    return render_template('base.html', 
+    return render_template('ProfileAdmin.html', 
                             count1 = len(admins_list), 
                             admins_list=admins_list
                             )
@@ -265,6 +271,7 @@ def DisableAdmin(id):
     admin.set_status('Disabled')
     db['Admin'] = admins_dict
     db.close()
+    flash('Hi'+ " "+', You have successfully Enabled ' + admin.get_username() + " ",'success')
 
     return redirect(url_for('RetrieveAdmin'))
 
@@ -281,7 +288,7 @@ def EnableAdmin(id):
     admin.set_status('Enabled')
     db['Admin'] = admins_dict
     db.close()
-    flash('Hi'+ " "+', You have successfully disabled ' + admin.get_username() + 'success')
+    flash('Hi'+ " "+', You have successfully disabled ' + admin.get_username() + " ",'success')
     return redirect(url_for('RetrieveAdmin'))
 
 @app.route('/DeleteAdmin/<int:id>', methods=['POST'])
@@ -961,7 +968,7 @@ def CreateProduct():
                 else:
                     CreateProduct_Form.product_image.data.save(os.path.join(basedir, 'static/images/Featured', filename))
 
-                flash('Product has created sucessfully')
+                flash('Product has created sucessfully','success')
                 print(productinfo.get_product_id())
                 return redirect(url_for('catalog', filename=filename))
     return render_template('CreateProduct.html', form=CreateProduct_Form)
@@ -1004,7 +1011,7 @@ def update_product(id):
                 productinfo.set_modified_by(UpdateProduct_Form.modified_by.data)
                 db['ProductInfo'] = productinfo_dict
                 db.close()
-                flash('Product has updated sucessfully')
+                flash('Product has updated sucessfully','success')
                 return redirect(url_for('catalog'))
 
     else:
@@ -1043,8 +1050,8 @@ def delete_product(id):
         print("An error occurred trying to read ProductInfo.db")
     product_dict.pop(id)
     print(id)
-
     db['ProductInfo'] = product_dict
+    flash('Product has deleted sucessfully','info')
     db.close()
 
     return redirect(url_for('catalog'))
@@ -1209,7 +1216,7 @@ def CreateFAQ():
         faq = FAQ(CreateFAQ_Form.question.data, CreateFAQ_Form.answer.data, CreateFAQ_Form.create_date.data)
         faq_dict[faq.get_id()] = faq
         db['FAQ'] = faq_dict
-        flash('New FAQ uploaded sucessfully')
+        flash('New FAQ uploaded sucessfully','success')
         return redirect(url_for('FAQs'))
     return render_template('CreateFAQ.html', form=CreateFAQ_Form)
 

@@ -42,7 +42,7 @@
 		  <a href="{{ url_for('login_page') }}" class="btn btn-dark"> Login </a>
 		  <a href="{{ url_for('profile_page') }}" class="btn btn-dark"> Profile </a>
 
-
+		
           <button class="btn float-right btn-light d-md-none" type="button" data-toggle="collapse" data-target="#main_nav8" aria-controls="main_nav" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fa fa-bars"></i>
           </button> <!-- Navbar under logo-->
@@ -81,31 +81,20 @@
 <!--  SHOPPING CART  -->
      <div class="shopping-cart">
 		<div class="sum-count">
-			<button class="openbtn" onclick="openNav()" >
+			<button class="openbtn" onclick="openNav()">
 				<i class="fa fa-shopping-cart shoppingCartButton"></i>
-				
+				<span class="position-absolute top-0 start-90 translate-middle p-1  bg-danger border border-light rounded-pill">
+					<h6 id="sum-count"></h6>			
 			</button>
-			<h6 id="sum-count"></h6>
-
+			
+			
 			<div id="productOnCart hide" class="sidepanel">
 				<div class="top">
 					<h3 >Cart</h3>
 					<a href="javascript:void(0)" id="overlay" class="closebtn" onclick="closeNav()"></a>
 				</div>
 				<ul id="buyItems">
-					<h4 class="empty">Your shopping cart is empty!</h4> -->
-					<!-- <li class="buyItem">
-						<img src="Images/producs-images/Mobiles/galaxynote10.png">
-						<div>
-							<h4>Products Name</h4>
-							<h6>$199</h6>
-							<div>
-								<button>-</button>
-								<span class="countOfProduct">1</span>
-								<button>+</button>
-							</div>
-						</div>
-					</li>  -->
+					<h4 class="empty">Your shopping cart is empty!</h4> 
 				</ul>
 				<div class="sum-price">
 					<!-- <li class="sum-price">

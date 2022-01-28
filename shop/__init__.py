@@ -7,7 +7,7 @@ from flask_wtf import FlaskForm
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
 #from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-# from sqlalchemy import PrimaryKeyConstraint
+from sqlalchemy import PrimaryKeyConstraint
 # from flask_bcrypt import Bcrypt
 from wtforms.fields.core import DateField,datetime
 import shelve, cust_order,Date
@@ -16,7 +16,7 @@ from HomeAnnouncement import HomeAnnouncement
 from FAQ import FAQ
 from Feedback import Feedback
 from cust_order import CustOrder
-# from shop.Forms import Change_PasswordForm
+from shop.Forms import Change_PasswordForm
 # from Forms import ApplyVoucher
 from voucher import Voucher
 from Subscriptions import Subscriptions
@@ -30,9 +30,9 @@ from Newsletter import Newsletter
 from Apply_Coupon import Coupon
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
-# from EditProduct import UpdateProductForm, CreateProductForm, photos
+from EditProduct import UpdateProductForm, CreateProductForm, photos
 
-# from flask_uploads import configure_uploads,UploadSet,IMAGES
+from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
 from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm
@@ -46,8 +46,8 @@ from Voucher_form import CreateVoucherForm, UpdateVoucherForm
 
 
 from werkzeug.datastructures import CombinedMultiDict
-# from werkzeug.utils import secure_filename
-# from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import ProductInfo
 from ProductInfo import ProductInfo

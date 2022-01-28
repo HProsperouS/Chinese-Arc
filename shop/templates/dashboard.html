@@ -303,23 +303,25 @@
                     
                 </div>
                 <!-- Card Body -->
-                {% for admin in admins_list %}
-                <div class="card-body">
-                    <ol class="list-group ">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ admin.get_username() }}</h5>
-                                <p class="card-text">{{ admin.get_roles() }}</p>
-                                {% if admin.get_status() == 'Enabled' %}
-                                    <p  class="badge badge-pill badge-info" >{{ admin.get_status() }}</p>
-                                {% else %}
-                                    <p  class="badge badge-pill badge-danger" >{{ admin.get_status() }}</p>
-                                {% endif %}
-                            </div>
+                <div style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
+                    {% for admin in admins_list %}
+                        <div class="card-body" >
+                            <ol class="list-group ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ admin.get_username() }}</h5>
+                                        <p class="card-text">{{ admin.get_roles() }}</p>
+                                        {% if admin.get_status() == 'Enabled' %}
+                                            <p  class="badge badge-pill badge-info" >{{ admin.get_status() }}</p>
+                                        {% else %}
+                                            <p  class="badge badge-pill badge-danger" >{{ admin.get_status() }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </ol>    
                         </div>
-                    </ol>    
+                    {% endfor %}
                 </div>
-                {% endfor %}
                 <br>
             </div>
         </div>

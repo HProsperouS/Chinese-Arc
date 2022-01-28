@@ -115,12 +115,12 @@
                             <form action="{{url_for('DeleteAdmin', id = admin.get_id())}}"  method="POST">
                             
                                 <!-- Button to Open the Modal -->
-                                <button type="button" title="Delete" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#myModal_{{admin.get_id()}}">
+                                <button type="button" title="Delete" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#myModal_1{{admin.get_id()}}">
                                 <i class="fas fa-trash-alt"></i>
                                 </button>
                                 
                                 <!-- The Modal -->
-                                <div class="modal" id="myModal_{{admin.get_id()}}">
+                                <div class="modal" id="myModal_1{{admin.get_id()}}">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                         

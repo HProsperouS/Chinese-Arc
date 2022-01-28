@@ -16,7 +16,7 @@ from HomeAnnouncement import HomeAnnouncement
 from FAQ import FAQ
 from Feedback import Feedback
 from cust_order import CustOrder
-from shop.Forms import Change_PasswordForm
+
 # from Forms import ApplyVoucher
 from voucher import Voucher
 from Subscriptions import Subscriptions
@@ -991,7 +991,6 @@ def CreateProduct():
                     CreateProduct_Form.create_by.data,
                     CreateProduct_Form.modified_date.data,
                     CreateProduct_Form.modified_by.data,
-
                 )
                 if len(productinfo_dict) == 0:
                     currentproductid = 1

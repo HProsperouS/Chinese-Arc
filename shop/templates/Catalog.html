@@ -169,7 +169,11 @@
                               <ul class="list-group list-group-flush">
                                 <li class="list-group-item">Category: {{ product.get_product_category() }} </li>
                                 <li class="list-group-item">Price: ${{ product.get_product_price() }}0</li>
-                                <li class="list-group-item float-right">Stock: {{ product.get_product_stock() }} {{ product.get_status() }}</li>
+                                {% if product.get_status() == 'Low Stock' or product.get_status() == 'Out of Stock' %}
+                                <li class="list-group-item float-right" >Stock: {{ product.get_product_stock() }} <p class="badge badge-danger" >{{ product.get_status() }}</p></li>
+                                {% else %}
+                                <li class="list-group-item float-right" >Stock: {{ product.get_product_stock() }} <p class="badge badge-success" >{{ product.get_status() }}</p></li>
+                                {% endif %}
                               </ul>
                               <div class="card-body">
                                 Created on :{{ product.get_create_date() }}
@@ -286,7 +290,11 @@
                               <ul class="list-group list-group-flush">
                                 <li class="list-group-item">Category: {{ product.get_product_category() }} </li>
                                 <li class="list-group-item">Price: ${{ product.get_product_price() }}0</li>
-                                <li class="list-group-item float-right">Stock: {{ product.get_product_stock() }} {{ product.get_status() }}</li>
+                                {% if product.get_status() == 'Low Stock' or product.get_status() == 'Out of Stock' %}
+                                <li class="list-group-item float-right" >Stock: {{ product.get_product_stock() }} <p class="badge badge-danger" >{{ product.get_status() }}</p></li>
+                                {% else %}
+                                <li class="list-group-item float-right" >Stock: {{ product.get_product_stock() }} <p class="badge badge-success" >{{ product.get_status() }}</p></li>
+                                {% endif %}
                               </ul>
                               <div class="card-body">
                                 Created on :{{ product.get_create_date() }}
@@ -403,8 +411,11 @@
                               <ul class="list-group list-group-flush">
                                 <li class="list-group-item">Category: {{ product.get_product_category() }} </li>
                                 <li class="list-group-item">Price: ${{ product.get_product_price() }}0</li>
-                                <li class="list-group-item float-right">Stock: {{ product.get_product_stock() }} {{ product.get_status() }}</li>
-                              </ul>
+                                {% if product.get_status() == 'Low Stock' or product.get_status() == 'Out of Stock' %}
+                                <li class="list-group-item float-right" >Stock: {{ product.get_product_stock() }} <p class="badge badge-danger" >{{ product.get_status() }}</p></li>
+                                {% else %}
+                                <li class="list-group-item float-right" >Stock: {{ product.get_product_stock() }} <p class="badge badge-success" >{{ product.get_status() }}</p></li>
+                                {% endif %}                              </ul>
                               <div class="card-body">
                                 Created on :{{ product.get_create_date() }}
                                 <br>
@@ -520,7 +531,11 @@
                               <ul class="list-group list-group-flush">
                                 <li class="list-group-item">Category: {{ product.get_product_category() }} </li>
                                 <li class="list-group-item">Price: ${{ product.get_product_price() }}0</li>
-                                <li class="list-group-item float-right">Stock: {{ product.get_product_stock() }} {{ product.get_status() }}</li>
+                                {% if product.get_status() == 'Low Stock' or product.get_status() == 'Out of Stock' %}
+                                <li class="list-group-item float-right" >Stock: {{ product.get_product_stock() }} <p class="badge badge-danger" >{{ product.get_status() }}</p></li>
+                                {% else %}
+                                <li class="list-group-item float-right" >Stock: {{ product.get_product_stock() }} <p class="badge badge-success" >{{ product.get_status() }}</p></li>
+                                {% endif %}
                               </ul>
                               <div class="card-body">
                                 Created on :{{ product.get_create_date() }}

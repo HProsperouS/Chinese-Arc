@@ -46,7 +46,7 @@ const updateWishListHTML = function () {
 						</div>
 						<div class="row" >
 							<i class="btn btn-danger button-delete fas fa-trash-alt"  data-id=${wishproduct.id} style='margin-top:-20px;margin-bottom:20px;margin-left:28px;' onclick='Delete()'> </i>
-							<button class="btn btn-danger button-delete fas fa-shopping-cart-alt addToCart" style='margin-top:-20px;margin-bottom:20px;margin-left:28px; color:black; background:white; border: black;' data-product-id="{{productinfo.get_product_id()}}"> <i class="fa fa-cart-plus"></i> Add to cart </button>
+							<button class="btn btn-danger button-addToCart fas fa-shopping-cart-alt addToCart" style='margin-top:-20px;margin-bottom:20px;margin-left:28px; color:black; background:white; border: black;' data-product-id="{{productinfo.get_product_id()}}"> <i class="fa fa-cart-plus"></i> Add to cart </button>
 
 						</div>
 

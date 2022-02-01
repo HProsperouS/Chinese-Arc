@@ -39,14 +39,16 @@
     		</form> <!-- search-wrap .end// -->
     	</div> <!-- col.// -->
     	    <div class="col-md-5 col-lg-4 col-sm-12 col-12 text-md-right"><div class="mt-3 mt-md-0">
-		  <a href="{{ url_for('login_page') }}" class="btn btn-dark"> Login </a>
-		  <a href="{{ url_for('profile_page') }}" class="btn btn-dark"> Profile </a>
+				<a href="{{ url_for('login_page') }}" class="btn btn-dark"> Login </a>
+				<a href="{{ url_for('profile_page') }}" class="btn btn-dark"> Profile </a>
 
 		
-          <button class="btn float-right btn-light d-md-none" type="button" data-toggle="collapse" data-target="#main_nav8" aria-controls="main_nav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fa fa-bars"></i>
-          </button> <!-- Navbar under logo-->
+				<button class="btn float-right btn-light d-md-none" type="button" data-toggle="collapse" data-target="#main_nav8" aria-controls="main_nav" aria-expanded="false" aria-label="Toggle navigation">
+					<i class="fa fa-bars"></i>
+				</button> <!-- Navbar under logo-->
+				
             </div>
+
     	</div> <!-- col.// -->
     </div> <!-- row.// -->
 	</div> <!-- container.// -->
@@ -79,19 +81,20 @@
       </ul>
     </div> <!-- collapse .// -->
 <!--  SHOPPING CART  -->
-     <div class="shopping-cart">
+	
+    <div class="shopping-cart">
 		<div class="sum-count">
-			<button class="openbtn" onclick="openNav()">
+			<button class="openCart" onclick="openCart()">
 				<i class="fa fa-shopping-cart shoppingCartButton"></i>
 				<span class="position-absolute top-0 start-90 translate-middle p-1  bg-danger border border-light rounded-pill">
 					<h6 id="sum-count"></h6>			
 			</button>
 			
 			
-			<div id="productOnCart hide" class="sidepanel">
+			<div id="productsOnCart hide" class="sidepanel">
 				<div class="top">
 					<h3 >Cart</h3>
-					<a href="javascript:void(0)" id="overlay" class="closebtn" onclick="closeNav()"></a>
+					<a href="javascript:void(0)" id="overlaycart" class="closeCart" onclick="closeCart()"></a>
 				</div>
 				<ul id="buyItems">
 					<h4 class="empty">Your shopping cart is empty!</h4> 
@@ -114,10 +117,53 @@
 				};
 			</script>
 			<!-- ================ -->
-
-			
 		</div>
-	 </div>
+	</div>	
+
+	<!-- ======= WISHLIST ========= -->
+	<div class="wish-list" style="padding: 10px;">
+		<button class="openWish" onclick="openWish()">
+			<i class="fa fa-heart WishlistButton"></i>
+			<span class="position-absolute top-0 start-90 translate-middle p-1  bg-danger border border-light rounded-pill">
+				<h6 id="total-count"></h6>			
+		</button>
+
+		<div id="productsOnWish hide" class="sidepanel">
+			<div class="top">
+				<h3>Wishlist</h3>
+				<a href="javascript:void(0)" id="overlaywish" class="closewish" onclick="closeWish()"></a>
+			</div>
+			<ul id="WishItems">
+				<h4 class="empty">Your wishlist is empty!</h4> 
+				<!-- <li class="WishItem">
+						<img src="Images/producs-images/Mobiles/galaxynote10.png">
+						<div>
+							<h4>Products Name</h4>
+							<h6>$199</h6>
+							<div>
+								<button>-</button>
+								<span class="countOfProduct">1</span>
+								<button>+</button>
+							</div>
+						</div>
+				</li>  -->
+			</ul>
+			<div class="checkout text-center mb-2">
+				<button id="view_wish" class="btn btn-secondary checkout hidden">View Wish</button>
+			</div>
+		</div>
+	</div>
+	<!-- JS FOR VIEW WISH BTN -->
+	<script type="text/javascript">
+		document.getElementById("view_wish").onclick = function () {
+			location.href="{{ url_for('fullpage_wish') }}";
+		};
+	</script>
+	
+	<!-- ============================ -->
+			
+	
+	 
 
   </div> <!-- container .// -->
 </nav>

@@ -16,7 +16,7 @@ from HomeAnnouncement import HomeAnnouncement
 from FAQ import FAQ
 from Feedback import Feedback
 from cust_order import CustOrder
-
+from shop.Forms import Change_PasswordForm
 # from Forms import ApplyVoucher
 from voucher import Voucher
 from Subscriptions import Subscriptions
@@ -67,8 +67,8 @@ app.config['SECRET_KEY'] = 'Chinese ARC'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images/')
 
 app.config['UPLOAD_EXTENSIONS'] = ['.jpeg', '.jpg', '.png', '.gif']
-photos = UploadSet('photos', IMAGES)
-configure_uploads(app, photos)
+# photos = UploadSet('photos', IMAGES)
+# configure_uploads(app, photos)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -987,6 +987,7 @@ def CreateProduct():
                     CreateProduct_Form.create_by.data,
                     CreateProduct_Form.modified_date.data,
                     CreateProduct_Form.modified_by.data,
+
                 )
                 if len(productinfo_dict) == 0:
                     currentproductid = 1
@@ -2130,6 +2131,10 @@ def fullpage_cart():
 def order_confirm():
     return render_template('orderConfirm.html')
 
+@app.route('/fullpage_wish')
+def fullpage_wish():
+   
+    return render_template('fullpage_wish.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

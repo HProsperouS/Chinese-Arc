@@ -31,7 +31,7 @@
     {{ render_field(form.modified_date, class="form-control") }}
   </div>
   <div class="form-group" >
-    {{ render_field(form.modified_by, class="form-control") }}
+    {{ render_field(form.modified_by, class="form-control", readOnly=True, value = session.get('loggedIn') ) }}
   </div>
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>

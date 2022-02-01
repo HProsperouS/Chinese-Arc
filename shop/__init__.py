@@ -294,7 +294,7 @@ def EnableAdmin(id):
     admin.set_status('Enabled')
     db['Admin'] = admins_dict
     db.close()
-    flash('Hi'+ " "+', You have successfully disabled ' + admin.get_username() + " ",'success')
+    flash('Hi'+ " "+', You have successfully enabled ' + admin.get_username() + " ",'success')
     return redirect(url_for('RetrieveAdmin'))
 
 @app.route('/DeleteAdmin/<int:id>', methods=['POST'])

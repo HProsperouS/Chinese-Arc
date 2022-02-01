@@ -16,7 +16,7 @@ from HomeAnnouncement import HomeAnnouncement
 from FAQ import FAQ
 from Feedback import Feedback
 from cust_order import CustOrder
-from shop.Forms import Change_PasswordForm
+
 # from Forms import ApplyVoucher
 from voucher import Voucher
 from Subscriptions import Subscriptions
@@ -24,7 +24,7 @@ import functools
 from Forms import CreateOrderForm, Registration,  CreateFAQForm, Login
 from Forms import CreateOrderForm, Registration,  CreateFAQForm
 from Order_form import CreateCustOrder,CustOrderUpdate
-# from EditProduct import UpdateProductForm, CreateProductForm, photos
+from EditProduct import UpdateProductForm, CreateProductForm, photos
 
 from Newsletter import Newsletter
 from Apply_Coupon import Coupon
@@ -67,8 +67,8 @@ app.config['SECRET_KEY'] = 'Chinese ARC'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images/')
 
 app.config['UPLOAD_EXTENSIONS'] = ['.jpeg', '.jpg', '.png', '.gif']
-# photos = UploadSet('photos', IMAGES)
-# configure_uploads(app, photos)
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
 
 login_manager = LoginManager()
 login_manager.init_app(app)

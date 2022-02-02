@@ -2,7 +2,7 @@
 {% block title %}The Chinese Arc{% endblock %}
 
 {% block content %}
-<h1 class="display-4">Retrieve Newsletter Subscriptions</h1>
+<h1 class="display-4">Newsletter Subscriptions</h1>
 
 {% for message in get_flashed_messages() %}
 
@@ -83,6 +83,69 @@
         </tbody>
     </table>
 </div>
+
+<br>
+<br>
+
+<h3>Subscribers to be Removed</h3>
+
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Reason For Unsubscribing</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for unsubscribe in unsubscribe_list %}
+            <tr>
+                <td>{{ unsubscribe.get_email() }}</td>
+                <td>{{ unsubscribe.get_reason() }}</td>
+                <td></td>
+                <td>
+                    <form action="{{url_for('delete_unsubscribe', id=unsubscribe.get_unsubscribe_id())}}" method="POST">
+                        <!-- Button to Open the Modal -->
+                        <button type="button" title="Delete" class="btn btn-primary " data-bs-toggle="modal"
+                            data-bs-target="#myModal_{{unsubscribe.get_unsubscribe_id()}}">
+                            <i class="fas fa-check-square"></i>
+                        </button>
+                
+                        <!-- The Modal -->
+                        <div class="modal" id="myModal_{{unsubscribe.get_unsubscribe_id()}}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Confirmation</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        Are you sure you have removed {{unsubscribe.get_email()}} from the newsletter subscription?
+                                    </div>
+                
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <input type="submit" value="Confirm" class="btn btn-danger">
+                
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

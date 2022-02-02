@@ -1,0 +1,249 @@
+{% block content %}
+<link rel="icon" type="image/png" href="../static/images/Chinese.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+{% from "_formHelper.html" import render_field %}
+
+<div class="container">
+    <h2>Oh! You want to unsubscribe?</h2>
+    <p>We hate goodbyes, but if you change yor mind, we'll always have something special for you.</p>
+
+    <form method="POST" action="" id="unsubscribe">
+        <div class="form-group">
+            {{ render_field(form.email, class="form-control") }}
+        </div>
+        <br>
+        <div class="form-group">
+            {{ render_field(form.reason, class="form-control") }}
+        </div>
+        <input type="submit" value="Submit" class="btn" id="unsubscribe"/>
+    </form>
+
+    <a href="/home" class="btn btn-light" id="cancel">Cancel</a>
+
+
+    <!-- <a href="/deleteSubscriptions" class="btn" id="unsubscribe">Unsubscribe</a>
+    <a href="/home" class="btn btn-light" id="cancel">Cancel</a> -->
+
+    <br>
+    <br>
+
+    <div class="emoji shocked">
+        <figure class="face">
+            <span class="eyes">
+                <span class="eye"></span>
+                <span class="eye"></span>
+            </span>
+            <span class="mouth">
+            </span>
+        </figure>
+    </div>
+
+</div>
+
+
+<!-- <footer style="position: absolute; bottom:10px; left: 10px;">By <a href="https://newtodesign.com"
+        target="_top">NewToDesign</a></footer> -->
+
+<style>
+    /*------ Base styles ------*/
+body {
+  background: #f7f8f9;
+  font-family: arial;
+  background-color: #FFF9DE;
+  text-rendering : optimizeLegibility;
+  -webkit-font-smoothing : antialiased;
+}
+
+
+.container {
+  max-width: 500px;
+  height: auto;
+  margin: 50px auto;
+  padding: 60px;
+  padding-bottom: 20px;
+  background-color: #fff;
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0px 15px 15px -12px rgba(0,0,0,0.09);
+}
+
+input[type=submit] {
+  background-color: #F2DD68;
+  border: none;
+  color: white;
+  padding: 15px 20px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn{
+  background-color: #F2DD68;
+  text-decoration: none;
+  padding: 15px 20px;
+  font-weight: bold;
+  border-radius: 50px;
+  color: #fff;
+}
+
+.btn-light {
+  background-color: #eee;
+  color: #222;
+}
+
+.btn:hover{
+  opacity: 0.8;
+}
+
+h2 {
+  margin: 0;
+  padding: 0;
+  color: #444;
+}
+
+p {
+  margin-top: 10px;
+  line-height: 24px;
+  margin-bottom: 40px;
+  color: #888;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+}
+
+
+
+/*------ Main Emoji Styling ------*/
+
+.emoji {
+  box-sizing: border-box;
+  margin: 30px auto 20px;
+  width: 120px;
+  height: 120px;
+}
+
+.face {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  margin: 0 15px 30px 0;
+  border-radius: 50%;
+  background: #F2DD68;
+  transition: 1s;
+}
+
+.face:after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: -8px;
+  left: -8px;
+  border-radius: 50%;
+  box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 0.07);
+}
+
+.eye {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  top: 30px;
+  left: 18px;
+  z-index: 1;
+  border-radius: 50%;
+  background: #995710;
+}
+
+.eye:last-child {
+  left: auto;
+  right: 18px;
+}
+
+.emoji .eyed {
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  animation-duration: 3s;
+}
+
+@keyframes blink {
+  10% {
+    height: 10px;
+    top: 32px;
+  }
+  20% {
+    height: 0.5px;
+    top: 37px;
+  }
+  50% {
+    height: 10px;
+    top: 32px;
+  }
+}
+
+.mouth {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  width: 70px;
+  height: 34px;
+  margin: 0 auto;
+  border-radius: 0 0 70px 70px;
+  overflow: hidden;
+  background: #995710;
+  transition: 0.3s;
+}
+
+.mouth:before,
+.mouth:after {
+  content: '';
+  position: absolute;
+  display: block;
+}
+
+
+/*------ Shocked Emoji Styling ------*/
+
+.shocked .mouth {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+
+#cancel:hover ~ .emoji .mouth{
+  top: 55px;
+  z-index: 1;
+  width: 50px;
+  height: 25px;
+  margin: 0 auto;
+  border-radius: 0 0 70px 70px;
+  overflow: hidden;
+  background: #995710;
+}
+
+#unsubscribe:hover ~ .emoji .mouth{
+  width: 50px;
+  height: 5px;
+  top: 60px;
+  border-radius: 50px;
+}
+
+</style>
+
+{% endblock %}

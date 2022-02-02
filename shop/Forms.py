@@ -48,6 +48,11 @@ class CreateNewsletterForm(Form):
     create_date = DateField('Date Updated/Created', format="%Y-%m-%d", default=datetime.datetime.now())
     create_by = StringField('Created By', [validators.DataRequired()])
 
+class CreateUnsubscribeForm(Form):
+    email = StringField('Email Address', [validators.Length(min=1, max=150), validators.DataRequired()])
+    reason = TextAreaField('Why do you want to unsubscribe?', [validators.DataRequired()])
+
+
 class CreateFAQForm(Form):
     question = TextAreaField('Question', [validators.DataRequired()])
     answer = TextAreaField('Answer', [validators.DataRequired()])

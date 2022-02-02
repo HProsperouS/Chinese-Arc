@@ -16,6 +16,7 @@ from HomeAnnouncement import HomeAnnouncement
 from FAQ import FAQ
 from Feedback import Feedback
 from cust_order import CustOrder
+from Unsubscribe import Unsubscribe
 
 # from Forms import ApplyVoucher
 from voucher import Voucher
@@ -35,7 +36,7 @@ from EditProduct import UpdateProductForm, CreateProductForm, photos
 from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
-from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm
+from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm
 from DeliveryFeedback import DeliveryFeedback
 from Forms import Registration, CreateFAQForm,CreateDeliveryFeedbackForm, CreateFeedbackForm
 from Forms import Registration,  CreateFAQForm
@@ -1551,7 +1552,7 @@ def create_subscriptions():
 
                                         <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">
                                         <div>Copyright &#169; 2022. All rights reserved.</div>
-                                        <div>If you don't want to receive these emails from us in the future, please <a href="#" target="_blank" style="text-decoration:none;color:#828282;"><span style="color:#828282;">Unsubscribe</span></a></div>
+                                        <div>If you don't want to receive these emails from us in the future, please <a href="http://127.0.0.1:5000/createUnsubscribe" target="_blank" style="text-decoration:none;color:#828282;"><span style="color:#828282;">Unsubscribe</span></a></div>
                                         </div>
 
                                     </td>
@@ -1595,6 +1596,8 @@ def create_subscriptions():
 
         db.close()
 
+        flash("You have successfully subscribed to TCA Newsletter")
+
         return redirect(url_for('home_page'))
     return render_template('createSubscriptions.html', form=create_subscriptions_form)
 
@@ -1610,7 +1613,21 @@ def retrieve_subscriptions():
         subscriptions = subscriptions_dict.get(key)
         subscriptions_list.append(subscriptions)
 
-    return render_template('retrieveSubscriptions.html', count=len(subscriptions_list), subscriptions_list=subscriptions_list)
+    unsubscribe_dict = {}
+    db = shelve.open('unsubscribe.db', 'r')
+    unsubscribe_dict = db['Unsubscribe']
+    db.close()
+
+    unsubscribe_list = []
+    for key in unsubscribe_dict:
+        unsubscribe = unsubscribe_dict.get(key)
+        unsubscribe_list.append(unsubscribe)
+
+    return render_template('retrieveSubscriptions.html', 
+                            count=len(subscriptions_list), 
+                            subscriptions_list=subscriptions_list,
+                            count1=len(unsubscribe_list), 
+                            unsubscribe_list=unsubscribe_list)
 
 @app.route('/updateSubscriptions/<uuid:id>/', methods=['GET', 'POST'])
 def update_subscriptions(id):
@@ -1627,6 +1644,8 @@ def update_subscriptions(id):
 
         db['Subscriptions'] = subscriptions_dict
         db.close()
+
+        flash("Subscription have been updated")
 
         return redirect(url_for('retrieve_subscriptions'))
     else:
@@ -1653,7 +1672,48 @@ def delete_subscriptions(id):
     db['Subscriptions'] = subscriptions_dict
     db.close()
 
+    flash("Subscription have been deleted")
+
     return redirect(url_for('retrieve_subscriptions'))
+
+@app.route('/createUnsubscribe', methods=['GET', 'POST'])
+def create_unsubscribe():
+    create_unsubscribe_form = CreateUnsubscribeForm(request.form)
+    if request.method == 'POST' and create_unsubscribe_form.validate():
+        unsubscribe_dict = {}
+        db = shelve.open('unsubscribe.db', 'c')
+
+        try:
+            unsubscribe_dict = db['Unsubscribe']
+        except:
+            print("Error in retrieving Unsubscribe from unsubscribe.db.")
+
+        unsubscribe = Unsubscribe(create_unsubscribe_form.email.data, 
+                                    create_unsubscribe_form.reason.data)
+
+        unsubscribe_dict[unsubscribe.get_unsubscribe_id()] = unsubscribe
+        db['Unsubscribe'] = unsubscribe_dict
+
+        db.close()
+
+        return redirect(url_for('home_page'))
+    return render_template('createUnsubscribe.html', form=create_unsubscribe_form)
+
+@app.route('/deleteUnsubscribe/<uuid:id>', methods=['POST'])
+def delete_unsubscribe(id):
+    unsubscribe_dict = {}
+    db = shelve.open('unsubscribe.db', 'w')
+    unsubscribe_dict = db['Unsubscribe']
+
+    unsubscribe_dict.pop(id)
+
+    db['Unsubscribe'] = unsubscribe_dict
+    db.close()
+
+    flash("A subscription have been removed")
+
+    return redirect(url_for('retrieve_subscriptions'))
+
 
 @app.route('/createNewsletter', methods=['GET', 'POST'])
 def create_newsletter():
@@ -1677,6 +1737,8 @@ def create_newsletter():
         db['Newsletter'] = newsletter_dict
 
         db.close()
+
+        flash("Newsletter has been added successfully")
 
         return redirect(url_for('retrieve_newsletter'))
     return render_template('createNewsletter.html', form=create_newsletter_form)
@@ -1707,7 +1769,7 @@ def update_newslette(id):
 
             newsletter = newsletter_dict.get(id)
             newsletter.set_newsletter_name(update_newsletter_form.newsletter_name.data)
-            newsletter.set_last_name(update_newsletter_form.message.data)
+            newsletter.set_message(update_newsletter_form.message.data)
             newsletter.set_create_date(update_newsletter_form.create_date.data)
             newsletter.set_create_by(update_newsletter_form.create_by.data)
 
@@ -1718,8 +1780,6 @@ def update_newslette(id):
 
         finally:
             db.close()
-
-        flash("Newsletter has been updated successfully")
         
         return redirect(url_for('retrieve_newsletter'))
 
@@ -1734,6 +1794,8 @@ def update_newslette(id):
 
         finally:
             db.close()
+
+        flash("Newsletter have been updated")
 
         newsletter = newsletter_dict.get(id)
         update_newsletter_form.newsletter_name.data = newsletter.get_newsletter_name()
@@ -1753,6 +1815,8 @@ def delete_newsletter(id):
 
     db['Newsletter'] = newsletter_dict
     db.close()
+
+    flash("Newsletter have been deleted")
 
     return redirect(url_for('retrieve_newsletter'))
 
@@ -1810,7 +1874,7 @@ def send_newsletter(id):
     db['Newsletter'] = newsletter_dict
     db.close()
 
-    return redirect(url_for('retrieve_newsletter'))
+    return render_template('sendNewsletter.html')
 
 #brings to customer account page
 @app.route('/base_cust')
@@ -1845,7 +1909,7 @@ def CreateFeedback():
         feedback_dict[feedback.get_feedback_id()] = feedback
         db['Feedback'] = feedback_dict
         flash('Feedback has sent sucessfully')
-        return redirect(url_for('base_cust'))
+        return redirect(url_for('CreateFeedback'))
     return render_template('CreateFeedback.html', form=CreateFeedback_Form)
 
 @app.route('/RetrieveFeedback',methods=['GET','POST'])

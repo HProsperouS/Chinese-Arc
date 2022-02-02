@@ -4,7 +4,7 @@ from msilib import change_sequence
 from re import split, sub, template
 from venv import create
 from flask_wtf import FlaskForm
-from flask import Flask, render_template, request, redirect, url_for, session, flash, g
+from flask import Flask, message_flashed, render_template, request, redirect, url_for, session, flash, g
 #from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from sqlalchemy import PrimaryKeyConstraint
@@ -24,7 +24,7 @@ import functools
 from Forms import CreateOrderForm, Registration,  CreateFAQForm, Login
 from Forms import CreateOrderForm, Registration,  CreateFAQForm
 from Order_form import CreateCustOrder,CustOrderUpdate
-from EditProduct import UpdateProductForm, CreateProductForm, photos
+# from EditProduct import UpdateProductForm, CreateProductForm, photos
 
 from Newsletter import Newsletter
 from Apply_Coupon import Coupon

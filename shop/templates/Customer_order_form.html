@@ -23,9 +23,9 @@
   <div class="container" style="max-width: 720px;">
     <h1 class="display-4 text-center" >Payment & Checkout</h1>
     <br>
-    <aside class="col-md-6 mx-auto" style="color: rgb(160, 28, 10); font-size: 18px; ">
-      <div class="card col-sm-10" style="text-align: center; border-radius: 7px;" >
-        <div class="card-body">
+    <aside class="col-md-5 mx-auto" >
+      <div class="card col-sm-10" style="text-align: center; border-radius: 7px; color: #ff6a00; font-size: larger; font-weight: bolder;" >
+        <div class="card-body" >
                 <div>
                     <strong>Grand Total:
                         <span class='float-right'>$<span class="sum-price " id="grandTotal"></span>
@@ -81,7 +81,7 @@
                 <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
                   {{ render_field(form.card_num, class="form-control", required="", placeholder="Eg: 1234...16") }}
                 </div>
-                <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
+                <div class="form-group" style= "padding-right:20px; padding-left: 20px;" >
                   {{ render_field(form.cvv, class="form-control", required="") }}
                 </div>
               </div>  
@@ -123,15 +123,16 @@
         </div>
       </div>
       <br> 
-      <input type="submit" value="Checkout" class="btn btn-primary text-center-mb-2" style="background-color:rgb(255, 255, 255); color:rgb(160, 28, 10); border-color:#650e0e; width: 200px; text-align: center;margin-left: 15rem;" />
-      
+      <input type="submit" value="Checkout" class="btn btn-primary text-center-mb-2" style="background-color:rgb(255, 255, 255); color:rgb(160, 28, 10); border-color:#650e0e; width: 200px; text-align: center;margin-left: 15rem;"onclick="localStorage.clear()" />
+  
     </form>
     <br>
-    <a href="{{ url_for('fullpage_cart') }}" type="submit" value="Back to cart" class="btn btn-primary text-center-mb-2" style="background-color:#ff6a00; color:rgb(255, 255, 255); border: none; width: 200px; text-align: center;margin-left: 15rem;" >Back to Home</a>
+    <a href="{{ url_for('fullpage_cart') }}" type="submit" value="Back to cart" class="btn btn-primary text-center-mb-2" style="background-color:#ff6a00; color:rgb(255, 255, 255); border: none; width: 200px; text-align: center;margin-left: 15rem;"  >Back to Cart</a>
   </div>
 </section>
 
 <script src="../static/js/customer/fullpage_cart.js" type="text/javascript"></script>
 
-<script></script>
+<script>
+</script>
 {% endblock %}

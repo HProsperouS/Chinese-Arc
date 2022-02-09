@@ -32,6 +32,7 @@ function getCartSum() {
 
 	}
 	document.getElementById("grandTotal").textContent = paymentPrice;
+	localStorage.setItem('value', paymentPrice);
 }
 function Checkout(){
 	var pricing = document.getElementById("grandTotal").textContent
@@ -60,6 +61,14 @@ function Checkout(){
 	else if (pricing > 0){
 		document.getElementById("checkout").href = "createCustOrder";
 	}
+	
+}
+function Summary_value(){
+	const value = localStorage.getItem('value')
+	document.getElementById("grandTotal").innerHTML = value;
+	document.getElementById('summary-value').value = value;
+	console.log(productsInCart)
+	
 	
 }
 

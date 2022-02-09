@@ -12,8 +12,8 @@ const parentElement = document.querySelector('#buyItems');
 const cartSumPrice = document.querySelector('#sum-price');
 const products = document.querySelectorAll('.col-md-3');
 const cartItemNumber= document.querySelector('#sum-count');
-const flash = document.getElementById('flash_2')
-
+const flash_2 = document.getElementById('flash_2')
+const flash = document.getElementById('flash')
 
 // const CartCallout = function(){
 //   alert("Item added to cart!");
@@ -96,10 +96,10 @@ const updateShoppingCartHTML = function () {  // 3
 function updateProductsInCart(product) { // 2
 	document.getElementById('flash_2').textContent = 'Item added to Cart!'
 		const showFlash = () => {
-			flash.classList.add("flash--visible_2")  
+			flash_2.classList.add("flash--visible_2")  
 			}
 		const hideFlash = () => {
-			flash.classList.remove("flash--visible_2")
+			flash_2.classList.remove("flash--visible_2")
 			document.getElementById('flash_2').innerHTML = ''
 			}
 		// const btn = document.getElementById('checkout')
@@ -140,6 +140,8 @@ products.forEach(item => {   // 1
 			}
 			updateProductsInCart(product);
 			updateShoppingCartHTML();
+			AddtoCart(product);
+			
 
 
 		}
@@ -161,15 +163,19 @@ parentElement.addEventListener('click', (e) => { // Last
 				if (isPlusButton) {
 					productsInCart[i].count += 1
 
+					AddtoCart(productsInCart[i])
 				}
 				else if (isMinusButton) {
 					productsInCart[i].count -= 1
+
+					MinusCart(productsInCart[i])
 				}
 				else if (isDeleteButton){
 				productsInCart[i].count = 0
 
 				productsInCart[i].price = productsInCart[i].basePrice * productsInCart[i].count;
 
+				Deleteitem(productsInCart[i])
 				
 
 				}
@@ -189,10 +195,67 @@ parentElement.addEventListener('click', (e) => { // Last
 
 updateShoppingCartHTML();
 
-function Delete(){
-	
+function AddtoCart(product){
+	console.log('add')
+	for (let i = 0; i < productsInCart.length; i++) {
+		if (productsInCart[i].id == product.id) {
+			if (productsInCart[i].count > 1) {
+				fetch('/createCustOrder',{
+					method:'POST',
+					body: JSON.stringify({
+						function:'plus',product_name : product.name, product_price: product.price, product_qty : product.count
+					}),
+					cache: 'no-cache',
+					headers: new Headers({
+						'content-type': 'application/json'
+					})
+				})
+				
+			}
+			else if (productsInCart[i].count == 1){
+				fetch('/createCustOrder',{
+					method:'POST',
+					body: JSON.stringify({
+						function:'add',product_name : product.name, product_price: product.price, product_qty : product.count
+					}),
+					cache: 'no-cache',
+					headers: new Headers({
+						'content-type': 'application/json'
+					})
+				})
+				
+			}
+		}
+	}
 }
 
+function MinusCart(productsInCart){
+	fetch('/createCustOrder',{
+		method:'POST',
+		body: JSON.stringify({
+			function:'minus',product_name : productsInCart.name, product_price: productsInCart.price, product_qty : productsInCart.count
+		}),
+		cache: 'no-cache',
+		headers: new Headers({
+			'content-type': 'application/json'
+		})
+	})
+
+}
+
+function Deleteitem(productsInCart){
+	fetch('/createCustOrder',{
+		method:'POST',
+		body: JSON.stringify({
+			function:'delete',product_name :productsInCart.name, product_price: productsInCart.price, product_qty : productsInCart.count
+		}),
+		cache: 'no-cache',
+		headers: new Headers({
+			'content-type': 'application/json'
+		})
+	
+	})
+}
 
 // // cartSumPrice.innerHTML = '$' + countTheSumPrice();
 // let count_1 = 0;

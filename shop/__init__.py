@@ -17,7 +17,7 @@ from FAQ import FAQ
 from Feedback import Feedback
 from cust_order import CustOrder
 from Unsubscribe import Unsubscribe
-
+from count import Count
 # from Forms import ApplyVoucher
 from voucher import Voucher
 from Subscriptions import Subscriptions
@@ -2009,10 +2009,21 @@ def DeleteFeedback(id):
 
 @app.route('/createCustOrder', methods = ['GET', 'POST'])
 def createCustOrder():
+    cust_cart_dict = {}
+    db = shelve.open('custCart.db', 'c')
+    try:
+        cust_cart_dict = db['custCart']
+    except :
+        print("Error in retrieving cust Orders from CustCart.db.")
+    db['custCart'] = cust_cart_dict
+    db.close()
+
     create_custorder_form = CreateCustOrder(request.form)
     if request.method == 'POST' and create_custorder_form.validate():
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'c')
+
+        copy_cart_dict = cust_cart_dict.copy()
 
         try:
             cust_order_dict = db['CustOrder']
@@ -2031,14 +2042,109 @@ def createCustOrder():
                                 create_custorder_form.unit_number.data,
                                 create_custorder_form.create_date.data,
                                 create_custorder_form.modified_date.data,
-                                create_custorder_form.modified_by.data)
+                                create_custorder_form.modified_by.data,
+                                create_custorder_form.total.data)
         
-        cust_order_dict[Cust_orders.get_custOrder_id()] = Cust_orders
-        db['CustOrder'] = cust_order_dict
+        cust_order_dict[Cust_orders.get_custOrder_id()] = {'order':Cust_orders,'cart':copy_cart_dict} 
 
+        db['CustOrder'] = cust_order_dict
+        db.close()
+
+        try:
+            cust_cart_dict = {}
+            db = shelve.open('custCart.db', 'w')
+            cust_cart_dict = db['custCart']
+
+            print(cust_cart_dict)
+            cust_cart_dict.clear()
+            
+
+        except:
+            print('Error in opening db')
+
+            
+        db['custCart'] = cust_cart_dict
+        db.close()
+
+        print(cust_order_dict)
+        print(cust_cart_dict)
+        print(copy_cart_dict)
+
+        delete_order_dict = {}
+        db = shelve.open('deleteorder.db', 'c')
+        try:
+            delete_order_dict = db['deleteOrder']
+        except:
+            print('Error in opening db')
+        db['deleteOrder'] = delete_order_dict 
 
         flash("Order has been processed successfully! Thank you for shopping with Chinese Arc")
         return redirect(url_for('order_confirm'))
+    try:  
+        req = request.get_json()
+        name = req['product_name']
+        price = req['product_price']
+        qty = req['product_qty']
+        delete_add = req['function']
+        print(req)
+        try:
+            product_dict = {}
+            db = shelve.open('ProductInfo.db', 'r')
+            product_dict = db['ProductInfo']
+        except IOError:
+            print('An error occurered trying to read PRODUCTINFO.db')
+        finally:
+            db.close()
+
+        try:
+            cust_cart_dict = {}
+            db = shelve.open('custCart.db', 'w')
+            cust_cart_dict = db['custCart']
+        except:
+            print('Error in opening db')
+
+        for key in product_dict:
+            product = product_dict.get(key)
+            cust_cart_dict[0] = {'cart':1,'name':'cart','qty':0}
+            if product.get_product_name() == name:          
+                if delete_add == 'add':
+                    count=Count()
+                    cust_cart_dict[count.get_count()] = {'name':name,'price':price,'qty': qty}
+                    print('created')
+                elif delete_add == 'plus':
+                    for key in list(cust_cart_dict):                   
+                        if product.get_product_stock() >= cust_cart_dict[key]['qty']:
+                            if cust_cart_dict[key]['name'] == name:
+                                cust_cart_dict[key]['qty'] += 1
+                                cust_cart_dict[key]['price'] += cust_cart_dict[key]['price']
+                                print('added')
+                        if product.get_product_stock() < cust_cart_dict[key]['qty']:
+                            cust_cart_dict[key]['qty'] -= 1
+                            
+                            print('Out of stock') 
+                                    
+                elif delete_add == 'minus':
+                    for key in list(cust_cart_dict):
+                        if cust_cart_dict[key]['name'] == name:
+                            cust_cart_dict[key]['qty'] -= 1
+                            cust_cart_dict[key]['price'] -= cust_cart_dict[key]['price']
+                            print('minus')
+                            if cust_cart_dict[key]['qty'] == 0:
+                                del cust_cart_dict[key]
+                                print('item is 0 ( deleted )')
+                elif delete_add == 'delete':
+                    for key in list(cust_cart_dict):
+                        if name == cust_cart_dict[key]['name']:
+                            del cust_cart_dict[key]
+                            print('removed')        
+                
+                    
+        print(cust_cart_dict)
+                
+        db['custCart'] = cust_cart_dict
+        db.close()
+    except:
+        print('error in receiving add to cart')
     return render_template('Customer_order_form.html', form=create_custorder_form)
 
 @app.route('/order', methods=['GET','POST'])
@@ -2056,12 +2162,42 @@ def retrieve_cust_orders():
     for key in cust_order_dict:
         cust_order = cust_order_dict.get(key)
         cust_order_list.append(cust_order)
+
     
-    return render_template('retrieveCustOrders.html', count=len(cust_order_list), cust_order_list=cust_order_list)
+    try:
+        cust_cart_dict = {}
+        db = shelve.open('custCart.db', 'w')
+        cust_cart_dict = db['custCart']
+
+        del cust_cart_dict[0]
+    except:
+        print('Error in opening db')
+
+    
+
+    db['custCart'] = cust_cart_dict
+    db.close()
+    
+
+    cust_cart_dict = {}
+    db = shelve.open('custCart.db', 'r')
+    try:
+        cust_cart_dict = db['custCart']
+    except :
+        print("Error in retrieving cust Orders from CustCart.db.")
+    
+    db.close()
+
+    cust_cart_list = []
+    for key in cust_cart_dict:
+        cust_order = cust_cart_dict.get(key)
+        cust_cart_list.append(cust_order)
+    
+    return render_template('order.html', count=len(cust_order_list), cust_order_list=cust_order_list,count3=len(cust_cart_list),cust_cart_list=cust_cart_list)
 
 
 @app.route('/deleteOrder/<uuid:id>', methods=['POST'])
-def delete_cust_order(id):
+def delete_order(id):
     try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'w')
@@ -2081,108 +2217,120 @@ def delete_cust_order(id):
 
 
 
-# @app.route('/refundOrder/<int:id>', methods=['POST'])
-# def refund_order(id):
-#     cust_order_dict = {}
-#     db = shelve.open('CustOrder.db', 'w')
-#     cust_order_dict = db['CustOrder']
+@app.route('/refundOrder/<uuid:id>', methods=['POST'])
+def refund_order(id):
+ 
+    try:   
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'r')
+        cust_order_dict = db['CustOrder']
+        deleted_order_id = cust_order_dict.get(id)
+       
+    except:
+        print('Error in opening db')
 
-#     cust_order_list = []
-#     order = cust_order_dict.get(id)
-#     cust_order_list.append(order)
+    cust_order_list = []
+    order = cust_order_dict.get(id)
+    cust_order_list.append(order)
 
-#     refund_mail2(id)
+    refund_mail2(id)
+    
+    
 
-#     cust_order_dict.pop(id)
+    
+    db.close()
 
-#     db['CustOrder'] = cust_order_dict
-#     db.close()
-#     flash('Order has been refunded sucessfully')
+    delete_order_dict = {}
+    db = shelve.open('deleteorder.db', 'w')
+    delete_order_dict = db['deleteOrder']
+    
+    
+    
+    deleted_orders = (deleted_order_id['order'].get_custOrder_id(),deleted_order_id['order'].get_status())
+    delete_order_dict[deleted_order_id['order'].get_custOrder_id()] =  deleted_orders
+    
+    db['deleteOrder'] = delete_order_dict 
+     
+     
+    flash('Order has been refunded sucessfully','success')
 
-#     return render_template('refund.html', count=len(cust_order_list), cust_order_list=cust_order_list)
+    return render_template('refund.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 
 
-# def refund_mail2(id):
-#     update_order_form = CreateCustOrder(request.form)
-#     cust_order_dict = {}
-#     db = shelve.open('CustOrder.db', 'r')
-#     cust_order_dict = db['CustOrder']
+def refund_mail2(id):
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'r')
+        cust_order_dict = db['CustOrder']
+    except:
+        print('error in opening db')
+    finally:
+        db.close()
+    
 
-#     db.close()
+    order = cust_order_dict.get(id)
+    first_name_1 = order['order'].get_first_name()
+    last_name_1 = order['order'].get_last_name()
+    email = order['order'].get_email()
 
-#     order = cust_order_dict.get(id)
-#     update_order_form.first_name.data = order.get_first_name()
-#     update_order_form.last_name.data = order.get_last_name()
-#     update_order_form.email.data = order.get_email()
+    sender = password = ""
+    port = 465
+    sender = 'testingusers1236@gmail.com'
+    password = 'dG09#G.@Yg23G'
 
-#     sender = password = ""
-#     port = 465
-#     sender = 'testingusers1236@gmail.com'
-#     password = 'dG09#G.@Yg23G'
+    recieve = 'tayzheyin123@gmail.com'
+    first_name = first_name_1
+    last_name = last_name_1
 
-#     recieve = update_order_form.email.data
-#     first_name = update_order_form.first_name.data
-#     last_name = update_order_form.last_name.data
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'w')
+        cust_order_dict = db['CustOrder']
 
-#     msg = EmailMessage()
-#     msg['Subject'] = 'Chinese Arc Refund' + ' ( ' + first_name + last_name + ' ) '
-#     msg['From'] = sender
-#     msg['To'] = recieve
-
-#     msg.add_alternative("""\
-#     <!DOCTYPE html>
-#     <html lang="en">
-
-#     <body>
-#         <h3 style='color:black;'> Hey hey ~~ Hope your doing well! </h3>
-#         <h4> As requested by you, we have processed your refund and it should reflect in your bank account in the 2-3 business days.
-
-#     <br> <br> We are sad to see you go, but we hope that we could work together in the future where our product will be useful for your business.
-
-#     <br> <br> If you are still on the lookout for other options, please do let me know, as I’d be able to help you choose other options that might be the right fit for you.
-
-#     <br> <br> Please do stay connected. Have a great day.
-
-#     <br> <br> Thanks, </h4>
-#     <h3> Tay </h3>
-#     </body>
-        # order = cust_order_dict.get(id)
-        # order.set_first_name(update_order_form.first_name.data)
-        # order.set_last_name(update_order_form.last_name.data)
-        # order.set_holder_name(update_order_form.holder_name.data)
-        # order.set_email(update_order_form.email.data)
-        # order.set_card_type(update_order_form.card_type.data)
-        # order.set_card_num(update_order_form.card_num.data)
-        # order.set_city(update_order_form.city.data)
-        # order.set_postal_code(update_order_form.postal_code.data)
-        # order.set_unit_number(update_order_form.unit_number.data)
-        # order.set_cvv(update_order_form.cvv.data)
+        cust_order_dict.pop(id)
         
-        
-        # order.set_create_date(update_order_form.create_date.data)
-        # order.set_status(update_order_form.status.data)
+        db['CustOrder'] = cust_order_dict
+    except:
+        print('An error occured when opening CustOrder.db')
+    finally:
+        db.close()
 
-#     </html>
-#     """, subtype='html')
+    msg = EmailMessage()
+    msg['Subject'] = 'Chinese Arc Refund' + ' ( ' + first_name + last_name + ' ) '
+    msg['From'] = sender
+    msg['To'] = recieve
 
-#     context = ssl.create_default_context()
+    
 
-#     with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
-#         server.login(sender, password)
-#         server.send_message(msg)
+    
 
-        # (update_order_form.first_name.data) = order.get_first_name()
-        # update_order_form.last_name.data =  order.get_last_name()
-        # (update_order_form.email.data) = order.get_email()
-        # (update_order_form.holder_name.data) = order.get_holder_name()
-        # (update_order_form.card_type.data) = order.get_card_type()
-        # (update_order_form.card_num.data) = order.get_card_num()
-        # (update_order_form.city.data) = order.get_city()
-        # (update_order_form.postal_code.data) = order.get_postal_code()
-        # (update_order_form.unit_number.data) = order.get_unit_number()
-        # (update_order_form.cvv.data) = order.get_cvv()
-        # (update_order_form.create_date.data) = order.get_create_date()
-        # (update_order_form.status.data) = order.get_status()
+    msg.add_alternative("""\
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <body>
+        <h3 style='color:black;'> Hey hey ~~ Hope your doing well! </h3>
+        <h4> As requested by you, we have processed your refund and it should reflect in your bank account in the 2-3 business days.
+
+    <br> <br> We are sad to see you go, but we hope that we could work together in the future where our product will be useful for your business.
+
+    <br> <br> If you are still on the lookout for other options, please do let me know, as I’d be able to help you choose other options that might be the right fit for you.
+
+    <br> <br> Please do stay connected. Have a great day.
+
+    <br> <br> Thanks, </h4>
+    <h3> Tay </h3>
+    </body>
+       
+
+    </html>
+    """, subtype='html')
+
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+        server.login(sender, password)
+        server.send_message(msg)
 
 
 

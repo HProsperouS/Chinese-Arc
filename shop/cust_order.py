@@ -8,7 +8,7 @@ class CustOrder(Customer.Customer,fakeinheritence):
 
 
 
-    def __init__(self, first_name, last_name, email, holder_name, card_type, card_num, cvv, city, postal_code, unit_number, create_date, modified_date, modified_by ):
+    def __init__(self, first_name, last_name, email, holder_name, card_type, card_num, cvv, city, postal_code, unit_number, create_date, modified_date, modified_by,total ):
         super().__init__(first_name, last_name,"", "", city, postal_code,"", "", email)
         fakeinheritence.__init__(self,create_date,"", modified_date,modified_by)
 
@@ -21,6 +21,7 @@ class CustOrder(Customer.Customer,fakeinheritence):
         self.__postal_code = postal_code
         self.__unit_number = unit_number
         self.__status = None
+        self.__total = total
   
 
     def get_custOrder_id(self):
@@ -54,7 +55,8 @@ class CustOrder(Customer.Customer,fakeinheritence):
         #     self.__status = 'Delivered'
         return self.__status
 
-
+    def get_total(self):
+        return self.__total
 
     def set_holder_name(self,holder_name):
         self.__holder_name = holder_name
@@ -80,6 +82,8 @@ class CustOrder(Customer.Customer,fakeinheritence):
     def set_status(self, status):
         self.__status = status
 
+    def set_total(self, total):
+        self.__total = total
 
 
 

@@ -21,7 +21,7 @@ class CreateCustOrder(Form):
     modified_by = StringField('Modified By', [validators.Length(min=1, max=50), validators.Optional()])
     modified_date = DateField('Modified Date', [validators.Optional()])
     status = SelectField('Status', [validators.DataRequired(message='Please choose card type')], choices=[('Pending', 'Pending'), ('Undelivered', 'Undelivered'), ('Delivered', 'Delivered')], default='Pending')
-
+    total = FloatField('Grand Total')
 class CustOrderUpdate(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired(message='Please enter a valid name')])
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired(message='Please enter a valid name')])

@@ -2070,13 +2070,30 @@ def createCustOrder():
         print(cust_cart_dict)
         print(copy_cart_dict)
 
+        refund_order_dict = {}
+        db = shelve.open('refundorder.db', 'c')
+        try:
+            refund_order_dict = db['refundeOrder']
+        except:
+            print('Error in opening db')
+
+        db['refundOrder'] = refund_order_dict 
+        db.close()
+
         delete_order_dict = {}
         db = shelve.open('deleteorder.db', 'c')
         try:
             delete_order_dict = db['deleteOrder']
         except:
             print('Error in opening db')
+
         db['deleteOrder'] = delete_order_dict 
+        db.close()
+
+        
+        
+
+       
 
         flash("Order has been processed successfully! Thank you for shopping with Chinese Arc")
         return redirect(url_for('order_confirm'))
@@ -2150,6 +2167,16 @@ def createCustOrder():
 @app.route('/order', methods=['GET','POST'])
 def retrieve_cust_orders():
     try:
+        cust_cart_dict = {}
+        db = shelve.open('custCart.db', 'w')
+        cust_cart_dict = db['custCart']
+
+        del cust_cart_dict[0]
+    except:
+        print('Error in opening db')
+
+
+    try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'r')
         cust_order_dict = db['CustOrder']
@@ -2162,22 +2189,6 @@ def retrieve_cust_orders():
     for key in cust_order_dict:
         cust_order = cust_order_dict.get(key)
         cust_order_list.append(cust_order)
-
-    
-    try:
-        cust_cart_dict = {}
-        db = shelve.open('custCart.db', 'w')
-        cust_cart_dict = db['custCart']
-
-        del cust_cart_dict[0]
-    except:
-        print('Error in opening db')
-
-    
-
-    db['custCart'] = cust_cart_dict
-    db.close()
-    
 
     cust_cart_dict = {}
     db = shelve.open('custCart.db', 'r')
@@ -2192,8 +2203,25 @@ def retrieve_cust_orders():
     for key in cust_cart_dict:
         cust_order = cust_cart_dict.get(key)
         cust_cart_list.append(cust_order)
+
     
-    return render_template('order.html', count=len(cust_order_list), cust_order_list=cust_order_list,count3=len(cust_cart_list),cust_cart_list=cust_cart_list)
+    try:
+        delete_order_dict = {}
+        db = shelve.open('deleteorder.db', 'r')
+        delete_order_dict = db['deleteOrder']
+    except:
+        print('Error in opening db')
+    finally:
+        db.close()
+
+    delete_order_list = []
+    for key in delete_order_dict:
+        delete_order = delete_order_dict.get(key)
+        delete_order_list.append(delete_order)
+
+    
+   
+    return render_template('order.html', count=len(cust_order_list), cust_order_list=cust_order_list,count3=len(cust_cart_list),cust_cart_list=cust_cart_list,count4=len(delete_order_list),delete_order_list=delete_order_list)
 
 
 @app.route('/deleteOrder/<uuid:id>', methods=['POST'])
@@ -2203,6 +2231,7 @@ def delete_order(id):
         db = shelve.open('CustOrder.db', 'w')
         cust_order_dict = db['CustOrder']
 
+        deleted_order_id = cust_order_dict.get(id)
         cust_order_dict.pop(id)
 
         db['CustOrder'] = cust_order_dict
@@ -2212,37 +2241,13 @@ def delete_order(id):
     finally:
         db.close()
     
-    return redirect(url_for('retrieve_cust_orders'))
 
-
-
-
-@app.route('/refundOrder/<uuid:id>', methods=['POST'])
-def refund_order(id):
- 
-    try:   
-        cust_order_dict = {}
-        db = shelve.open('CustOrder.db', 'r')
-        cust_order_dict = db['CustOrder']
-        deleted_order_id = cust_order_dict.get(id)
-       
+    try:
+        delete_order_dict = {}
+        db = shelve.open('deleteorder.db', 'w')
+        delete_order_dict = db['deleteOrder']
     except:
-        print('Error in opening db')
-
-    cust_order_list = []
-    order = cust_order_dict.get(id)
-    cust_order_list.append(order)
-
-    refund_mail2(id)
-    
-    
-
-    
-    db.close()
-
-    delete_order_dict = {}
-    db = shelve.open('deleteorder.db', 'w')
-    delete_order_dict = db['deleteOrder']
+        print('error in opening delete db')
     
     
     
@@ -2250,7 +2255,63 @@ def refund_order(id):
     delete_order_dict[deleted_order_id['order'].get_custOrder_id()] =  deleted_orders
     
     db['deleteOrder'] = delete_order_dict 
-     
+
+    return redirect(url_for('retrieve_cust_orders'))
+
+
+
+
+@app.route('/refundOrder/<uuid:id>', methods=['POST'])
+def refund_order(id):
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'r')
+        cust_order_dict = db['CustOrder']
+
+        cust_order_list = []
+        order = cust_order_dict.get(id)
+        cust_order_list.append(order)
+
+        db['CustOrder'] = cust_order_dict
+        flash('Order has been deleted sucessfully')
+    except:
+        print('An error occured when opening CustOrder.db')
+    finally:
+        db.close()
+
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'w')
+        cust_order_dict = db['CustOrder']
+
+        refund_order_id = cust_order_dict.get(id)
+    
+        refund_order_id['order'].set_status('Refunded')
+        print(refund_order_id['order'].get_status())
+        print(refund_order_id['order'].set_status('Refunded'))
+
+        db['CustOrder'] = cust_order_dict
+    except:
+        print('An error occured when opening CustOrder.db')
+    finally:
+        db.close()
+    
+    try:
+        delete_order_dict = {}
+        db = shelve.open('deleteorder.db', 'w')
+        delete_order_dict = db['deleteOrder']
+    except:
+        print('error in opening delete db')
+ 
+    
+    refund_orders = (refund_order_id['order'].get_custOrder_id(),refund_order_id['order'].get_status())
+    delete_order_dict[refund_order_id['order'].get_custOrder_id()] = refund_orders
+    
+    db['deleteOrder'] = delete_order_dict 
+    
+    refund_mail2(id)
+    
+    
      
     flash('Order has been refunded sucessfully','success')
 
@@ -2282,18 +2343,7 @@ def refund_mail2(id):
     first_name = first_name_1
     last_name = last_name_1
 
-    try:
-        cust_order_dict = {}
-        db = shelve.open('CustOrder.db', 'w')
-        cust_order_dict = db['CustOrder']
-
-        cust_order_dict.pop(id)
-        
-        db['CustOrder'] = cust_order_dict
-    except:
-        print('An error occured when opening CustOrder.db')
-    finally:
-        db.close()
+    
 
     msg = EmailMessage()
     msg['Subject'] = 'Chinese Arc Refund' + ' ( ' + first_name + last_name + ' ) '

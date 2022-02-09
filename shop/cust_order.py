@@ -48,15 +48,16 @@ class CustOrder(Customer.Customer,fakeinheritence):
     def get_unit_number(self):
         return self.__unit_number
 
-    def get_status(self):
-        # if self.__custOrder_id%2 == 0:
-        #     self.__status = 'Pending'
-        # else :
-        #     self.__status = 'Delivered'
-        return self.__status
-
     def get_total(self):
         return self.__total
+
+    def get_status(self):
+        if self.__card_type == 'Visa' or self.__card_type == 'Mastercard':
+            self.__status = 'Delivered'
+        elif self.__card_type == 'Select':
+            self.__status = 'Pending'
+        return self.__status
+    
 
     def set_holder_name(self,holder_name):
         self.__holder_name = holder_name

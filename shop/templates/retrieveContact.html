@@ -2,14 +2,14 @@
 {% block title %}The Chinese Arc{% endblock %}
 
 {% block content %}
-<h1 class="display-4">Retrieve Users</h1>
+<h1 class="display-4">Retrieve Queries</h1>
 <div>
     {% if count == 0 %}
     <p>There are no queries.</p>
     {% elif count == 1 %}
-    <p>There is 1 user.</p>
+    <p>There is 1 query.</p>
     {% else %}
-    <p>There are {{ count }} users.</p>
+    <p>There are {{ count }} queries.</p>
     {% endif %}
 </div>
 <div>
@@ -46,4 +46,6 @@
         </tbody>
     </table>
 </div>
+
+
 {% endblock %}

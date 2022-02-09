@@ -106,7 +106,7 @@ class CreateContactForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     email = StringField('Email address', [validators.DataRequired(),validators.Length(min=4, max=150, message='Please enter a valid email'),validators.Email()])
-    subject = SelectField('Subject', [validators.DataRequired()], choices=[('Select'), ('Female'), ('Male')], default='')
+    subject = SelectField('Subject', [validators.DataRequired()], choices=[('Select'), ('Cheongsam Adjustment'), ('Sizing'), ('Appointment'), ('Others')], default='')
     message = TextAreaField('Message', [validators.Optional()])
 
     

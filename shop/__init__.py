@@ -32,11 +32,12 @@ from Apply_Coupon import Coupon
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
 from EditProduct import UpdateProductForm, CreateProductForm, photos
+from Contact import Contact
 
 from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
-from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm
+from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm
 from DeliveryFeedback import DeliveryFeedback
 from Forms import Registration, CreateFAQForm,CreateDeliveryFeedbackForm, CreateFeedbackForm
 from Forms import Registration,  CreateFAQForm
@@ -2397,6 +2398,59 @@ def order_confirm():
 def fullpage_wish():
    
     return render_template('fullpage_wish.html')
+
+@app.route('/createContact', methods=['GET', 'POST'])
+def create_contact():
+    create_contact_form = CreateContactForm(request.form)
+    if request.method == 'POST' and create_contact_form.validate():
+        contact_dict = {}
+        db = shelve.open('contact.db', 'c')
+
+        try:
+            contact_dict = db['Contact']
+        except:
+            print("Error in retrieving Contact from contact.db.")
+
+        contact = Contact(create_contact_form.first_name.data, 
+                            create_contact_form.last_name.data, 
+                            create_contact_form.email.data, 
+                            create_contact_form.subject.data, 
+                            create_contact_form.message.data)
+
+        contact_dict[contact.get_contact_id()] = contact
+        db['Contact'] = contact_dict
+
+        db.close()
+
+        return redirect(url_for('home_page'))
+    return render_template('createContact.html', form=create_contact_form)
+
+@app.route('/retrieveContact')
+def retrieve_contact():
+    contact_dict = {}
+    db = shelve.open('contact.db', 'r')
+    contact_dict = db['Contact']
+    db.close()
+
+    contact_list = []
+    for key in contact_dict:
+        contact = contact_dict.get(key)
+        contact_list.append(contact)
+
+    return render_template('retrieveContact.html', count=len(contact_list), contact_list=contact_list)
+
+@app.route('/deleteContact/<uuid:id>', methods=['POST'])
+def delete_contact(id):
+    contact_dict = {}
+    db = shelve.open('contact.db', 'w')
+    contact_dict = db['Contact']
+
+    contact_dict.pop(id)
+
+    db['Contact'] = contact_dict
+    db.close()
+
+    return redirect(url_for('retrieve_contact'))
 
 if __name__ == '__main__':
     app.run(debug=True)

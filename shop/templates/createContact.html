@@ -1,0 +1,118 @@
+{% extends "base_home.html" %}
+{% block title %}The Chinese Arc{% endblock %}
+
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<section class="location">
+    <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.6611865763484!2d103.84676001453855!3d1.3799499989935624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da16eb64b0249d%3A0xe5f10ff680eed942!2sNanyang%20Polytechnic!5e0!3m2!1sen!2ssg!4v1644411274233!5m2!1sen!2ssg"
+        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+</section>
+
+<section class="contact-us">
+    <div class="row">
+        <div class="contact-col">
+            <div>
+                <i class="fa fa-home"></i>
+                <span>
+                    <h5>101 Thomson Rd, Singapore 307591</h5>
+                    <p>City Link Mall, Singapore, Singapore</p>
+                </span>
+            </div>
+            <div>
+                <i class="fa fa-phone"></i>
+                <span>
+                    <h5>+65123455675<h5>
+                            <p>Monday To Sautrday, 10AM - 6PM</p>
+                </span>
+            </div>
+            <div>
+                <i class="fa fa-envelope"></i>
+                <span>
+                    <h5>info@gmail.com<h5>
+                            <p>Email us your query</p>
+                </span>
+            </div>
+        </div>
+        <div class="contact-col">
+            <form method="POST" action="">
+                {{ render_field(form.first_name, class="form-control") }}
+                {{ render_field(form.last_name, class="form-control") }}
+                {{ render_field(form.email, class="form-control") }}
+                {{ render_field(form.subject, class="form-control") }}
+                <br>
+                {{ render_field(form.message, class="form-control") }}
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </form>
+
+        </div>
+    </div>
+
+</section>
+
+<style>
+
+.location {
+  width: 80%;
+  margin: auto;
+  padding: 80px 0;
+}
+
+.location iframe {
+  width: 100%;
+  /* so that it would be reponsive */
+}
+
+.contact-us {
+  width: 80%;
+  margin: auto;
+}
+
+.contact-col {
+  flex-basis: 48%;
+  margin-bottom: 30px;
+}
+
+.contact-col div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+  /* the whole alignment of the text */
+}
+
+.contact-col div .fa {
+  font-size: 28px;
+  color: #000000;
+  margin:10px;
+  margin-right: 30px;
+ /* for the position of the icons */
+}
+
+.contact-col div p {
+  padding: 0;
+}
+
+.contact-col div h5 {
+  font-size: 20px;
+  margin-bottom: 5px;
+  color: #555;
+  font-weight: 400;
+}
+
+.contact-col input, .contact-col textarea {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 17px;
+  outline: none;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+
+</style>
+
+
+
+
+{% endblock %}

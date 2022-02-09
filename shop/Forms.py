@@ -102,4 +102,11 @@ class UpdateAdminForm(Form):
     password = PasswordField('Password', [validators.InputRequired(), validators.Length(min=1,max=100),validators.EqualTo('confirm', message='passwords must match')])
     confirm = PasswordField("Confirm Password", validators=[validators.DataRequired(message="Please Fill This Field")])
 
+class CreateContactForm(Form):
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    email = StringField('Email address', [validators.DataRequired(),validators.Length(min=4, max=150, message='Please enter a valid email'),validators.Email()])
+    subject = SelectField('Subject', [validators.DataRequired()], choices=[('Select'), ('Female'), ('Male')], default='')
+    message = TextAreaField('Message', [validators.Optional()])
+
     

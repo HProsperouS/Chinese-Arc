@@ -2091,11 +2091,6 @@ def createCustOrder():
         db['deleteOrder'] = delete_order_dict 
         db.close()
 
-        
-        
-
-       
-
         flash("Order has been processed successfully! Thank you for shopping with Chinese Arc")
         return redirect(url_for('order_confirm'))
     try:  
@@ -2454,7 +2449,21 @@ def delete_contact(id):
 
 @app.route('/cust_order_history')
 def cust_order_history():
-    return render_template('cust_order_history.html')
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'r')
+        cust_order_dict = db['CustOrder']
+    except:
+        print('Unable to read data')
+    finally:
+        db.close()
+
+    cust_order_list = []
+    for key in cust_order_dict:
+        cust_order = cust_order_dict.get(key)
+        cust_order_list.append(cust_order)
+
+    return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 
 if __name__ == '__main__':
     app.run(debug=True)

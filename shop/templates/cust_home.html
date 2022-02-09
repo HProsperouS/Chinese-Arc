@@ -223,7 +223,7 @@
 	</div> <!-- row.// -->
 <!-- ============================ WHY CHOOSE US AREA END ================================= -->
 
-<br><br>
+<br>
 
 <!-- ========================= FEEDBACK AREA ========================= -->
 <!-- Testimonials section-->
@@ -234,36 +234,37 @@
 			<p class="lead mb-0">Our customers love working with us</p>
 		</div>
 
-		{% for feedback in feedback_list %}
-		<div class="row gx-5 justify-content-center">
-			<div class="col-lg-6">
-				<!-- Testimonial 1-->
-				<div class="card mb-4">
-					<div class="card-body p-4">
-						<div class="d-flex">
-							<div class="flex-shrink-0"><i class="bi bi-chat-right-quote-fill text-primary fs-1"></i>
-							</div>
-							<div class="ms-4">
-								<h5 class="mb-1">{{ feedback.get_product_name() }}</h5>
-								<div class="small text-muted">Product: {{ feedback.get_product_name() }}</div>
-								<div class="small text-muted">Ratings (1-5): {{ feedback.get_rating() }}</div>
-								<div class="small text-muted"><i class="fas fa-tape"></i> {{ feedback.get_fit() }} | <i
-										class="far fa-gem"></i> {{ feedback.get_quality() }}</div>
-								<br>
-								<p class="mb-1">
-									{{ feedback.get_description() }}
-								</p>
-								<div class="small text-muted">- {{ feedback.get_create_by() }}, {{
-									feedback.get_create_date() }}</div>
-							</div>
-						</div>
-					</div>
+		<div class='reviews'>
+			{% for feedback in feedback_list %}
+			<!-- Panel one -->
+			<div class='panel'>
+				<img src='/static/images/Chinese.png'>
+				<p>
+				<div class="ms-4">
+					<h5 class="mb-1">{{ feedback.get_product_name() }}</h5>
+					<div class="small text-muted">Product: {{ feedback.get_product_name() }}</div>
+					<div class="small text-muted">Ratings (1-5): {{ feedback.get_rating() }}</div>
+					<div class="small text-muted"><i class="fas fa-tape"></i> {{ feedback.get_fit() }} | <i
+							class="far fa-gem"></i> {{
+						feedback.get_quality() }}</div>
+					<p class="mb-1">
+						{{ feedback.get_description() }}
+					</p>
+					<p class="mb-1">
+						- {{ feedback.get_create_by() }}, {{
+						feedback.get_create_date() }}
+					</p>
 				</div>
+				</p>
 			</div>
+			{% endfor %}
 		</div>
-		{% endfor %}
+		<script>
+			speed = 600
+		</script>
 	</div>
 </section>
+
 
 <!-- ============================ SHOP BY CATEGORY AREA  ================================= -->
 <header class="section-heading mb-4">

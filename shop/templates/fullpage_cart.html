@@ -64,13 +64,15 @@
             <div class="card-body">
                     <div>
                         <strong >Grand Total:
-                            <span class='float-right'>$<span class="sum-price " id="grandTotal"></span></span>
+                            <span class='float-right' style="font-size: 20px;">$<span class="sum-price " id="grandTotal"></span></span>
                         </strong>
                         
                     </div>
                     <div>
                         <a href="#" id='checkout' class="btn btn-primary mt-4 col-12" onclick="Checkout()"> Checkout <i class="fas fa-shopping-cart"></i> </a>   
-                        
+                    </div>
+                    <div>
+                        <a href="{{ url_for('home_page')}}" id='checkout' class="btn btn-primary mt-4 col-12" style="background-color: white; color: black; border: solid rgb(108, 108, 108); border-radius: 5px; "> Back to home</i> </a>   
                     </div>
                     
             </div> <!-- card-body.// -->

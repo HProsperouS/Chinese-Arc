@@ -1168,10 +1168,12 @@ def UpdateHomeAnnouncement(id):
     UpdateHomeAnnouncement_Form = UpdateHomeAnnouncementForm(request.form)
 
     if request.method == 'POST' and UpdateHomeAnnouncement_Form.validate():
-
-        homeannouncement_dict = {}
-        db = shelve.open('HomeAnnouncement.db', 'w')
-        homeannouncement_dict = db['HomeAnnouncement']
+        try:
+            homeannouncement_dict = {}
+            db = shelve.open('HomeAnnouncement.db', 'w')
+            homeannouncement_dict = db['HomeAnnouncement']
+        except IOError:
+            print("An Error occured when retrieve from HomeAnnouncement.db")
 
         homeannouncement = homeannouncement_dict.get(id)
         homeannouncement.set_title(UpdateHomeAnnouncement_Form.title.data)

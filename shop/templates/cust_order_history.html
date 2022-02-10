@@ -45,14 +45,14 @@
                     <td>{{ cust_orders['order'].get_custOrder_id() }}</td>
                     <td >{{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</td>
                     <td> 
-                      <h5 class="badge bg-success"  style="font-size: 15px;"> Delivered </h5>
+                      <h5 class="badge bg-success"  style="font-size: 15px;"> {{ cust_orders['order'].get_status() }}</h5>
                     </td>
                     <td>{{ cust_orders['order'].get_create_date() }}</td>
                     <td>
                       <form>
                   
                         <!-- Button to Open the Modal -->
-                        <button type="button" class='btn btn-success' style="background-color: rgb(251, 227, 128); border:none; " data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Delete'>
+                        <button type="button" class='btn btn-success' style="background-color: rgb(226, 89, 89); border:none; " data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Delete'>
                           <i class="fa-solid" style="font-weight: bold; color: rgb(103, 26, 26);">Received</i>
                         </button>
                         
@@ -82,6 +82,7 @@
                                 <script>
                                   function Received() {
                                     alert("Delivery status confirmed. Thank you")
+                                    
                                   }
                                   
                                 </script>

@@ -36,7 +36,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('home_page') }}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/logout_home" >
                 <div class="sidebar-brand-icon ">
                     <img src="{{ url_for('static', filename='img/Chinese.png') }}" alt="" style='width:59px; height:55px;'>
                 </div>
@@ -85,24 +85,7 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Orders</h6>
-                        <a class="collapse-item" href="/order">Order</a>
-                        <a class="collapse-item" href="/orderform">Order Forms</a>
-                        
-                    </div>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsecustorders"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-box-open"></i>
-                    <span>Customer Orders</span>
-                </a>
-                <div id="collapsecustorders" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Customer Orders</h6>
-                        <a class="collapse-item" href="/retrieveCustOrders">Retrieve Customer Orders</a>
+                        <a class="collapse-item" href="/order">Order</a>                        
                     </div>
                 </div>
             </li>

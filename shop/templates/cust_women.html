@@ -100,6 +100,18 @@
 						<div class="price-wrap">
 							<h6 class="price">
 								$<span class="priceValue">{{ productinfo.get_product_price() }}</span>
+								{% if productinfo.get_product_stock() <= 10 %}
+										<span class="badge bg-danger" style="float: right;" >
+											<span class="stockCount" id='stockCount'>{{ productinfo.get_product_stock() }}</span>
+											left
+										</span>
+									
+									{% elif productinfo.get_product_stock() > 10 %}
+										<span class="badge bg-success" style="float: right;" >
+											<span class="stockCount" id='stockCount'>{{ productinfo.get_product_stock() }}</span>
+											left
+										</span>
+									{% endif %}	
 							</h6>
 						</div> <!-- price-wrap.// -->
 					</div>

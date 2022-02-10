@@ -70,7 +70,7 @@
         </thead>
         <tbody>
           {% for cust_orders in cust_order_list %}
-          <tr class='order-data {' id='order-data'>
+          <tr class='order-data {{ cust_orders["order"].get_status() }}' id='order-data'>
             <td>{{ cust_orders['order'].get_custOrder_id() }}</td>
             <td >{{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</td>
             
@@ -246,7 +246,7 @@
                                                 <div class="card">
                                                   <div class="card-body" >
                                                     <span class="card-text">Grand Total: </span>
-                                                    <span class="card-text " style="float:right;">{{ cust_orders['order'].get_total() }}</span>
+                                                    <span class="card-text " style="float:right;">${{ cust_orders['order'].get_total() }}0</span>
                                                   </div>
                                                 </div>
                                               </div>

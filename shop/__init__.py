@@ -33,11 +33,12 @@ from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
 from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
+from ContactReply import ContactReply
 
 from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
-from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm
+from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm, CreateContactReplyForm
 from DeliveryFeedback import DeliveryFeedback
 from Forms import Registration, CreateFAQForm,CreateDeliveryFeedbackForm, CreateFeedbackForm
 from Forms import Registration,  CreateFAQForm
@@ -2527,6 +2528,42 @@ def delete_contact(id):
     db.close()
 
     return redirect(url_for('retrieve_contact'))
+
+@app.route('/createContactReply/<uuid:id>/', methods=['GET', 'POST'])
+def create_contactReply(id):
+    create_contactReply_form = CreateContactReplyForm(request.form)
+    if request.method == 'POST' and create_contactReply_form.validate():
+        contactReply_dict = {}
+        db = shelve.open('contactReply.db', 'c')
+
+        try:
+            contactReply_dict = db['ContactReply']
+        except:
+            print("Error in retrieving ContactReply from contactReply.db.")
+
+        contactReply = ContactReply(create_contactReply_form.subject.data, 
+                                    create_contactReply_form.recipient.data, 
+                                    create_contactReply_form.reply.data, 
+                                    create_contactReply_form.create_by.data, 
+                                    create_contactReply_form.create_date.data)
+        contactReply_dict[contactReply.get_contactReply_id()] = contactReply
+        db['ContactReply'] = contactReply_dict
+
+        db.close()
+
+        contact_dict = {}
+        db = shelve.open('contact.db', 'r')
+        contact_dict = db['Contact']
+        db.close()
+
+        contact_list = []
+        for key in contact_dict:
+            contact = contact_dict.get(key)
+            contact_list.append(contact)
+
+        return redirect(url_for('home_page'))
+    return render_template('createContactReply.html', form=create_contactReply_form)
+
 
 @app.route('/cust_order_history')
 def cust_order_history():

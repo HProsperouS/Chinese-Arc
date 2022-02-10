@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}The Chinese Arc{% endblock %}
+
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+{% for contact in contact_list %}
+<p>{{ contact.get_subject() }}</p>
+{% endfor %}
+<h1 class="display-4">Create Reply</h1>
+
+{% for contact in contact_list %}
+<p>{{ contact.get_contact_id() }}</p>
+{% endfor %}
+<p>hello</p>
+
+<form method="POST" action="">
+    {% for contact in contact_list %}
+    <p>{{ contact.get_subject() }}</p>
+    {% endfor %}
+    <div class="form-group">
+        {{ render_field(form.subject, class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ render_field(form.recipient, class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ render_field(form.reply, class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ render_field(form.create_by, class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ render_field(form.create_date, class="form-control") }}
+    </div>
+    <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}

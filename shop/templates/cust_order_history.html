@@ -32,22 +32,67 @@
                 <tr>
                   <th>Order ID</th>
                   <th>Name</th>
-                  
                   <th>Status</th>
                   <th>Date of Order</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {% for cust_orders in cust_order_list %}
                 <tr class='order-data ' id='order-data'>
-                  <td>{{ cust_orders['order'].get_custOrder_id() }}</td>
-                  <td >{{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</td>
-                  <td> 
-                    <h5 class="badge bg-success"  style="font-size: 15px;"> Delivered </h5>
-                  </td>
-                  <td>{{ cust_orders['order'].get_create_date() }}</td>
+                    <td>{{ cust_orders['order'].get_custOrder_id() }}</td>
+                    <td >{{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</td>
+                    <td> 
+                      <h5 class="badge bg-success"  style="font-size: 15px;"> {{ cust_orders['order'].get_status() }}</h5>
+                    </td>
+                    <td>{{ cust_orders['order'].get_create_date() }}</td>
+                    <td>
+                      <form>
                   
+                        <!-- Button to Open the Modal -->
+                        <button type="button" class='btn btn-success' style="background-color: rgb(226, 89, 89); border:none; " data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Delete'>
+                          <i class="fa-solid" style="font-weight: bold; color: rgb(103, 26, 26);">Received</i>
+                        </button>
+                        
+                        
+                        <!-- The Modal -->
+                        <div class="modal" id="myModal_{{cust_orders['order'].get_custOrder_id()}}">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+            
+                              <!-- Modal Header -->
+                              <div class="modal-header">
+                                <h4 class="modal-title">Delivery Confirmation</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                              </div>
+            
+                              <!-- Modal body -->
+                              <div class="modal-body">
+                                Have you received {{ cust_orders['order'].get_custOrder_id() }} ?
+                              </div>
+            
+                              <!-- Modal footer -->
+                              <div class="modal-footer">
+                                <input type="submit" id="received" value="Order Received" class="btn btn-success" onclick="Received()">
+                                
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                              </div>
+                                <script>
+                                  function Received() {
+                                    alert("Delivery status confirmed. Thank you")
+                                    
+                                  }
+                                  
+                                </script>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </td>
                 </tr>
+
                 {% endfor %}
               </tbody>
         </table>

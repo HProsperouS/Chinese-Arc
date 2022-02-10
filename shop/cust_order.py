@@ -56,6 +56,8 @@ class CustOrder(Customer.Customer,fakeinheritence):
             self.__status = 'Delivered'
         elif self.__card_type == 'Select':
             self.__status = 'Pending'
+
+
         return self.__status
     
 

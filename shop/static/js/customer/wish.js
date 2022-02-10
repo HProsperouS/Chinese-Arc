@@ -39,13 +39,11 @@ const updateWishListHTML = function () {
 					<div class="col-md-6">
 						<div class="card-body">
 							<h5 class="card-title">${wishproduct.name}</h5>
-							<div class='badge bg-secondary' style='font-size:1rem;'> $ ${wishproduct.price}</div>
+							<div class='badge bg-white' style='font-size:1rem; color:black;'> $ ${wishproduct.price}</div>
 							
 						</div>
 						<div class="row" >
-							<i class="btn btn-danger button-delete fas fa-trash-alt"  data-id=${wishproduct.id} style='margin-top:-20px;margin-bottom:20px;margin-left:28px;' onclick='Delete()'> </i>
-							<button class="btn btn-danger button-delete fas fa-shopping-cart-alt addToCart" style='margin-top:-20px;margin-bottom:20px;margin-left:28px; color:black; background:white; border: black;' data-product-id="{{productinfo.get_product_id()}}"> <i class="fa fa-cart-plus"></i> Add to cart </button>
-
+							<i class="btn btn-danger button-delete fas fa-trash-alt"  data-id=${wishproduct.id} style='margin-top:-20px;margin-bottom:20px;margin-left:28px;'> </i>							
 						</div>
 						
 					</div>
@@ -158,7 +156,9 @@ parentFavElement.addEventListener('click', (e) => { // Last
 });
 
 updateWishListHTML();
-function Delete(){}
+function Delete(){
+	
+}
 
 
 

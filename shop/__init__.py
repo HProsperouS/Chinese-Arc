@@ -789,8 +789,8 @@ def voucher():
 
 @app.route('/voucherform', methods=['GET', 'POST'])
 def voucherform():
-    create_voucher_form = CreateVoucherForm(request.form)
-    if request.method == 'POST' and create_voucher_form.validate():
+   create_voucher_form = CreateVoucherForm(request.form)
+   if request.method == 'POST' and create_voucher_form.validate():
         voucher_dict = {}
         db = shelve.open('voucher.db', 'c')
 
@@ -799,13 +799,24 @@ def voucherform():
         except:
             print("Error in retrieving Users from order.db.")
 
-        voucher = Voucher(create_voucher_form.name.data,create_voucher_form.desc.data, create_voucher_form.type.data, create_voucher_form.total.data,
-                      create_voucher_form.status.data, create_voucher_form.date.data,create_voucher_form.end_date.data,create_voucher_form.create_date.data,create_voucher_form.create_by.data,create_voucher_form.mod_date.data,create_voucher_form.mod_by.data)
+        voucher = Voucher(create_voucher_form.name.data,
+                        create_voucher_form.desc.data,
+                        create_voucher_form.type.data,
+                        create_voucher_form.secret.data,
+                        create_voucher_form.code.data, 
+                            
+                        create_voucher_form.total.data,
+                        create_voucher_form.status.data, 
+                        create_voucher_form.date.data,
+                        create_voucher_form.end_date.data,
+                        create_voucher_form.create_date.data,
+                        create_voucher_form.create_by.data,
+                        create_voucher_form.mod_date.data,
+                        create_voucher_form.mod_by.data)
         voucher_dict[voucher.get_voucher_id()] = voucher
         db['Vouchers'] = voucher_dict
         return redirect(url_for('voucher'))
-    return render_template('Voucher_form.html', form=create_voucher_form)
-
+   return render_template('Voucher_form.html', form=create_voucher_form)
 @app.route('/updatevoucher/<int:id>', methods=['GET', 'POST'])
 def update_voucher(id):
     update_voucher_form=UpdateVoucherForm(request.form)
@@ -817,9 +828,12 @@ def update_voucher(id):
         voucher = voucher_dict.get(id)
         voucher.set_name(update_voucher_form.name.data)
         voucher.set_desc(update_voucher_form.desc.data)
+        voucher.set_type(update_voucher_form.type.data)
+        voucher.set_secret(update_voucher_form.secret.data)
+        voucher.set_code(update_voucher_form.code.data)
         voucher.set_total(update_voucher_form.total.data)
         voucher.set_status(update_voucher_form.status.data)
-        voucher.set_type(update_voucher_form.type.data)
+        
         voucher.set_date(update_voucher_form.date.data)
         voucher.set_end_date(update_voucher_form.end_date.data)
 
@@ -842,6 +856,8 @@ def update_voucher(id):
 
         update_voucher_form.name.data = voucher.get_voucher_name()
         update_voucher_form.desc.data = voucher.get_voucher_desc()
+        update_voucher_form.secret.data = voucher.get_voucher_secret()
+        (update_voucher_form.code.data) = voucher.get_voucher_code()
         update_voucher_form.total.data = voucher.get_voucher_total()
         update_voucher_form.status.data = voucher.get_voucher_status()
         update_voucher_form.date.data = voucher.get_voucher_date()
@@ -858,7 +874,6 @@ def update_voucher(id):
         return render_template('Update_Voucher_form.html', form=update_voucher_form)
 
 
-
 @app.route('/deletevoucher/<int:id>', methods=['POST'])
 def delete_voucher(id):
     voucher_dict = {}
@@ -871,7 +886,6 @@ def delete_voucher(id):
     db.close()
     flash('Voucher has been deleted sucessfully')
     return redirect(url_for('voucher'))
-
 
 
 
@@ -2395,9 +2409,22 @@ def refund_mail2(id):
 
 @app.route('/fullpage_cart')
 def fullpage_cart():
-   
-    return render_template('fullpage_cart.html')
+    try:
+        voucher_dict = {}
+        db = shelve.open('voucher.db', 'r')
+        voucher_dict = db['Vouchers']
+    except(IOError):
+        print('Unable to read data')
+    finally:
+        db.close()
+    voucher_list = []
+    for key in voucher_dict:
+        order = voucher_dict.get(key)
+        voucher_list.append(order)
 
+    
+    
+    return render_template('fullpage_cart.html',count=len(voucher_list),voucher_list=voucher_list)
 @app.route('/order_confirm')
 def order_confirm():
 

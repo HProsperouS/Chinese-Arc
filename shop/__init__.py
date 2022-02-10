@@ -2057,9 +2057,10 @@ def createCustOrder():
             cust_cart_dict = db['custCart']
 
             print(cust_cart_dict)
-            cust_cart_dict.clear()
-            
 
+            cust_cart_dict.clear()
+
+            cust_cart_dict[Cust_orders.get_custOrder_id()] = {'order':Cust_orders,'cart':copy_cart_dict} 
         except:
             print('Error in opening db')
 
@@ -2387,7 +2388,48 @@ def fullpage_cart():
 
 @app.route('/order_confirm')
 def order_confirm():
-    return render_template('orderConfirm.html')
+
+    try:
+        cust_cart_dict = {}
+        db = shelve.open('custCart.db', 'r')
+        cust_cart_dict = db['custCart']
+
+        print(cust_cart_dict)
+      
+    except:
+        print('Error in opening db')
+
+    cust_cart_list = []
+    for key in cust_cart_dict:
+        cust_cart = cust_cart_dict.get(key)
+        cust_cart_list.append(cust_cart)
+    
+    try:
+        cust_cart_dict = {}
+        db = shelve.open('custCart.db', 'w')
+        cust_cart_dict = db['custCart']
+
+        cust_cart_dict.clear()
+
+        db['custCart'] = cust_cart_dict
+    except:
+        print('An error occured when opening CustOrder.db')
+    finally:
+        db.close()
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'r')
+        cust_order_dict = db['CustOrder']
+    except:
+        print('Unable to read data')
+    finally:
+        db.close()
+
+    cust_order_list = []
+    for key in cust_order_dict:
+        cust_order = cust_order_dict.get(key)
+        cust_order_list.append(cust_order)
+    return render_template('orderConfirm.html',count=len(cust_order_list), cust_order_list=cust_order_list, count2=len(cust_cart_list),cust_cart_list=cust_cart_list)
 
 @app.route('/fullpage_wish')
 def fullpage_wish():

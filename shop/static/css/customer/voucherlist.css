@@ -1,0 +1,32 @@
+.listpanel  {
+    height: 0;
+    position: relative;
+    z-index: 1;
+    width: 280px;
+    top: 1000;
+    left: 1000;
+    background-color:rgb(255, 255, 255);
+    /* overflow-x: hidden; */
+    display: block;
+    transition: 1s;
+  
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px 0 black;
+    
+  }
+/* .show {
+    transition: 1.5s;
+}
+ */
+.voucher_1{
+    display: none;
+   
+}
+.show{
+    display: block;
+    
+}
+
+.hide{
+    display: none;
+}

@@ -31,10 +31,10 @@ from Newsletter import Newsletter
 from Apply_Coupon import Coupon
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
-# from EditProduct import UpdateProductForm, CreateProductForm, photos
+from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
 
-# from flask_uploads import configure_uploads,UploadSet,IMAGES
+from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
 from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm
@@ -69,8 +69,8 @@ app.config['SECRET_KEY'] = 'Chinese ARC'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images/')
 
 app.config['UPLOAD_EXTENSIONS'] = ['.jpeg', '.jpg', '.png', '.gif']
-# photos = UploadSet('photos', IMAGES)
-# configure_uploads(app, photos)
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -216,28 +216,37 @@ def login_admin():
             admins_list.append(admin)
 
         for admin in admins_list:
-            print(admin.get_email())
-            print(admin.get_password())
+            # print(admin.get_email())
+            # print(admin.get_password())
             if login_admin_form.email.data == admin.email:
                 if admin.get_status() == 'Enabled':
-                    password = generate_password_hash(login_admin_form.password.data, method='sha256')
-                    check_password_hash(admin.password, password)
-                    session['login'] = admin.id
-                    session['loggedIn'] = admin.username
-                    flash("Hi," + session.get('loggedIn') + ", "+"Welcome to Chinese Arc ",'success')
-                    return redirect(url_for('dashboard',userid=session['login']))
+                    password = login_admin_form.password.data
+                    # print(password)
+                    if check_password_hash(admin.password, password):
+                        session['login'] = admin.id
+                        session['loggedIn'] = admin.username
+                        flash("Hi," + session.get('loggedIn') + ", "+"Welcome to Chinese Arc ",'success')
+                        return redirect(url_for('dashboard',userid=session['login']))
+                    else:
+                        flash('Please enter correct account or password','danger')
                 else:
                     flash("Hi, Your Account is disaled, Please Contact Chinese Arc for more information", 'info')
-        else:
-            flash('Please enter correct account or password','danger')
 
     return render_template('login_admin.html', form=login_admin_form)
+
+
 
 @app.route('/logout_admin')
 @login_required
 def logout_admin():
     session.clear()
     return redirect(url_for('login_admin'))
+
+@app.route('/logout_home')
+@login_required
+def logout_home():
+    session.clear()
+    return redirect(url_for('home_page'))
     
 @app.route('/profile_admin')
 @login_required
@@ -1603,6 +1612,7 @@ def create_subscriptions():
     return render_template('createSubscriptions.html', form=create_subscriptions_form)
 
 @app.route('/retrieveSubscriptions')
+@login_required
 def retrieve_subscriptions():
     subscriptions_dict = {}
     db = shelve.open('subscriptions.db', 'r')

@@ -213,6 +213,7 @@ products.forEach(item => {   // 1
 				basePrice: productPrice,
 				
 			}
+			product_qty();
 			updateProductsInCart(product);
 			updateShoppingCartHTML();
 			
@@ -223,6 +224,18 @@ products.forEach(item => {   // 1
 	});
 	
 });
+
+function product_qty(){
+	for (let i = 0; i < productsInCart.length; i++) {
+		var stock = document.getElementById('stockCount').textContent
+		sessionStorage.setItem('qty',productsInCart[i].count)
+		var product_stock = sessionStorage.getItem('qty')
+		document.getElementById('stockCount').innerHTML = parseFloat(stock) - product_stock
+
+		
+	}
+	
+}
 
 parentElement.addEventListener('click', (e) => { // Last
 	const isPlusButton = e.target.classList.contains('plus');

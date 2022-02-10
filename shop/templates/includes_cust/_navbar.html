@@ -89,11 +89,15 @@
     <div class="shopping-cart">
 		<div class="sum-count">
 
-			<button type="button" class="openCart btn position-relative pl-1" onclick="openCart()">
-				<i class="fa fa-shopping-cart shoppingCartButton"></i>
-				<span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" >
-					<span  id="sum-count" style="color: white;"></span>
+			<button type="button" class="openCart btn position-relative " onclick="openCart()">
+				<i class="fa fa-shopping-cart shoppingCartButton fa-lg"></i>
+				
+				<span class="position-absolute top-0 start-100 translate-middle" >
+					
+					<span class="badge bg-danger" id="sum-count" style="color: white; font-size: 12px;padding-right: 5px;"></span>
 				</span>
+				
+				
 			  </button>
 			
 			
@@ -132,10 +136,10 @@
 	<div class="wish-list" style="padding: 10px;">
 		
 
-		<button type="button" class="openWish btn  position-relative" onclick="openWish()"">
-			<i class="fa fa-heart WishlistButton"></i>
-			<span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" >
-				<span  id="total-count" style="color: white;"></span>
+		<button type="button" class="openWish btn  position-relative" onclick="openWish()">
+			<i class="fa fa-heart WishlistButton fa-lg"></i>
+			<span class="position-absolute top-0 start-100 translate-middle" >
+				<span  id="total-count" class="badge bg-danger" style="color: white; font-size: 12px;padding-right: 5px;"></span>
 			</span>
 		  </button>
 

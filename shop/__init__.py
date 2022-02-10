@@ -2405,7 +2405,7 @@ def order_confirm():
         cust_cart_list.append(cust_cart)
     
     try:
-        cust_cart_dict = {}
+        cust_cart_dict = {} 
         db = shelve.open('custCart.db', 'w')
         cust_cart_dict = db['custCart']
 

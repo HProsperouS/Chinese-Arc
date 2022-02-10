@@ -13,6 +13,9 @@ const cartSumPrice = document.querySelector('#sum-price');
 const products = document.querySelectorAll('.col-md-3');
 const cartItemNumber= document.querySelector('#sum-count');
 const flash = document.getElementById('flash')
+var discount_value = document.getElementById('Discount_entry')
+var discount_code = document.getElementById('Discount_code')
+var discount_secret = document.getElementById('Discount_secret')
 
 // const CartCallout = function(){
 //   alert("Item added to cart!");
@@ -22,21 +25,63 @@ const flash = document.getElementById('flash')
 function getCartSum() {
 	var prdLenth = productsInCart.length;
 	var paymentPrice = 0;
+	var discount_count = 0;
+	
 	for (let i = 0; i < prdLenth; i++) {
 //		alert(productsInCart[i].basePrice c);
 
 		// assuming the price of each item in cart will not be same
 
 		paymentPrice = paymentPrice + ((productsInCart[i].basePrice) * productsInCart[i].count)
-
+		
 
 	}
-	document.getElementById("grandTotal").textContent = paymentPrice;
 	localStorage.setItem('value', paymentPrice);
+	document.getElementById("grandTotal").textContent = paymentPrice;
+	document.getElementById('discount_number').textContent = 0
+	document.getElementById('code_number').textContent = 'N/A'
+	
+	
+	if (discount_value.value == discount_code.textContent && discount_count == 0) {
+		document.getElementById('discount_number').textContent = discount_secret.textContent
+		document.getElementById('code_number').textContent = discount_code.textContent
+		// var tick_confirm = document.getElementById('tick_confirm')
+		// tick_confirm.classList.add('far fa-check-circle');
+		var discount_pricing = document.getElementById("grandTotal").textContent
+		paymentPrice = discount_pricing - parseFloat(discount_secret.textContent)
+		document.getElementById("grandTotal").textContent = paymentPrice;
+		localStorage.setItem('value', paymentPrice);
+		discount_count +=1
+
+		
+		
+	}
+	else{
+		console.log('Error')
+	
+	
+	}
 }
+function Summary_value(){
+	const value = localStorage.getItem('value')
+	document.getElementById("grandTotal").innerHTML = value;
+	document.getElementById('summary-value').value = value;
+	console.log(productsInCart)
+	
+	
+}
+
+function Discount_active() {
+
+	discount_value.value = discount_code.textContent
+}
+
+
+
 function Checkout(){
 	var pricing = document.getElementById("grandTotal").textContent
 	
+
 	
 	if (pricing <= 0 ) {
 		document.getElementById("checkout").href = "#";
@@ -53,23 +98,33 @@ function Checkout(){
 	
 		showFlash();
 		setTimeout(hideFlash, 1000);
-		
-		
-		  
+
 		  
 	}
+
+	
 	else if (pricing > 0){
-		document.getElementById("checkout").href = "createCustOrder";
+		document.getElementById('checkout').href = '/createCustOrder'
+
+		
+
 	}
-	
 }
-function Summary_value(){
-	const value = localStorage.getItem('value')
-	document.getElementById("grandTotal").innerHTML = value;
-	document.getElementById('summary-value').value = value;
-	console.log(productsInCart)
-	
-	
+
+function Discount_expired(){
+	document.getElementById('flash').textContent = 'Voucher Expired!'
+		
+	const showFlash = () => {
+		flash.classList.add("flash--visible")  
+		}
+	const hideFlash = () => {
+		flash.classList.remove("flash--visible")
+		document.getElementById('flash').innerHTML = ''
+		}
+	const btn = document.getElementById('checkout')
+
+	showFlash();
+	setTimeout(hideFlash, 1000);
 }
 
 
@@ -213,7 +268,7 @@ products.forEach(item => {   // 1
 				basePrice: productPrice,
 				
 			}
-			product_qty();
+			
 			updateProductsInCart(product);
 			updateShoppingCartHTML();
 			

@@ -23,12 +23,10 @@
   {% endif %}
 </div>
 
-<form>
-    <div  class="d-none d-sm-inline-block form-inline navbar-search " style='padding-bottom: 20px;'>
-    </div>
-</form>
+
+
 <section>
-    <div class="content content-1" style="height:650px;overflow:hidden;overflow-y:scroll;">
+    <div class="table" style="height:650px;overflow:hidden;overflow-y:scroll;">
         <table class="table">
             <thead>
                 <tr>
@@ -44,42 +42,11 @@
                 <tr class='order-data ' id='order-data'>
                   <td>{{ cust_orders['order'].get_custOrder_id() }}</td>
                   <td >{{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</td>
-
-                  <td>{{ cust_orders['order'].get_create_date() }}</td>
-                  <td>
-                      <div class="row">
-                          <div class="col-2">
-                                <form action="{{url_for('delete_order', id = cust_orders['order'].get_custOrder_id())}}"  method="POST">
-                                    <!-- Button to Open the Modal -->
-                                    <button type="button" class='btn btn-danger' data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Delete'>
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                    <!-- the modal -->
-                                    <div class="modal" id="myModal_{{cust_orders['order'].get_custOrder_id()}}">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <!-- modal header -->
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Delete Confirmation</h4>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <!-- modal body -->
-                                                <div class="modal-body">
-                                                    Are you sure you want to delete your order? ({{ cust_orders['order'].get_custOrder_id() }})
-                                                </div>
-                                                <!-- modal footer -->
-                                                <div class="modal-footer">
-                                                    <input type="submit" value="Delete" class="btn btn-danger">
-                                                    
-                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                          </div>
-                      </div>
+                  <td> 
+                    <h5 class="badge bg-success"  style="font-size: 15px;"> Delivered </h5>
                   </td>
+                  <td>{{ cust_orders['order'].get_create_date() }}</td>
+                  
                 </tr>
                 {% endfor %}
               </tbody>

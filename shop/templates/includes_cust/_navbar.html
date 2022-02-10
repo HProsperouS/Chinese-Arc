@@ -88,11 +88,15 @@
 	
     <div class="shopping-cart">
 		<div class="sum-count">
-			<button class="openCart" onclick="openCart()">
+
+			<button type="button" class="openCart btn position-relative pl-1" onclick="openCart()">
 				<i class="fa fa-shopping-cart shoppingCartButton"></i>
-				<span class="position-absolute top-0 start-90 translate-middle p-1  bg-danger border border-light rounded-circle">
-					<h6 style="font-size: 10px;" id="sum-count"></h6>			
-			</button>
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" >
+					<span  id="sum-count" style="color: white;"></span>
+				</span>
+			  </button>
+			
+			
 			
 			
 			<div id="productsOnCart hide" class="sidepanel">
@@ -126,11 +130,14 @@
 
 	<!-- ======= WISHLIST ========= -->
 	<div class="wish-list" style="padding: 10px;">
-		<button class="openWish" onclick="openWish()">
+		
+
+		<button type="button" class="openWish btn  position-relative" onclick="openWish()"">
 			<i class="fa fa-heart WishlistButton"></i>
-			<span class="position-absolute top-0 start-90 translate-middle p-1  bg-danger border border-light rounded-circle">
-				<h6 style="font-size: 10px;" id="total-count"></h6>			
-		</button>
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" >
+				<span  id="total-count" style="color: white;"></span>
+			</span>
+		  </button>
 
 		<div id="productsOnWish hide" class="sidepanel">
 			<div class="top">

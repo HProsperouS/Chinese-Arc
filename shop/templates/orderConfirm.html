@@ -64,8 +64,8 @@
         margin: 0 !important;
     }
 </style>
-<body onload="getCartSum()"></body>
-<body style="margin: 0 !important; padding: 0 !important; background-color: #eeeeee;">
+
+<body onload="getCartSum()" style="margin: 0 !important; padding: 0 !important; background-color: #eeeeee;">
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
@@ -114,9 +114,9 @@
                                         
                                         <tr>
                                             
-                                            <td width="75%" align="left" bgcolor="#eeeeee" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;"> Order Confirmation # </td>
-                                            {% for cust_orders in cust_order_list %}
-                                            <td width="25%" align="left" bgcolor="#eeeeee" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;">{{ cust_orders.get_custOrder_id() }}</td>
+                                            <td width="40%" align="left" bgcolor="#eeeeee" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;"> Order Confirmation # </td>
+                                            {% for cust_orders in cust_cart_list %}
+                                            <td width="60%" align="left" bgcolor="#eeeeee" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;">{{ cust_orders['order'].get_custOrder_id() }}</td>
                                             {% endfor %}
                                         </tr>
                                         
@@ -132,8 +132,9 @@
                                             <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> 
                                                 <div>
                                                     <strong>
-                                                        <span class='float-right' style="font-weight: bolder;">$<span class="sum-price " id="grandTotal"></span>
-                                                        
+                                                        {% for cust_orders in cust_cart_list %}
+                                                        <span class='float-right' style="font-weight: bolder;">$<span> {{ cust_orders['order'].get_total() }}0</span>
+                                                        {% endfor %}
                                                     </strong>
                                                 </div> 
                                             </td>
@@ -151,12 +152,12 @@
                             <tr>
                                 <td valign="top" style="font-size:0; padding-left: 40px;">
                                     <div style="display:inline-block; max-width:50%; min-width:240px; vertical-align:top; width:100%;">
-                                        {% for cust_orders in cust_order_list %}
+                                        {% for cust_orders in cust_cart_list %}
                                         <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:400px;">
                                             <tr>
                                                 <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px;">
                                                     <p style="font-weight: 800;">Delivery Address</p>
-                                                    <p>{{ cust_orders.get_unit_number() }}<br>{{ cust_orders.get_postal_code() }}<br>{{ cust_orders.get_city() }}</p>
+                                                    <p>Unit Number: {{ cust_orders['order'].get_unit_number() }}<br>Postal Code: {{ cust_orders['order'].get_postal_code() }}<br>City: {{ cust_orders['order'].get_city() }}</p>
                                                 </td>
                                             </tr>
                                         </table>
@@ -209,5 +210,6 @@
 
 </body>
 <script src="../static/js/customer/fullpage_cart.js" type="text/javascript"></script>
+<script src="../static/js/customer/cart.js" type="text/javascript"></script>
 
 {% endblock %}

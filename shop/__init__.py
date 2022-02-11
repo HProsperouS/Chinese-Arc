@@ -33,11 +33,12 @@ from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
 from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
+from ContactReply import ContactReply
 
 from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
-from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm
+from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm, CreateContactReplyForm
 from DeliveryFeedback import DeliveryFeedback
 from Forms import Registration, CreateFAQForm,CreateDeliveryFeedbackForm, CreateFeedbackForm
 from Forms import Registration,  CreateFAQForm
@@ -166,9 +167,7 @@ def register_admin():
         except:
             print("Error in retrieving Users from Admin.db.")
 
-        email = register_admin_form.email.data
-
-        if email in admins_dict:
+        if register_admin_form.email.data in admins_dict:
             flash('You have already registered with the existing email.', 'Danger')
             return redirect(url_for('login_admin'))
         else:
@@ -1182,10 +1181,12 @@ def UpdateHomeAnnouncement(id):
     UpdateHomeAnnouncement_Form = UpdateHomeAnnouncementForm(request.form)
 
     if request.method == 'POST' and UpdateHomeAnnouncement_Form.validate():
-
-        homeannouncement_dict = {}
-        db = shelve.open('HomeAnnouncement.db', 'w')
-        homeannouncement_dict = db['HomeAnnouncement']
+        try:
+            homeannouncement_dict = {}
+            db = shelve.open('HomeAnnouncement.db', 'w')
+            homeannouncement_dict = db['HomeAnnouncement']
+        except IOError:
+            print("An Error occured when retrieve from HomeAnnouncement.db")
 
         homeannouncement = homeannouncement_dict.get(id)
         homeannouncement.set_title(UpdateHomeAnnouncement_Form.title.data)
@@ -2526,6 +2527,110 @@ def delete_contact(id):
     db.close()
 
     return redirect(url_for('retrieve_contact'))
+
+@app.route('/createContactReply/<uuid:id>/', methods=['GET', 'POST'])
+def create_contactReply(id):
+    create_contactReply_form = CreateContactReplyForm(request.form)
+    if request.method == 'POST' and create_contactReply_form.validate():
+        contactReply_dict = {}
+        db = shelve.open('contactReply.db', 'c')
+
+        try:
+            contactReply_dict = db['ContactReply']
+        except:
+            print("Error in retrieving ContactReply from contactReply.db.")
+
+        contactReply = ContactReply(create_contactReply_form.subject.data, 
+                                    create_contactReply_form.recipient.data, 
+                                    create_contactReply_form.reply.data, 
+                                    create_contactReply_form.create_by.data, 
+                                    create_contactReply_form.create_date.data)
+        contactReply_dict[contactReply.get_contactReply_id()] = contactReply
+        db['ContactReply'] = contactReply_dict
+
+        db.close()
+
+        # retriving information from contact:
+        create_contact_form = CreateContactForm(request.form)
+        contact_dict = {}
+        db = shelve.open('contact.db', 'w')
+        contact_dict = db['Contact']
+
+        contactReply_dict = {}
+        db = shelve.open('contactReply.db', 'w')
+        contactReply_dict = db['ContactReply']
+
+        contact = contact_dict.get(id)
+        contactReply = contactReply_dict.get(id)
+        if contact == contactReply:
+            create_contact_form.email.data = contact.get_email()
+            create_contact_form.subject.data = contact.get_subject()
+            create_contact_form.first_name.data = contact.get_first_name()
+            create_contact_form.last_name.data = contact.get_last_name()
+
+        create_contactReply_form.reply.data = contactReply.get_reply()
+        create_contactReply_form.create_by.data = contactReply.get_create_by()
+        create_contactReply_form.create_date.data = contactReply.get_create_date()
+
+        sender_email = "testingusers1236@gmail.com"
+        receiver_email = contact.get_email()
+        password = "dG09#G.@Yg23G"
+
+        message = MIMEMultipart("alternative")
+        message["Subject"] = contact.get_subject()
+        message["From"] = sender_email
+        message["To"] = receiver_email
+
+        # Create the plain-text and HTML version of your message
+        text = """\
+        
+        """
+        html = """\
+        <html>
+        <body>
+        </body>
+        </html>
+        """
+
+        # Turn these into plain/html MIMEText objects
+        part1 = MIMEText(text, "plain")
+        part2 = MIMEText(html, "html")
+        part3 = MIMEText(contactReply.get_reply(), "html")
+
+        # Add HTML/plain-text parts to MIMEMultipart message
+        # The email client will try to render the last part first
+        message.attach(part1)
+        message.attach(part2)
+        message.attach(part3)
+
+        # Create secure connection with server and send email
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(
+                sender_email, receiver_email, message.as_string()
+            )
+
+        db['Contact'] = contact_dict
+        db.close()
+
+        db['ContactReply'] = contactReply_dict
+        db.close()
+
+
+        # deleting the query after reply
+        contact_dict = {}
+        db = shelve.open('contact.db', 'w')
+        contact_dict = db['Contact']
+
+        contact_dict.pop(id)
+
+        db['Contact'] = contact_dict
+        db.close()
+
+        return redirect(url_for('retrieve_contact'))
+    return render_template('createContactReply.html', form=create_contactReply_form)
+
 
 @app.route('/cust_order_history')
 def cust_order_history():

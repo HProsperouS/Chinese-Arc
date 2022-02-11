@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}The Chinese Arc{% endblock %}
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 {% block content %}
 <h1 class="display-4">Retrieve Queries</h1>
 <div>
@@ -12,6 +16,7 @@
     <p>There are {{ count }} queries.</p>
     {% endif %}
 </div>
+
 <div>
     <table class="table table-striped">
         <thead>
@@ -46,6 +51,237 @@
         </tbody>
     </table>
 </div>
+
+<section id="tabs" class="project-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-adjustment-tab" data-toggle="tab" href="#nav-adjustment"
+                            role="tab" aria-controls="nav-adjustment" aria-selected="true">Cheongsam Adjustment 
+                            {% if count == 0 %}
+                            <button type="button" class="btn btn-danger">
+                                0
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-danger">
+                                {{ count }}
+                            </button>
+                            {% endif %}
+                        </a>
+
+                        <a class="nav-item nav-link" id="nav-sizing-tab" data-toggle="tab" href="#nav-sizing"
+                            role="tab" aria-controls="nav-sizing" aria-selected="false">Sizing
+                            {% if count == 0 %}
+                            <button type="button" class="btn btn-danger">
+                                0
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-danger">
+                                {{ count }}
+                            </button>
+                            {% endif %}
+                        </a>
+
+                        <a class="nav-item nav-link" id="nav-appointment-tab" data-toggle="tab" href="#nav-appointment"
+                            role="tab" aria-controls="nav-appointment" aria-selected="false">Appointment
+                            {% if count == 0 %}
+                            <button type="button" class="btn btn-danger">
+                                0
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-danger">
+                                {{ count }}
+                            </button>
+                            {% endif %}
+                        </a>
+
+                        <a class="nav-item nav-link" id="nav-others-tab" data-toggle="tab" href="#nav-others" 
+                            role="tab" aria-controls="nav-others" aria-selected="false">Others
+                            {% if count == 0 %}
+                            <button type="button" class="btn btn-danger">
+                                0
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-danger">
+                                {{ count }}
+                            </button>
+                            {% endif %}
+                        </a>
+
+                    </div>
+                </nav>
+                
+                <div class="tab-content" id="nav-tabContent">
+
+                    <!-- Cheongsam Adjustment -->
+                    <div class="tab-pane fade show active" id="nav-adjustment" role="tabpanel" aria-labelledby="nav-adjustment-tab">
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Message</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contact in contact_list %}
+                                {% if contact.get_subject() == 'Cheongsam Adjustment' %}
+                                <tr>
+                                    <td>{{ contact.get_first_name() }} {{ contact.get_last_name() }}</td>
+                                    <td>{{ contact.get_message() }}</td>
+                                    <td></td>
+                                    <td>
+                                        <a href="/createContactReply/{{contact.get_contact_id()}}" class="btn btn-primary">Reply</a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Sizing -->
+                    <div class="tab-pane fade" id="nav-sizing" role="tabpanel" aria-labelledby="nav-sizing-tab">
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Message</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contact in contact_list %}
+                                {% if contact.get_subject() == 'Sizing' %}
+                                <tr>
+                                    <td>{{ contact.get_first_name() }} {{ contact.get_last_name() }}</td>
+                                    <td>{{ contact.get_message() }}</td>
+                                    <td></td>
+                                    <td>
+                                        <a href="/createContactReply/{{contact.get_contact_id()}}" class="btn btn-primary">Reply</a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Appointment -->
+                    <div class="tab-pane fade" id="nav-appointment" role="tabpanel" aria-labelledby="nav-appointment-tab">
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Message</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contact in contact_list %}
+                                {% if contact.get_subject() == 'Appointment' %}
+                                <tr>
+                                    <td>{{ contact.get_first_name() }} {{ contact.get_last_name() }}</td>
+                                    <td>{{ contact.get_message() }}</td>
+                                    <td></td>
+                                    <td>
+                                        <a href="/createContactReply/{{contact.get_contact_id()}}" class="btn btn-primary">Reply</a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Others -->
+                    <div class="tab-pane fade" id="nav-others" role="tabpanel" aria-labelledby="nav-others-tab">
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Message</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contact in contact_list %}
+                                {% if contact.get_subject() == 'Others' %}
+                                <tr>
+                                    <td>{{ contact.get_first_name() }} {{ contact.get_last_name() }}</td>
+                                    <td>{{ contact.get_message() }}</td>
+                                    <td></td>
+                                    <td>
+                                        <a href="/createContactReply/{{contact.get_contact_id()}}" class="btn btn-primary">Reply</a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<style>
+    .project-tab {
+    padding: 10%;
+    margin-top: -8%;
+}
+.project-tab #tabs{
+    background: #007b5e;
+    color: #eee;
+}
+.project-tab #tabs h6.section-title{
+    color: #eee;
+}
+.project-tab #tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: #0062cc;
+    background-color: transparent;
+    border-color: transparent transparent #f3f3f3;
+    border-bottom: 3px solid !important;
+    font-size: 16px;
+    font-weight: bold;
+}
+.project-tab .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    color: #0062cc;
+    font-size: 16px;
+    font-weight: 600;
+}
+.project-tab .nav-link:hover {
+    border: none;
+}
+.project-tab thead{
+    background: #f3f3f3;
+    color: #333;
+}
+.project-tab a{
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+</style>
+
+
+
 
 
 {% endblock %}

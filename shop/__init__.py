@@ -2551,17 +2551,85 @@ def create_contactReply(id):
 
         db.close()
 
+        # retriving information from contact:
+        create_contact_form = CreateContactForm(request.form)
         contact_dict = {}
-        db = shelve.open('contact.db', 'r')
+        db = shelve.open('contact.db', 'w')
         contact_dict = db['Contact']
+
+        contactReply_dict = {}
+        db = shelve.open('contactReply.db', 'w')
+        contactReply_dict = db['ContactReply']
+
+        contact = contact_dict.get(id)
+        contactReply = contactReply_dict.get(id)
+        if contact == contactReply:
+            create_contact_form.email.data = contact.get_email()
+            create_contact_form.subject.data = contact.get_subject()
+            create_contact_form.first_name.data = contact.get_first_name()
+            create_contact_form.last_name.data = contact.get_last_name()
+
+        create_contactReply_form.reply.data = contactReply.get_reply()
+        create_contactReply_form.create_by.data = contactReply.get_create_by()
+        create_contactReply_form.create_date.data = contactReply.get_create_date()
+
+        sender_email = "testingusers1236@gmail.com"
+        receiver_email = contact.get_email()
+        password = "dG09#G.@Yg23G"
+
+        message = MIMEMultipart("alternative")
+        message["Subject"] = contact.get_subject()
+        message["From"] = sender_email
+        message["To"] = receiver_email
+
+        # Create the plain-text and HTML version of your message
+        text = """\
+        
+        """
+        html = """\
+        <html>
+        <body>
+        </body>
+        </html>
+        """
+
+        # Turn these into plain/html MIMEText objects
+        part1 = MIMEText(text, "plain")
+        part2 = MIMEText(html, "html")
+        part3 = MIMEText(contactReply.get_reply(), "html")
+
+        # Add HTML/plain-text parts to MIMEMultipart message
+        # The email client will try to render the last part first
+        message.attach(part1)
+        message.attach(part2)
+        message.attach(part3)
+
+        # Create secure connection with server and send email
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(
+                sender_email, receiver_email, message.as_string()
+            )
+
+        db['Contact'] = contact_dict
         db.close()
 
-        contact_list = []
-        for key in contact_dict:
-            contact = contact_dict.get(key)
-            contact_list.append(contact)
+        db['ContactReply'] = contactReply_dict
+        db.close()
 
-        return redirect(url_for('home_page'))
+
+        # deleting the query after reply
+        contact_dict = {}
+        db = shelve.open('contact.db', 'w')
+        contact_dict = db['Contact']
+
+        contact_dict.pop(id)
+
+        db['Contact'] = contact_dict
+        db.close()
+
+        return redirect(url_for('retrieve_contact'))
     return render_template('createContactReply.html', form=create_contactReply_form)
 
 

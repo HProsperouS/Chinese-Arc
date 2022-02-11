@@ -4,16 +4,6 @@
 {% block content %}
 {% from "_formHelper.html" import render_field %}
 
-{% for contact in contact_list %}
-<p>{{ contact.get_subject() }}</p>
-{% endfor %}
-<h1 class="display-4">Create Reply</h1>
-
-{% for contact in contact_list %}
-<p>{{ contact.get_contact_id() }}</p>
-{% endfor %}
-<p>hello</p>
-
 <form method="POST" action="">
     {% for contact in contact_list %}
     <p>{{ contact.get_subject() }}</p>

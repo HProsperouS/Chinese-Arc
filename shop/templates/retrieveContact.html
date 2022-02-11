@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}The Chinese Arc{% endblock %}
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 {% block content %}
 <h1 class="display-4">Retrieve Queries</h1>
 <div>
@@ -12,6 +16,7 @@
     <p>There are {{ count }} queries.</p>
     {% endif %}
 </div>
+
 <div>
     <table class="table table-striped">
         <thead>
@@ -104,10 +109,13 @@
                             </button>
                             {% endif %}
                         </a>
+
                     </div>
                 </nav>
                 
                 <div class="tab-content" id="nav-tabContent">
+
+                    <!-- Cheongsam Adjustment -->
                     <div class="tab-pane fade show active" id="nav-adjustment" role="tabpanel" aria-labelledby="nav-adjustment-tab">
                         <table class="table" cellspacing="0">
                             <thead>
@@ -124,10 +132,9 @@
                                 <tr>
                                     <td>{{ contact.get_first_name() }} {{ contact.get_last_name() }}</td>
                                     <td>{{ contact.get_message() }}</td>
-                                    <th></th>
+                                    <td></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open
-                                            modal for @mdo</button>
+                                        <a href="/createContactReply/{{contact.get_contact_id()}}" class="btn btn-primary">Reply</a>
                                     </td>
                                 </tr>
                                 {% endif %}
@@ -136,6 +143,7 @@
                         </table>
                     </div>
                     
+                    <!-- Sizing -->
                     <div class="tab-pane fade" id="nav-sizing" role="tabpanel" aria-labelledby="nav-sizing-tab">
                         <table class="table" cellspacing="0">
                             <thead>
@@ -152,10 +160,9 @@
                                 <tr>
                                     <td>{{ contact.get_first_name() }} {{ contact.get_last_name() }}</td>
                                     <td>{{ contact.get_message() }}</td>
-                                    <th></th>
+                                    <td></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open
-                                            modal for @fat</button>
+                                        <a href="/createContactReply/{{contact.get_contact_id()}}" class="btn btn-primary">Reply</a>
                                     </td>
                                 </tr>
                                 {% endif %}
@@ -164,6 +171,7 @@
                         </table>
                     </div>
 
+                    <!-- Appointment -->
                     <div class="tab-pane fade" id="nav-appointment" role="tabpanel" aria-labelledby="nav-appointment-tab">
                         <table class="table" cellspacing="0">
                             <thead>
@@ -180,10 +188,9 @@
                                 <tr>
                                     <td>{{ contact.get_first_name() }} {{ contact.get_last_name() }}</td>
                                     <td>{{ contact.get_message() }}</td>
-                                    <th></th>
+                                    <td></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open
-                                            modal for @fat</button>
+                                        <a href="/createContactReply/{{contact.get_contact_id()}}" class="btn btn-primary">Reply</a>
                                     </td>
                                 </tr>
                                 {% endif %}
@@ -192,6 +199,7 @@
                         </table>
                     </div>
 
+                    <!-- Others -->
                     <div class="tab-pane fade" id="nav-others" role="tabpanel" aria-labelledby="nav-others-tab">
                         <table class="table" cellspacing="0">
                             <thead>
@@ -208,9 +216,9 @@
                                 <tr>
                                     <td>{{ contact.get_first_name() }} {{ contact.get_last_name() }}</td>
                                     <td>{{ contact.get_message() }}</td>
-                                    <th></th>
+                                    <td></td>
                                     <td>
-                                        <a href="/createContactReply/{{contact.get_contact_id()}}" class="btn btn-primary"><i class="fas fa-pen"></i></a>
+                                        <a href="/createContactReply/{{contact.get_contact_id()}}" class="btn btn-primary">Reply</a>
                                     </td>
                                 </tr>
                                 {% endif %}
@@ -267,7 +275,7 @@
 }
 .project-tab a{
     text-decoration: none;
-    color: #333;
+    color: rgb(255, 255, 255);
     font-weight: 600;
 }
 </style>

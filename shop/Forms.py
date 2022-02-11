@@ -110,8 +110,8 @@ class CreateContactForm(Form):
     message = TextAreaField('Message', [validators.Optional()])
 
 class CreateContactReplyForm(Form):
-    subject = StringField('Subject', [validators.Length(min=1, max=150), validators.DataRequired()])
-    recipient = StringField('Recipient', [validators.Length(min=1, max=150), validators.DataRequired()])
+    # subject = StringField('Subject', [validators.Length(min=1, max=150), validators.DataRequired()])
+    # recipient = StringField('Recipient', [validators.Length(min=1, max=150), validators.DataRequired()])
     reply = TextAreaField('Reply', [validators.Optional()])
     create_by = StringField('Admin', [validators.Length(min=1, max=150), validators.DataRequired()])
     create_date = create_date= DateField('Date Updated/Created', [validators.DataRequired()],format="%Y-%m-%d", default=datetime.datetime.now())

@@ -16,7 +16,7 @@ const flash = document.getElementById('flash')
 var discount_value = document.getElementById('Discount_entry')
 var discount_code = document.getElementById('Discount_code')
 var discount_secret = document.getElementById('Discount_secret')
-
+const active_discount = document.querySelectorAll('.Discount-active')
 // const CartCallout = function(){
 //   alert("Item added to cart!");
 // }
@@ -40,41 +40,57 @@ function getCartSum() {
 	document.getElementById("grandTotal").textContent = paymentPrice;
 	document.getElementById('discount_number').textContent = 0
 	document.getElementById('code_number').textContent = 'N/A'
-	
-	
-	if (discount_value.value == discount_code.textContent && discount_count == 0) {
-		document.getElementById('discount_number').textContent = discount_secret.textContent
-		document.getElementById('code_number').textContent = discount_code.textContent
-		// var tick_confirm = document.getElementById('tick_confirm')
-		// tick_confirm.classList.add('far fa-check-circle');
-		var discount_pricing = document.getElementById("grandTotal").textContent
-		paymentPrice = discount_pricing - parseFloat(discount_secret.textContent)
-		document.getElementById("grandTotal").textContent = paymentPrice;
-		localStorage.setItem('value', paymentPrice);
-		discount_count +=1
 
-		
-		
-	}
-	else{
-		console.log('Error')
 	
 	
-	}
+	
 }
+active_discount.forEach(code => {
+	code.addEventListener('click', (e) => {
+		getCartSum()
+		var discount_count = 0;
+		console.log('1')
+		const discount_code = code.querySelector('.Discount_code').textContent;
+		const discount_value = document.getElementById('Discount_entry')
+		const discount_secret = code.querySelector('.Discount_secret').textContent
+		discount_value.value = discount_code
+
+		if (discount_value.value == discount_code && discount_count == 0) {
+			document.getElementById('discount_number').textContent = discount_secret
+			document.getElementById('code_number').textContent = discount_code
+			// var tick_confirm = document.getElementById('tick_confirm')
+			// tick_confirm.classList.add('far fa-check-circle');
+			var discount_pricing = document.getElementById("grandTotal").textContent
+			paymentPrice = discount_pricing - parseFloat(discount_secret)
+			document.getElementById("grandTotal").textContent = paymentPrice;
+			localStorage.setItem('value', paymentPrice);
+			localStorage.setItem('discount', discount_secret)
+			discount_count +=1
+	
+			
+			
+		}
+		else{
+			console.log('Error')
+		
+		
+		}
+	
+	})
+})
+
 function Summary_value(){
 	const value = localStorage.getItem('value')
+	const discount = localStorage.getItem('discount')
 	document.getElementById("grandTotal").innerHTML = value;
 	document.getElementById('summary-value').value = value;
+	document.getElementById('discount-value').value = discount;
 	console.log(productsInCart)
 	
 	
 }
 
-function Discount_active() {
 
-	discount_value.value = discount_code.textContent
-}
 
 
 
@@ -279,6 +295,8 @@ products.forEach(item => {   // 1
 	});
 	
 });
+
+
 
 function product_qty(){
 	for (let i = 0; i < productsInCart.length; i++) {

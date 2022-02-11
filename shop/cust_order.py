@@ -1,3 +1,4 @@
+from dis import dis
 import Customer
 import webbrowser
 from Date import fakeinheritence
@@ -8,7 +9,7 @@ class CustOrder(Customer.Customer,fakeinheritence):
 
 
 
-    def __init__(self, first_name, last_name, email, holder_name, card_type, card_num, cvv, city, postal_code, unit_number, create_date, modified_date, modified_by,total ):
+    def __init__(self, first_name, last_name, email, holder_name, card_type, card_num, cvv, city, postal_code, unit_number, create_date, modified_date, modified_by,total,discount ):
         super().__init__(first_name, last_name,"", "", city, postal_code,"", "", email)
         fakeinheritence.__init__(self,create_date,"", modified_date,modified_by)
 
@@ -22,6 +23,7 @@ class CustOrder(Customer.Customer,fakeinheritence):
         self.__unit_number = unit_number
         self.__status = None
         self.__total = total
+        self.__discount = discount
   
 
     def get_custOrder_id(self):
@@ -50,6 +52,9 @@ class CustOrder(Customer.Customer,fakeinheritence):
 
     def get_total(self):
         return self.__total
+    
+    def get_discount(self):
+        return self.__discount
 
     def get_status(self):
         if self.__card_type == 'Visa' or self.__card_type == 'Mastercard':
@@ -57,6 +62,7 @@ class CustOrder(Customer.Customer,fakeinheritence):
         elif self.__card_type == 'Select':
             self.__status = 'Pending'
         return self.__status
+
     
 
     def set_holder_name(self,holder_name):
@@ -85,6 +91,9 @@ class CustOrder(Customer.Customer,fakeinheritence):
 
     def set_total(self, total):
         self.__total = total
+    
+    def set_discount(self, discount):
+        self.__discount = discount
 
 
 

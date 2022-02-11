@@ -167,9 +167,7 @@ def register_admin():
         except:
             print("Error in retrieving Users from Admin.db.")
 
-        email = register_admin_form.email.data
-
-        if email in admins_dict:
+        if register_admin_form.email.data in admins_dict:
             flash('You have already registered with the existing email.', 'Danger')
             return redirect(url_for('login_admin'))
         else:

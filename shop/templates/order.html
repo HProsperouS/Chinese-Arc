@@ -245,8 +245,14 @@
                                                 {% endif %}
                                                 <div class="card">
                                                   <div class="card-body" >
+                                                    <span class="card-text">Subtotal: </span>
+                                                    <span class="card-text " style="float:right;">$<span id="subtotal"></span>.00</span>
+                                                    <hr>
+                                                    <span class="card-text">Discount: </span>
+                                                    <span class="card-text"  style="float:right;">- $<span id="order-discount">{{ cust_orders['order'].get_discount() }}</span>0</span>
+                                                    <hr>
                                                     <span class="card-text">Grand Total: </span>
-                                                    <span class="card-text " style="float:right;">${{ cust_orders['order'].get_total() }}0</span>
+                                                    <span class="card-text" style="float:right;">$<span id="grand-total">{{ cust_orders['order'].get_total() }}</span>0</span>
                                                   </div>
                                                 </div>
                                               </div>
@@ -531,6 +537,10 @@
     <script src="js/sb-admin-2.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script>
+      var discount = document.getElementById('order-discount').textContent
+      var total = document.getElementById('grand-total').textContent
+
+      document.getElementById('subtotal').textContent = parseFloat(discount) + parseFloat(total)
       $(document).ready(function(){
         $('.order-search-button').click(function(){
         const value = $("#search-order").val();

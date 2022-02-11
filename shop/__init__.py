@@ -2088,7 +2088,8 @@ def createCustOrder():
                                 create_custorder_form.create_date.data,
                                 create_custorder_form.modified_date.data,
                                 create_custorder_form.modified_by.data,
-                                create_custorder_form.total.data)
+                                create_custorder_form.total.data,
+                                create_custorder_form.discount.data)
         
         cust_order_dict[Cust_orders.get_custOrder_id()] = {'order':Cust_orders,'cart':copy_cart_dict} 
 

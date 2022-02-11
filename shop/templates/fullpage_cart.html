@@ -56,20 +56,23 @@
                     </div>
                     <div class="discount-list listpanel " id="voucherlist hide" >
                         
-                          <div class="card voucher_1 " id='voucher_1' style="transition: ease-in 2s;">
+                          <div class="card voucher_1 " id='voucher_1' style="transition: ease-in 2s;overflow:hidden;overflow-y:scroll;">
                             {% for voucher in voucher_list%}
                                 {% if voucher.get_voucher_status() == 'Active' %}
                                     
-                                        
-                                        <div class="card-body " onclick="Discount_active()">
-                                        
-                                                <p class='btn btn-danger w-100 ' style="text-align: center;">{{ voucher.get_voucher_name()}}</p>
-                                                <br>
-                                        
-                                                <p class='badge bg-danger  ' id='Discount_code' style="color: white;" data-action='{{voucher.get_voucher_code()}}'>{{voucher.get_voucher_code()}}</p>
-                                                <h5 class='' id='Discount_secret' style="display:none;">{{voucher.get_voucher_secret()}}</h5>
-                                                
-                                                <h5 class='badge bg-success  w-75' style="color: white;">{{voucher.get_voucher_status()}}</h5>
+                                        <div class="Discount-active">
+                                            <div class="card-body " onclick="Discount_active()">
+                                                <div class="select-code">
+                                                    <p class='btn btn-danger w-100' style="text-align: center;">{{ voucher.get_voucher_name()}}</p>
+                                                    <br>
+                                            
+                                                    <p class='badge bg-danger Discount_code' id='Discount_code' style="color: white;" data-action='{{voucher.get_voucher_code()}}'>{{voucher.get_voucher_code()}}</p>
+                                                    <h5 class='Discount_secret' id='Discount_secret' style="display:none;">{{voucher.get_voucher_secret()}}</h5>
+                                                    
+                                                    <h5 class='badge bg-success  w-75' style="color: white;">{{voucher.get_voucher_status()}}</h5>
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <hr>
                                     

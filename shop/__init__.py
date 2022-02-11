@@ -2566,11 +2566,6 @@ def create_contactReply(id):
         db['ContactReply'] = contactReply_dict
         db.close()
 
-        contact_list = []
-        for key in contact_dict:
-            contact = contact_dict.get(key)
-            contact_list.append(contact)
-
         #send email reply
         contactReply_email(id)
 

@@ -29,7 +29,7 @@
 		<div class="col-md-9 col-xl-7 col-lg-7">
 
 	<!-- ================== COMPONENT SLIDER  BOOTSTRAP  ==================  -->
-	<div id="carousel1_indicator" class="slider-home-banner carousel slide" data-ride="carousel">
+	<div id="carousel1_indicator" class="slider-home-banner carousel slide" data-ride="carousel" >
 	<ol class="carousel-indicators">
 		<li data-target="#carousel1_indicator" data-slide-to="0" class="active"></li>
 		<li data-target="#carousel1_indicator" data-slide-to="1"></li>
@@ -50,8 +50,8 @@
 		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 		<span class="sr-only">Previous</span>
 	</a>
-	<a class="carousel-control-next" href="#carousel1_indicator" role="button" data-slide="next">
-		<span class="carousel-control-next-icon" aria-hidden="true"></span>
+	<a class="carousel-control-next" href="#carousel1_indicator" role="button" data-slide="next" >
+		<span class="carousel-control-next-icon" aria-hidden="true" ></span>
 		<span class="sr-only">Next</span>
 	</a>
 	</div>
@@ -141,17 +141,17 @@
 							<div class="price-wrap">
 								<h6 class="price">
 									$<span class="priceValue">{{ productinfo.get_product_price() }}</span>
-									{% if productinfo.get_product_stock() <= 10 %}
+									{% if productinfo.get_product_stock() <= 20 %}
 										<span class="badge bg-danger" style="float: right;" >
 											<span class="stockCount" id='stockCount'>{{ productinfo.get_product_stock() }}</span>
 											left
 										</span>
 									
-									{% elif productinfo.get_product_stock() > 10 %}
+									<!-- {% elif productinfo.get_product_stock() > 10 %}
 										<span class="badge bg-success" style="float: right;" >
 											<span class="stockCount" id='stockCount'>{{ productinfo.get_product_stock() }}</span>
 											left
-										</span>
+										</span> -->
 									{% endif %}	
 								</h6>
 								

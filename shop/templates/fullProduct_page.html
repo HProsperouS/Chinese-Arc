@@ -9,6 +9,14 @@
     <section class="section-content bg-white padding-y">
         <div class="container">
 
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{url_for('home_page')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#" onclick="history.back()">Women</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{productinfo.get_product_name() }}</li>
+                </ol>
+            </nav>
+
             <!-- ============================ ITEM DETAIL ======================== -->
             <div class="row">
                 <aside class="col-md-6">
@@ -111,6 +119,42 @@
             </div> <!-- row.// -->
             <!-- ================ ITEM DETAIL END .// ================= -->
         </div> <!-- container .//  -->
+
+        <br>
+
+        <div class="container">
+        
+            <div class="row">
+                <div class="col">
+                    <h5 class="title-description">Cheongsam Care</h5>
+                    <p>
+                        The nature of the fabric, the embroidery work and the embellishments that go into the making of the
+                        Cheongsam do not
+                        allow room for roughness. Hence, it is definitely not recommended to machine wash your Cheongsams.
+                        They won’t be able to
+                        withstand the harsh tumble and spinning of the washing machine and dryer.
+        
+                        You might even end up having the bright colour dull off or frays coming out from the threads that
+                        will shorten the life
+                        of the dress itself.
+                    </p>
+                    <ul class="list-check">
+                        <li>Washing Method: 
+                            <ul>
+                                <li>Dry clean or hand wash</li>
+                                <li>Neutral detergent should be used</li>
+                                <li>Washed separately from other clothes</li>
+                                <li>Put it in a ventilated and cool place for natural air drying, try not to expose it to the sun</li>
+                            </ul>
+                        </li>
+                        <li>Iron: Low Heat</li>
+                    </ul>
+                </div> <!-- col.// -->
+        
+        
+        
+            </div> <!-- box.// -->
+        </div> <!-- row.// -->
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
     {% endfor %}

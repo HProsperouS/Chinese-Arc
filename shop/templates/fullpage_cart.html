@@ -41,66 +41,128 @@
 
     </main> <!-- col.// -->
     <aside class="col-md-3">
-        <div class="card mb-3">
+        <div class="card mb-3 ">
             <div class="card-body">
-            <form>
-                <div class="form-group">
-                    <label>Have coupon?</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="" placeholder="Coupon code" onclick="openlist(),ApplyRemove()" id='Discount_entry'>
-                        <span class="input-group-append"> 
-                            <button class="btn btn-primary" style="background-color:black; color:white; border:none" type="button" id="Apply_Remove" onclick="ApplyRemove()" >Apply</button>
-                        </span>
-
-                        
-                    </div>
-                    <div class="discount-list listpanel " id="voucherlist hide" >
-                        
-                          <div class="card voucher_1 " id='voucher_1' style="transition: ease-in 2s;overflow:hidden;overflow-y:scroll;">
-                            {% for voucher in voucher_list%}
-                                {% if voucher.get_voucher_status() == 'Active' %}
-                                    
-                                        <div class="Discount-active">
-                                            <div class="card-body " onclick="Discount_active()">
-                                                <div class="select-code">
-                                                    <p class='btn btn-danger w-100' style="text-align: center;">{{ voucher.get_voucher_name()}}</p>
-                                                    <br>
-                                            
-                                                    <p class='badge bg-danger Discount_code' id='Discount_code' style="color: white;" data-action='{{voucher.get_voucher_code()}}'>{{voucher.get_voucher_code()}}</p>
-                                                    <h5 class='Discount_secret' id='Discount_secret' style="display:none;">{{voucher.get_voucher_secret()}}</h5>
-                                                    
-                                                    <h5 class='badge bg-success  w-75' style="color: white;">{{voucher.get_voucher_status()}}</h5>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <hr>
-                                    
-                                {% elif voucher.get_voucher_status() == 'Expired' %}
-                                    
-                                        
-                                        <div class="card-body" onclick="Discount_expired()">
-                                        
-                                            <p class='btn btn-danger w-100 ' style="text-align: center;">{{ voucher.get_voucher_name()}}</p>
-                                            <br>
-                                    
-                                            <p class='badge bg-danger  ' style="color: white;" >{{voucher.get_voucher_code()}}</p>
-                                            <h5 class=''  style="display:none;">{{voucher.get_voucher_secret()}}</h5>
-                                           
-                                            <h5 class='badge bg-danger  w-75' style="color: white;">{{voucher.get_voucher_status()}}</h5>
-                                        </div>
-                                        <hr>
+                <form>
+                    <div class="form-group">
+                        <label>Have coupon?</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="" placeholder="Coupon code" onclick="openlist(),ApplyRemove()" id='Discount_entry'>
+                            <span class="input-group-append"> 
+                                <button class="btn btn-primary" style="background-color:black; color:white; border:none" type="button" id="Apply_Remove" onclick="ApplyRemove()" >Apply</button>
+                            </span>
+                        </div>
+                        <br>
+                       
+                        {% if voucher_list is defined and voucher_list|length <= 0 %}
+                            <div class='empty-discount' id='empty-discount' style='color: crimson;'>
                                 
-                                {% endif %}
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm float-right col-12" data-bs-toggle="modal" data-bs-target="#exampleModal2" >
+                                <i class="fas fa-tags"></i> Select Code
+                            </button>
+
+                            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                        
+                                        <h5 class="modal-title" id="exampleModalLabel1" >No Codes Available  <i class="fas fa-exclamation fa-lg"></i></h5>
+                                      
+                                        <div class="fas fa-times fa-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer;"></div>
+                                      
+                                    </div>
+                                                                    
+                                  </div>
+                                </div>
+                              </div>
+                        
+                            
+                        {% else %}
+                        <div class='empty-discount' id='empty-discount' style='color: crimson;'>
+                                    
+                        </div>
+                        <br>
+                        <button type="button" class="btn btn-primary btn-sm float-right col-12" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                            <i class="fas fa-tags"></i> Select Code
+                        </button>
+
+                        
+                          
+                          <!-- Modal -->
+                          <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Available Codes</h5>
+                                  
+                                <div class="fas fa-times fa-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer;"></div>
+                                  
+                                </div>
+                                <div class="modal-body">
+                                    
+                            
+                                        <div style="transition: ease-in 2s;overflow:hidden;overflow-y:scroll;">
+                                            {% for voucher in voucher_list%}
+                                                {% if voucher.get_voucher_status() == 'Active' %}
+                                                    
+                                                        <div class="Discount-active">
+                                                            <div class="card-body " onclick="Discount_active()">
+                                                                <div class="select-code">
+                                                                    <p class='btn btn-danger w-100' style="text-align: center;">{{ voucher.get_voucher_name()}}</p>
+                                                                    <br>
+                                                            
+                                                                    <p class='badge bg-danger Discount_code' id='Discount_code' style="color: white;" data-action='{{voucher.get_voucher_code()}}'>{{voucher.get_voucher_code()}}</p>
+                                                                    <h5 class='Discount_secret' id='Discount_secret' style="display:none;">{{voucher.get_voucher_secret()}}</h5>
+                                                                    
+                                                                    <h5 class='badge bg-success  w-75' style="color: white;">{{voucher.get_voucher_status()}}</h5>
+                                                                </div>
+                                                            </div>
+        
+                                                        </div>
+                                                        <hr>
+                                                    
+                                                {% elif voucher.get_voucher_status() == 'Expired' %}
+                                                    
+                                                        
+                                                        <div class="card-body" onclick="Discount_expired()">
+                                                        
+                                                            <p class='btn btn-danger w-100 ' style="text-align: center;">{{ voucher.get_voucher_name()}}</p>
+                                                            <br>
+                                                    
+                                                            <p class='badge bg-danger  ' style="color: white;" >{{voucher.get_voucher_code()}}</p>
+                                                            <h5 class=''  style="display:none;">{{voucher.get_voucher_secret()}}</h5>
+                                                        
+                                                            <h5 class='badge bg-danger  w-75' style="color: white;">{{voucher.get_voucher_status()}}</h5>
+                                                        </div>
+                                                        <hr>
+                                                
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        
+                                       
+                                    
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                  
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                     
                             
-                            {% endfor %}
-                          </div>
-                        <button type='button' onclick='closelist()' class='btn btn-danger btn-sm hide' id='close-button' >Close</button>
+                        
                             
+                        {% endif %}
+                        
+                           
+                                
+                       
                     </div>
-                </div>
-            </form>
+                </form>
             </div> <!-- card-body.// -->
         </div>  <!-- card .// -->
         <div class='card col-12'>
@@ -122,13 +184,7 @@
                         <span class='float-right'>- $<span id="discount_number"></span></span>
                     </div>
                 </div>
-                
-                
-                    
-                
-                
-            </div>
-            
+            </div>          
         </div>
         <br>
         <div class="card col-12">

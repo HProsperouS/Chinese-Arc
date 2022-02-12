@@ -44,9 +44,22 @@ function getCartSum() {
 	
 	
 }
-
+function empty_display(){
+	document.querySelector('#empty-discount').textContent =''
+}
 function ApplyRemove(){
-	if (document.getElementById('Discount_entry').value == ''){
+	if (document.getElementById('Apply_Remove').textContent == 'Apply'){
+		if (document.getElementById('Discount_entry').value == ''){
+			document.querySelector('#empty-discount').textContent = 'Please enter a vaild code'
+
+			const timer = setTimeout(empty_display,1000)
+
+			
+
+			
+		}
+	}
+	else if (document.getElementById('Discount_entry').value == ''){
 		document.getElementById('Discount_entry').value = ''
 		document.getElementById('Apply_Remove').textContent ='Apply'
 		var discount = document.getElementById('discount_number').textContent;
@@ -72,6 +85,7 @@ function ApplyRemove(){
 		localStorage.setItem('value', paymentPrice);
 		localStorage.setItem('discount', 0)
 	}
+	
 
 }
 

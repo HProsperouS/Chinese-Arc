@@ -2703,6 +2703,14 @@ def full_product_page(id):
             if productinfo.get_product_id() == id:
                 productinfo_list.append(productinfo)
 
+        elif productinfo.get_product_category() == 'TangZhuang':
+            if productinfo.get_product_id() == id:
+                productinfo_list.append(productinfo)
+
+        elif productinfo.get_product_category() == 'Accessories':
+            if productinfo.get_product_id() == id:
+                productinfo_list.append(productinfo)
+
     image_list = os.listdir(app.config['UPLOADED_PHOTOS_DEST'])
 
     return render_template('fullProduct_page.html',

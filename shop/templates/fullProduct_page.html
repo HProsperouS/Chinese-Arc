@@ -12,7 +12,17 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{url_for('home_page')}}">Home</a></li>
+
+                    {% if productinfo.get_product_category() == "Cheongsam" %}
                     <li class="breadcrumb-item"><a href="#" onclick="history.back()">Women</a></li>
+                    
+                    {% elif productinfo.get_product_category() == "TangZhuang" %}
+                    <li class="breadcrumb-item"><a href="#" onclick="history.back()">Men</a></li>
+
+                    {% elif productinfo.get_product_category() == "Accessories" %}
+                    <li class="breadcrumb-item"><a href="#" onclick="history.back()">Accessories</a></li>
+                    
+                    {% endif %}
                     <li class="breadcrumb-item active" aria-current="page">{{productinfo.get_product_name() }}</li>
                 </ol>
             </nav>
@@ -23,7 +33,16 @@
                     <div class="card">
                         <article class="gallery-wrap">
                             <div class="img-big-wrap">
+                                {% if productinfo.get_product_category() == "Cheongsam" %}
                                 <div><img src="../static/images/Cheongsam/{{productinfo.get_product_image() }}"></div>
+
+                                {% elif productinfo.get_product_category() == "TangZhuang" %}
+                                <div><img src="../static/images/TangZhuang/{{productinfo.get_product_image() }}"></div>
+                                
+                                {% elif productinfo.get_product_category() == "Accessories" %}
+                                <div><img src="../static/images/Accessories/{{productinfo.get_product_image() }}"></div>
+
+                                {% endif %}
                             </div> <!-- slider-product.// -->
                             <!-- <div class="thumbs-wrap">
                                 <a href="#" class="item-thumb"> <img src="images/items/15.jpg"></a>
@@ -81,7 +100,13 @@
 
                         <dl class="row">
                             <dt class="col-sm-3">Material Type</dt>
+                            {% if productinfo.get_product_category() == "Accessories" %}
+                            <dd class="col-sm-9">24k Gold</a></dd>
+
+                            {% else %}
                             <dd class="col-sm-9">95% cotton | 5% wool</a></dd>
+
+                            {% endif %}
 
                             <dt class="col-sm-3">Delivery time</dt>
                             <dd class="col-sm-9">3-4 days</dd>
@@ -126,20 +151,35 @@
         
             <div class="row">
                 <div class="col">
-                    <h5 class="title-description">Cheongsam Care</h5>
+                    <h5 class="title-description">Product Care</h5>
+
+                    {% if productinfo.get_product_category() == "Accessories" %}
+                    <p>
+                        To preserve the lustre of your gold jewellery, avoid exposure to household bleach and other cleaning products, which
+                        will quickly cause gold to discolour and possibly disintegrate. We recommend that you store your gold jewellery in a
+                        safe place when engaging in these activities:
+                        <ul>
+                            <li>Household and outdoor chores (i.e., cleaning and gardening)</li>
+                            <li>Showering, bathing or swimming in pools, hot tubs, hot springs and the ocean</li>
+                            <li>Lotion, hair products, fragrances and other cosmetics</li>
+                        </ul>
+                    </p>
+                    
+                    {% else %}
                     <p>
                         The nature of the fabric, the embroidery work and the embellishments that go into the making of the
-                        Cheongsam do not
-                        allow room for roughness. Hence, it is definitely not recommended to machine wash your Cheongsams.
+                        Cheongsam or TangZhuang do not
+                        allow room for roughness. Hence, it is definitely not recommended to machine wash your Cheongsams or TangZhuang.
                         They won’t be able to
                         withstand the harsh tumble and spinning of the washing machine and dryer.
-        
+                    
                         You might even end up having the bright colour dull off or frays coming out from the threads that
                         will shorten the life
                         of the dress itself.
                     </p>
+
                     <ul class="list-check">
-                        <li>Washing Method: 
+                        <li>Washing Method:
                             <ul>
                                 <li>Dry clean or hand wash</li>
                                 <li>Neutral detergent should be used</li>
@@ -149,6 +189,8 @@
                         </li>
                         <li>Iron: Low Heat</li>
                     </ul>
+                    
+                    {% endif %}
                 </div> <!-- col.// -->
         
         

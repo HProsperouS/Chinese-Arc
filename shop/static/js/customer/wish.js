@@ -43,7 +43,7 @@ const updateWishListHTML = function () {
 							
 						</div>
 						<div class="row" >
-							<i class="btn btn-danger button-delete fas fa-trash-alt"  data-id=${wishproduct.id} style='margin-top:-20px;margin-bottom:20px;margin-left:28px;'> </i>							
+							<i class="btn btn-danger button-delete fas fa-trash-alt" id="remove" value="remove"  style='margin-top:-20px;margin-bottom:20px;margin-left:28px;' onclick="Remove()"> </i>							
 						</div>
 						
 					</div>
@@ -64,6 +64,17 @@ const updateWishListHTML = function () {
 		FavItemNumber.innerHTML = ""
 	}
 }
+
+function Remove(){
+	var elem = document.getElementById('remove');
+        elem.parentNode.removeChild(elem);
+        return false;
+}
+
+
+
+
+
 function updateProductsInWish(wishproduct) { // 2
 	document.getElementById('flash_2').textContent = 'Item added to Wishlist!'
 		const showFlash = () => {

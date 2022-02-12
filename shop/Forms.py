@@ -54,8 +54,8 @@ class CreateUnsubscribeForm(Form):
 
 
 class CreateFAQForm(Form):
-    question = TextAreaField('Question', [validators.DataRequired()])
-    answer = TextAreaField('Answer', [validators.DataRequired()])
+    question = StringField('Question', [validators.Length(min=1,max=800), validators.DataRequired(message="This field is required")])
+    answer = StringField('Answer', [validators.Length(min=1,max=800), validators.DataRequired(message="This field is required")])
     create_date = DateField('Date Updated/Created', format="%Y-%m-%d", default=datetime.datetime.now())
 
 class CreateFeedbackForm(Form):

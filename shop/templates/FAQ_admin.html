@@ -20,74 +20,111 @@
   <p>There are {{ count }} FAQs.</p>
   {% endif %}
 </div>
-{% for faq in faq_list %}
-<div class="card">
-  <div class="card-header">Question {{ faq.get_count_id() }}:<br>
-    {{ faq.get_question() }}
-  </div>
-  <div class="card-body">
-    <p class="card-text">
-      Answer: <br>
-      {{ faq.get_answer() }}
-    </p>
-    <br>
-    <div class="row">
-      <div class="col-1">
-        <form action="{{url_for('update_FAQs', id = faq.get_id())}}"  method="POST">
-          <!-- Button to Open the Modal -->
-          <button type="submit" class="btn btn-primary bg-gradient-primary"  data-bs-target="#myModal_{{faq.get_id()}}">
-            Update
-          </button>
-        </form>
-      </div>
-      <div class="col-1">
-        <form action="{{url_for('delete_FAQs', id = faq.get_id())}}"  method="POST">
-                
-          <!-- Button to Open the Modal -->
-          <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#myModal_{{faq.get_id()}}">
-            Delete
-          </button>
-          
-          <!-- The Modal -->
-          <div class="modal" id="myModal_{{faq.get_id()}}">
-            <div class="modal-dialog">
-              <div class="modal-content">
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                  <h4 class="modal-title">Delete Confirmation</h4>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
 
-                <!-- Modal body -->
-                <div class="modal-body">
-                  Are you sure you want to delete Question {{faq.get_id()}}?
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                  <input type="submit" value="Delete" class="btn btn-danger">
-                  
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+<div class="content content-1" style="height:650px;overflow:hidden;overflow-y:scroll;">
+  <table class="table ">
+    <thead>
+      <tr>
+        <th>Question id</th>
+        <th>Question</th>
+        <th>Date Created/Modified</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for faq in faq_list %}
+      <tr>
+        <td style="font-size: smaller;">{{ faq.get_id() }}</td>
+        <td>{{ faq.get_question() }}</td>
+        <td>{{ faq.get_create_date() }}</td>
+        <td>
+          <form action="{{url_for('update_FAQs', id = faq.get_id())}}"  method="POST">
+            <!-- Button to Open the Modal -->
+            <button type="submit" class="btn btn-primary bg-gradient-primary"  data-bs-target="#myModal_{{faq.get_id()}}">
+              <i class="fas fa-pen"></i>
+            </button>
+            
+          </form>
+        </td>
+        <td>
+          <form action="{{url_for('delete_FAQs', id = faq.get_id())}}" method="POST">
+            <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#myModal_{{faq.get_id()}}">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+            <div class="modal" id="myModal_{{faq.get_id()}}">
+              <div class="modal-dialog">
+                <div class="modal-content">
+  
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+  
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    Are you sure you want to delete Question {{faq.get_id()}}?
+                  </div>
+  
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                    
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                  </div>
                 </div>
               </div>
             </div>
+          </form>
+        </td>
+        <td>
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#Modal_{{faq.get_id()}}"><i class="far fa-eye"></i></button>
+        </td>
+   
+      </tr>
+      {% endfor %}
+    </tbody>
+    <div class="text-right">
+      <form action="{{url_for('CreateFAQ')}}"  method="POST">
+        <button type="submit" class="btn btn-primary" style="background-color:orange; border: none;"  >
+          <i class="fas fa-plus"></i>
+        </button>
+      </form>
+    </div>
+  </table>
+  
+</div>
+
+{% for faq in faq_list %}
+  <div class="card">
+    <!-- modal -->
+    <div class="modal fade" id="Modal_{{faq.get_id()}}" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered">
+        <!-- Modal Content -->
+        <div class="modal-content">
+          <div class="modal-header text-left">
+            <h4 class="text-left">{{ faq.get_question() }}</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
-        </form>
+          <div class="modal-body">
+            <p>{{ faq.get_answer() }}</p>
+            <br>
+            <p style="font-size: x-small;">Date Created/Modified: {{ faq.get_create_date() }}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
-    <br>
-    <p class="card-text">
-      Date Created/Updated:
-      {{ faq.get_create_date() }}
-    </p>
-    <p class="card-text" style="color: rgba(151, 153, 159, 0);">
-      Question id:
-      {{ faq.get_id() }}
-    </p>
-  </div> 
-</div><br><br>
+  </div>
 {% endfor %}
+
+
+
+
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <!-- Bootstrap core JavaScript-->
@@ -101,5 +138,6 @@
     <script src="js/sb-admin-2.min.js"></script>
 
 </body>
+
 
 {% endblock %}

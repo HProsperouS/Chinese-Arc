@@ -6,18 +6,18 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 {% block content %}
-<h1 class="display-4">Retrieve Queries</h1>
+<h1 class="display-4">Customer Query</h1>
 <div>
     {% if count == 0 %}
-    <p>There are no queries.</p>
+    <p>There are no query.</p>
     {% elif count == 1 %}
-    <p>There is 1 query.</p>
+    <p>There is 1 query in total.</p>
     {% else %}
-    <p>There are {{ count }} queries.</p>
+    <p>There are {{ count }} queries in total.</p>
     {% endif %}
 </div>
 
-<div>
+<!-- <div>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -50,10 +50,10 @@
             {% endfor %}
         </tbody>
     </table>
-</div>
+</div> -->
 
-<section id="tabs" class="project-tab">
-    <div class="container">
+<section>
+    <div>
         <div class="row">
             <div class="col-md-12">
                 <nav>

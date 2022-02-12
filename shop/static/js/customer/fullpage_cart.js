@@ -13,9 +13,7 @@ const cartSumPrice = document.querySelector('#sum-price');
 const products = document.querySelectorAll('.col-md-3');
 const cartItemNumber= document.querySelector('#sum-count');
 const flash = document.getElementById('flash')
-var discount_value = document.getElementById('Discount_entry')
-var discount_code = document.getElementById('Discount_code')
-var discount_secret = document.getElementById('Discount_secret')
+
 const active_discount = document.querySelectorAll('.Discount-active')
 // const CartCallout = function(){
 //   alert("Item added to cart!");
@@ -40,11 +38,44 @@ function getCartSum() {
 	document.getElementById("grandTotal").textContent = paymentPrice;
 	document.getElementById('discount_number').textContent = 0
 	document.getElementById('code_number').textContent = 'N/A'
+	localStorage.setItem('discount', 0)
 
 	
 	
 	
 }
+
+function ApplyRemove(){
+	if (document.getElementById('Discount_entry').value == ''){
+		document.getElementById('Discount_entry').value = ''
+		document.getElementById('Apply_Remove').textContent ='Apply'
+		var discount = document.getElementById('discount_number').textContent;
+		var discount_pricing = document.getElementById("grandTotal").textContent
+		paymentPrice = parseFloat(discount_pricing) + parseFloat(discount)
+		document.getElementById("grandTotal").textContent = paymentPrice;
+		
+		document.getElementById('discount_number').textContent = 0
+		document.getElementById('code_number').textContent = 'N/A'
+		localStorage.setItem('value', paymentPrice);
+		localStorage.setItem('discount', 0)
+	}
+	else if (document.getElementById('Apply_Remove').textContent == 'Remove'){
+		document.getElementById('Discount_entry').value = ''
+		document.getElementById('Apply_Remove').textContent ='Apply'
+		var discount = document.getElementById('discount_number').textContent;
+		var discount_pricing = document.getElementById("grandTotal").textContent
+		paymentPrice = parseFloat(discount_pricing) + parseFloat(discount)
+		document.getElementById("grandTotal").textContent = paymentPrice;
+		
+		document.getElementById('discount_number').textContent = 0
+		document.getElementById('code_number').textContent = 'N/A'
+		localStorage.setItem('value', paymentPrice);
+		localStorage.setItem('discount', 0)
+	}
+
+}
+
+
 active_discount.forEach(code => {
 	code.addEventListener('click', (e) => {
 		getCartSum()
@@ -53,9 +84,12 @@ active_discount.forEach(code => {
 		const discount_code = code.querySelector('.Discount_code').textContent;
 		const discount_value = document.getElementById('Discount_entry')
 		const discount_secret = code.querySelector('.Discount_secret').textContent
+		
 		discount_value.value = discount_code
 
 		if (discount_value.value == discount_code && discount_count == 0) {
+			document.getElementById('Apply_Remove').textContent = 'Remove';
+			
 			document.getElementById('discount_number').textContent = discount_secret
 			document.getElementById('code_number').textContent = discount_code
 			// var tick_confirm = document.getElementById('tick_confirm')
@@ -65,6 +99,7 @@ active_discount.forEach(code => {
 			document.getElementById("grandTotal").textContent = paymentPrice;
 			localStorage.setItem('value', paymentPrice);
 			localStorage.setItem('discount', discount_secret)
+			
 			discount_count +=1
 	
 			
@@ -78,6 +113,7 @@ active_discount.forEach(code => {
 	
 	})
 })
+
 
 function Summary_value(){
 	const value = localStorage.getItem('value')

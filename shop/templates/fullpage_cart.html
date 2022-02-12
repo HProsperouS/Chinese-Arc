@@ -47,9 +47,9 @@
                 <div class="form-group">
                     <label>Have coupon?</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="" placeholder="Coupon code" onclick="openlist()" id='Discount_entry'>
+                        <input type="text" class="form-control" name="" placeholder="Coupon code" onclick="openlist(),ApplyRemove()" id='Discount_entry'>
                         <span class="input-group-append"> 
-                            <button class="btn btn-primary" style="background-color:black; color:white; border:none" type="button" onclick="getCartSum()">Apply</button>
+                            <button class="btn btn-primary" style="background-color:black; color:white; border:none" type="button" id="Apply_Remove" onclick="ApplyRemove()" >Apply</button>
                         </span>
 
                         
@@ -112,7 +112,7 @@
                     </div>
                     <div class="col-md-2">
                         
-                        <span class='float-right'><span id="code_number"></span>
+                        <span class='float-right'><span id="code_number"></span></span>
                         
                     </div>
                     <div class="col-md-9">

@@ -244,8 +244,8 @@
                                                 
                                                 {% endif %}
                                                 <div class="card">
-                                                  <div class="card-body" >
-                                                    <span class="card-text">Subtotal: </span>
+                                                  <div class="card-body summary" >
+                                                    <span class="card-text" >Subtotal: </span>
                                                     <span class="card-text " style="float:right;">$<span id="subtotal"></span>.00</span>
                                                     <hr>
                                                     <span class="card-text">Discount: </span>
@@ -537,10 +537,23 @@
     <script src="js/sb-admin-2.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script>
-      var discount = document.getElementById('order-discount').textContent
-      var total = document.getElementById('grand-total').textContent
+      const summary = document.querySelectorAll('.summary')
+      summary.forEach(code => {
+        console.log('ho')
+        var discount = document.getElementById('order-discount').textContent
+        var total = document.getElementById('grand-total').textContent
 
-      document.getElementById('subtotal').textContent = parseFloat(discount) + parseFloat(total)
+        document.getElementById('subtotal').textContent = parseFloat(discount) + parseFloat(total)
+        code.addEventListener('load', (e) => {
+          console.log('hi')
+          
+        
+        })
+      })
+      
+        
+      
+      
       $(document).ready(function(){
         $('.order-search-button').click(function(){
         const value = $("#search-order").val();

@@ -2613,7 +2613,7 @@ def contactReply_email(id):
         create_contact_form.subject.data = contact.get_subject()
         create_contact_form.first_name.data = contact.get_first_name()
         create_contact_form.last_name.data = contact.get_last_name()
-        create_contactReply_form.reply.data = contactReply.get_reply()
+        # create_contactReply_form.reply.data = contactReply.get_reply()
 
     sender = password = ""
     port = 465
@@ -2623,10 +2623,10 @@ def contactReply_email(id):
     recieve = contact.get_email()
     first_name = contact.get_first_name()
     last_name = contact.get_last_name()
-    reply = contactReply.get_reply(id)
+    # reply = contactReply.get_reply(id)
 
     msg = EmailMessage()
-    msg['Subject'] = 'Chinese Arc Query Reply' + ' ( ' + first_name + last_name + reply + ' ) '
+    msg['Subject'] = 'The Chinese Arc Query Reply' + ' ( ' + first_name + last_name + ' ) '
     msg['From'] = sender
     msg['To'] = recieve
 

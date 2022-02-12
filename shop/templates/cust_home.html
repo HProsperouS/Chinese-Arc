@@ -249,6 +249,7 @@
 
 			<div class='reviews'>
 				{% for feedback in feedback_list %}
+				{% if feedback.get_rating() == "5" %}
 				<!-- Panel one -->
 				<div class='panel'>
 					<img src='/static/images/Chinese.png'>
@@ -270,6 +271,7 @@
 					</div>
 					</p>
 				</div>
+				{% endif %}
 				{% endfor %}
 			</div>
 			<script>

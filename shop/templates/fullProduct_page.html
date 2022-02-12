@@ -4,12 +4,12 @@
 {% block content %}
 
 <body>
+    {% for productinfo in productinfo_list %}
     <!-- ========================= SECTION CONTENT ========================= -->
     <section class="section-content bg-white padding-y">
         <div class="container">
 
             <!-- ============================ ITEM DETAIL ======================== -->
-            {% for productinfo in productinfo_list %}
             <div class="row">
                 <aside class="col-md-6">
                     <div class="card">
@@ -109,11 +109,16 @@
                     </article> <!-- product-info-aside .// -->
                 </main> <!-- col.// -->
             </div> <!-- row.// -->
-            {% endfor %}
             <!-- ================ ITEM DETAIL END .// ================= -->
         </div> <!-- container .//  -->
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
+    {% endfor %}
 </body>
+
+<script src="../static/js/customer/wish.js" type="text/javascript"></script>
+<script src="../static/js/customer/fullpage_wish.js" type="text/javascript"></script>
+<script src="../static/js/customer/cart.js" type="text/javascript"></script>
+<script src="../static/js/customer/cart_btn.js" type="text/javascript"></script>
 
 {% endblock %}

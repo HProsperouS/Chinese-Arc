@@ -2671,8 +2671,8 @@ def cust_order_history():
 
     return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 
-@app.route('/fullProduct')
-def full_product_page():
+@app.route('/fullProduct/<int:id>')
+def full_product_page(id):
     try:
         productinfo_dict = {}
         db = shelve.open('ProductInfo.db', 'r')
@@ -2686,11 +2686,10 @@ def full_product_page():
     for key in productinfo_dict:
         productinfo = productinfo_dict.get(key)
         if productinfo.get_product_category() == 'Cheongsam':
-            productinfo_list.append(productinfo)
+            if productinfo.get_product_id() == id:
+                productinfo_list.append(productinfo)
 
     image_list = os.listdir(app.config['UPLOADED_PHOTOS_DEST'])
-
-    print(id)
 
     return render_template('fullProduct_page.html',
                             count1=len(image_list),

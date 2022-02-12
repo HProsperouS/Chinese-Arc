@@ -65,15 +65,13 @@ const updateWishListHTML = function () {
 	}
 }
 
+
+
 function Remove(){
 	var elem = document.getElementById('remove');
         elem.parentNode.removeChild(elem);
         return false;
 }
-
-
-
-
 
 function updateProductsInWish(wishproduct) { // 2
 	document.getElementById('flash_2').textContent = 'Item added to Wishlist!'
@@ -90,22 +88,11 @@ function updateProductsInWish(wishproduct) { // 2
 		setTimeout(hideFlash, 1000);
 		console.log(ProductsInWish)
 
-
-	for (let i = 0; i < ProductsInWish.length; i++) {
-		if (ProductsInWish.id == wishproduct.id) {
-            ProductsInWish[i].count += 1;
-            ProductsInWish[i].price =  ProductsInWish[i].basePrice *  ProductsInWish[i].count;
-
-			return;
-		}
-	}
     ProductsInWish.push(wishproduct);
-	
 }
+
 favproducts.forEach(item => {   // 1
-
 	item.addEventListener('click', (e) => {
-
 		if (e.target.classList.contains('addToWish')) {
 			const productID = e.target.dataset.productId;
 			const productName = item.querySelector('.productName').innerHTML;
@@ -118,17 +105,12 @@ favproducts.forEach(item => {   // 1
 				count:1,
 				price: +productPrice,
 				basePrice: +productPrice,
-			}
-			
+			}	
 			updateProductsInWish(wishproduct);
 			updateWishListHTML();
 
-			
 		}
-	
-
 	});
-
 });
 
 parentFavElement.addEventListener('click', (e) => { // Last
@@ -151,12 +133,7 @@ parentFavElement.addEventListener('click', (e) => { // Last
 					ProductsInWish[i].count = 0
 
 					ProductsInWish[i].price = ProductsInWish[i].basePrice * ProductsInWish[i].count;
-
-				
-
 				}
-				
-
 			}
 			if (ProductsInWish[i].count <= 0) {
 				ProductsInWish.splice(i,1); //The splice() method adds and/or removes array elements
@@ -165,10 +142,8 @@ parentFavElement.addEventListener('click', (e) => { // Last
 		updateWishListHTML();
 	} 
 });
-
 updateWishListHTML();
 function Delete(){
-	
 }
 
 

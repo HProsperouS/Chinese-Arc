@@ -84,25 +84,18 @@
 		
       </ul>
     </div> <!-- collapse .// -->
-<!--  SHOPPING CART  -->
+	<!--  SHOPPING CART  -->
 	
     <div class="shopping-cart" style="z-index: 100;">
-		<div class="sum-count" >
-
+		<div class="sum-count">
 			<button type="button" class="openCart btn position-relative " onclick="openCart()">
 				<i class="fa fa-shopping-cart "></i>
-				
 				<span class="position-absolute top-0 start-100 translate-middle" >
 					
 					<span class="badge bg-danger" id="sum-count" style="color: white; font-size: 12px;padding-right: 5px;"></span>
 				</span>
-				
-				
-			  </button>
-			
-			
-			
-			
+			</button>
+
 			<div id="productsOnCart hide" class="sidepanel">
 				<div class="top">
 					<h3 >Cart</h3>
@@ -134,14 +127,12 @@
 
 	<!-- ======= WISHLIST ========= -->
 	<div class="wish-list" style="padding: 10px;">
-		
-
 		<button type="button" class="openWish btn  position-relative" onclick="openWish()">
-			<i class="fa fa-heart WishlistButton "></i>
+			<i class="fa fa-heart WishlistButton"></i>
 			<span class="position-absolute top-0 start-100 translate-middle" >
 				<span  id="total-count" class="badge bg-danger" style="color: white; font-size: 12px;padding-right: 5px;"></span>
 			</span>
-		  </button>
+		</button>
 
 		<div id="productsOnWish hide" class="sidepanel">
 			<div class="top">
@@ -174,12 +165,7 @@
 			location.href="{{ url_for('fullpage_wish') }}";
 		};
 	</script>
-	
 	<!-- ============================ -->
-			
-	
-	 
-
   </div> <!-- container .// -->
 </nav>
 </header> <!-- section-header.// -->

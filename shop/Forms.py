@@ -77,7 +77,7 @@ class CreateDeliveryFeedbackForm(Form):
     message3 = RadioField('Was the item difficult to open?', [validators.DataRequired()], choices=[('Yes', 'Yes'), ('No', 'No')], default='Yes')
     message4 = RadioField('Was the process of receiving delivery quick and hassle-free?', [validators.DataRequired()], choices=[('Yes', 'Yes, It was quick and simple'),('No', 'No, not as convinient as expected')], default='Yes')
     remarks = TextAreaField('Remarks', [validators.Length(min=1, max=150),validators.Optional()])
-    create_date= DateField('Date Updated/Created', [validators.DataRequired()],format="%Y-%m-%d", default=datetime.datetime.now())
+    create_date= DateField('Date Of Creation', [validators.DataRequired()],format="%Y-%m-%d", default=datetime.datetime.now())
     
 
 class Register_AdminForm(Form):

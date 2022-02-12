@@ -2543,7 +2543,42 @@ def retrieve_contact():
         contact = contact_dict.get(key)
         contact_list.append(contact)
 
-    return render_template('retrieveContact.html', count=len(contact_list), contact_list=contact_list)
+    adjustment_list = []
+    for key in contact_dict:
+        adjustment = contact_dict.get(key)
+        if adjustment.get_subject() == 'Cheongsam Adjustment':
+            adjustment_list.append(adjustment)
+
+    sizing_list = []
+    for key in contact_dict:
+        sizing = contact_dict.get(key)
+        if sizing.get_subject() == 'Sizing':
+            sizing_list.append(sizing)
+
+    appointment_list = []
+    for key in contact_dict:
+        appointment = contact_dict.get(key)
+        if appointment.get_subject() == 'Appointment':
+            appointment_list.append(appointment)
+
+    others_list = []
+    for key in contact_dict:
+        others = contact_dict.get(key)
+        if others.get_subject() == 'Others':
+            others_list.append(others)        
+
+    return render_template('retrieveContact.html', 
+                            count=len(contact_list), 
+                            contact_list=contact_list, 
+                            adjustment_list=adjustment_list,
+                            count1=len(adjustment_list),
+                            sizing_list=sizing_list,
+                            count2=len(sizing_list),
+                            appointment_list=appointment_list,
+                            count3=len(appointment_list),
+                            others_list=others_list,
+                            count4=len(others_list)
+                            )
 
 @app.route('/deleteContact/<uuid:id>', methods=['POST'])
 def delete_contact(id):

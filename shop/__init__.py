@@ -788,6 +788,7 @@ def chart():
 
 
 @app.route('/voucher')
+@login_required
 def voucher():
     try:
         voucher_dict = {}
@@ -806,6 +807,7 @@ def voucher():
 
 
 @app.route('/voucherform', methods=['GET', 'POST'])
+@login_required
 def voucherform():
    create_voucher_form = CreateVoucherForm(request.form)
    if request.method == 'POST' and create_voucher_form.validate():
@@ -836,6 +838,7 @@ def voucherform():
         return redirect(url_for('voucher'))
    return render_template('Voucher_form.html', form=create_voucher_form)
 @app.route('/updatevoucher/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update_voucher(id):
     update_voucher_form=UpdateVoucherForm(request.form)
     if request.method == 'POST' and update_voucher_form.validate():
@@ -893,6 +896,7 @@ def update_voucher(id):
 
 
 @app.route('/deletevoucher/<int:id>', methods=['POST'])
+@login_required
 def delete_voucher(id):
     voucher_dict = {}
     db = shelve.open('voucher.db', 'w')
@@ -911,11 +915,6 @@ def delete_voucher(id):
 @login_required
 def settings():
     return render_template('settings.html')
-
-@app.route('/box')
-def box():
-    return render_template('boxing.html')
-
 
 
 @app.route('/catalog')
@@ -1239,6 +1238,7 @@ def UpdateHomeAnnouncement(id):
         return render_template('UpdateHomeAnnouncement.html', form=UpdateHomeAnnouncement_Form)
 
 @app.route('/FAQ')
+@login_required
 def FAQs():
     try:
         faq_dict = {}
@@ -1258,6 +1258,7 @@ def FAQs():
                            faq_list=faq_list)
 
 @app.route('/UpdateFaqs/<uuid:id>/', methods=['GET', 'POST'])
+@login_required
 def update_FAQs(id):
     UpdateFAQ_Form = CreateFAQForm(request.form)
 
@@ -1294,6 +1295,7 @@ def update_FAQs(id):
         return render_template('UpdateFAQs.html', form=UpdateFAQ_Form)
 
 @app.route('/CreateFAQ',methods=['GET','POST'])
+@login_required
 def CreateFAQ():
     CreateFAQ_Form=CreateFAQForm(request.form)
     if request.method == 'POST' and CreateFAQ_Form.validate():
@@ -1313,6 +1315,7 @@ def CreateFAQ():
     return render_template('CreateFAQ.html', form=CreateFAQ_Form)
 
 @app.route('/DeleteFAQ/<uuid:id>', methods=['POST'])
+@login_required
 def delete_FAQs(id):
     faq_dict = {}
     db = shelve.open('FAQ.db', 'w')
@@ -1381,6 +1384,7 @@ def CreateDeliveryFeedback():
     return render_template('CreateDeliveryFeedback.html', form=CreateDeliveryFeedback_Form)
 
 @app.route('/DeleteDeliveryFeedback/<int:id>', methods=['POST'])
+@login_required
 def delete_deliveryfeedback(id):
     try:
         deliveryfeedback_dict = {}
@@ -1682,6 +1686,7 @@ def retrieve_subscriptions():
                             unsubscribe_list=unsubscribe_list)
 
 @app.route('/updateSubscriptions/<uuid:id>/', methods=['GET', 'POST'])
+@login_required
 def update_subscriptions(id):
     update_subscriptions_form = CreateSubscriptionsForm(request.form)
     if request.method == 'POST' and update_subscriptions_form.validate():
@@ -1714,6 +1719,7 @@ def update_subscriptions(id):
         return render_template('updateSubscriptions.html', form=update_subscriptions_form)
 
 @app.route('/deleteSubscriptions/<uuid:id>', methods=['POST'])
+@login_required
 def delete_subscriptions(id):
     subscriptions_dict = {}
     db = shelve.open('subscriptions.db', 'w')
@@ -1768,6 +1774,7 @@ def delete_unsubscribe(id):
 
 
 @app.route('/createNewsletter', methods=['GET', 'POST'])
+@login_required
 def create_newsletter():
     create_newsletter_form = CreateNewsletterForm(request.form)
     if request.method == 'POST' and create_newsletter_form.validate():
@@ -1796,6 +1803,7 @@ def create_newsletter():
     return render_template('createNewsletter.html', form=create_newsletter_form)
 
 @app.route('/retrieveNewsletter')
+@login_required
 def retrieve_newsletter():
     newsletter_dict = {}
     db = shelve.open('newsletter.db', 'r')
@@ -1810,6 +1818,7 @@ def retrieve_newsletter():
     return render_template('retrieveNewsletter.html', count=len(newsletter_list), newsletter_list=newsletter_list)
 
 @app.route('/updateNewsletter/<uuid:id>/', methods=['GET', 'POST'])
+@login_required
 def update_newslette(id):
     update_newsletter_form = CreateNewsletterForm(request.form)
     if request.method == 'POST' and update_newsletter_form.validate():
@@ -1858,6 +1867,7 @@ def update_newslette(id):
         return render_template('updateNewsletter.html', form=update_newsletter_form)
 
 @app.route('/deleteNewsletter/<uuid:id>', methods=['POST'])
+@login_required
 def delete_newsletter(id):
     newsletter_dict = {}
     db = shelve.open('newsletter.db', 'w')
@@ -1873,6 +1883,7 @@ def delete_newsletter(id):
     return redirect(url_for('retrieve_newsletter'))
 
 @app.route('/sendNewsletter/<uuid:id>')
+@login_required
 def send_newsletter(id):
     create_newsletter_form = CreateNewsletterForm(request.form)
 
@@ -2214,6 +2225,7 @@ def createCustOrder():
     return render_template('Customer_order_form.html', form=create_custorder_form)
 
 @app.route('/order', methods=['GET','POST'])
+@login_required
 def retrieve_cust_orders():
     try:
         cust_cart_dict = {}
@@ -2274,6 +2286,7 @@ def retrieve_cust_orders():
 
 
 @app.route('/deleteOrder/<uuid:id>', methods=['POST'])
+@login_required
 def delete_order(id):
     try:
         cust_order_dict = {}
@@ -2311,6 +2324,7 @@ def delete_order(id):
 
 
 @app.route('/refundOrder/<uuid:id>', methods=['POST'])
+@login_required
 def refund_order(id):
     try:
         cust_order_dict = {}
@@ -2671,8 +2685,8 @@ def cust_order_history():
 
     return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 
-@app.route('/fullProduct')
-def full_product_page():
+@app.route('/fullProduct/<int:id>')
+def full_product_page(id):
     try:
         productinfo_dict = {}
         db = shelve.open('ProductInfo.db', 'r')
@@ -2686,11 +2700,10 @@ def full_product_page():
     for key in productinfo_dict:
         productinfo = productinfo_dict.get(key)
         if productinfo.get_product_category() == 'Cheongsam':
-            productinfo_list.append(productinfo)
+            if productinfo.get_product_id() == id:
+                productinfo_list.append(productinfo)
 
     image_list = os.listdir(app.config['UPLOADED_PHOTOS_DEST'])
-
-    print(id)
 
     return render_template('fullProduct_page.html',
                             count1=len(image_list),

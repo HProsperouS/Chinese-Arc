@@ -1,10 +1,8 @@
 
 class DeliveryFeedback():
-    count_id = 0
     def __init__(self, email_address, product, rating, 
                 message1, message2, message3,message4, remarks,create_date):
-        DeliveryFeedback.count_id += 1
-        self.__id = DeliveryFeedback.count_id
+        self.__id = 0
         self.__email_address = email_address
         self.__product = product
         self.__rating = rating

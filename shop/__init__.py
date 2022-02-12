@@ -2671,5 +2671,33 @@ def cust_order_history():
 
     return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 
+@app.route('/fullProduct')
+def full_product_page():
+    try:
+        productinfo_dict = {}
+        db = shelve.open('ProductInfo.db', 'r')
+        productinfo_dict = db['ProductInfo']
+    except IOError:
+        print('An error occurred trying to read from ProductInfo.db')
+    else:
+        db.close()
+    
+    productinfo_list = []
+    for key in productinfo_dict:
+        productinfo = productinfo_dict.get(key)
+        if productinfo.get_product_category() == 'Cheongsam':
+            productinfo_list.append(productinfo)
+
+    image_list = os.listdir(app.config['UPLOADED_PHOTOS_DEST'])
+
+    print(id)
+
+    return render_template('fullProduct_page.html',
+                            count1=len(image_list),
+                            count2=len(productinfo_list),
+                            productinfo_list = productinfo_list,
+                            image_list = image_list,
+                            )
+
 if __name__ == '__main__':
     app.run(debug=True)

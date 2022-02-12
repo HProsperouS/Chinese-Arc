@@ -17,25 +17,26 @@
 <h3 class="text-center" style="color: rgb(106, 49, 49);">Frequently Asked Questions</h3>
 <br>
 
+<div class="accordion" id="accordionPanelsStayOpenExample">
 {% for faq in faq_list %}
 <div class="container align-items-center justify-content-center " >
-<div class="accordion" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-      <button  style="background-color: rgba(216, 200, 200, 0.272); color: rgb(126, 39, 39);", class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#demo" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-        Question {{ faq.get_count_id() }}: {{ faq.get_question() }} 
+      <button  style="background-color: rgba(255, 255, 255, 0.272); color: rgb(126, 39, 39); font-weight: bold;", class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{ faq.get_id() }}" aria-expanded="true" aria-controls="{{ faq.get_id() }}">
+        {{ faq.get_question() }} 
       </button>
     </h2>
-    <div id="demo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-      <div class="accordion-body">
+    <div id="{{ faq.get_id() }}" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+      <div class="accordion-body" style="background-color: rgba(238, 192, 192, 0.272);">
         {{ faq.get_answer() }}      
       </div>
     </div>
+
   </div> 
 </div>
 <br>
-</div>
 {% endfor %}
+</div>
  
 {% endblock %}
 

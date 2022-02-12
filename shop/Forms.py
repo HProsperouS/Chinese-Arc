@@ -54,8 +54,8 @@ class CreateUnsubscribeForm(Form):
 
 
 class CreateFAQForm(Form):
-    question = TextAreaField('Question', [validators.DataRequired()])
-    answer = TextAreaField('Answer', [validators.DataRequired()])
+    question = StringField('Question', [validators.Length(min=1,max=800), validators.DataRequired(message="This field is required")])
+    answer = StringField('Answer', [validators.Length(min=1,max=800), validators.DataRequired(message="This field is required")])
     create_date = DateField('Date Updated/Created', format="%Y-%m-%d", default=datetime.datetime.now())
 
 class CreateFeedbackForm(Form):
@@ -110,8 +110,8 @@ class CreateContactForm(Form):
     message = TextAreaField('Message', [validators.Optional()])
 
 class CreateContactReplyForm(Form):
-    subject = StringField('Subject', [validators.Length(min=1, max=150), validators.DataRequired()])
-    recipient = StringField('Recipient', [validators.Length(min=1, max=150), validators.DataRequired()])
+    # subject = StringField('Subject', [validators.Length(min=1, max=150), validators.DataRequired()])
+    # recipient = StringField('Recipient', [validators.Length(min=1, max=150), validators.DataRequired()])
     reply = TextAreaField('Reply', [validators.Optional()])
     create_by = StringField('Admin', [validators.Length(min=1, max=150), validators.DataRequired()])
     create_date = create_date= DateField('Date Updated/Created', [validators.DataRequired()],format="%Y-%m-%d", default=datetime.datetime.now())

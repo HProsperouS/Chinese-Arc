@@ -45,8 +45,8 @@ const updateWishListHTML = function () {
 							
 						</div>
 						<div class="row" >
-							<i class="btn btn-danger button-delete fas fa-trash-alt"  data-id=${wishproduct.id} style='margin-top:-20px;margin-bottom:20px;margin-left:28px;' onclick='Delete()'> </i>
-							<button class="btn btn-danger button-addToCart fas fa-shopping-cart-alt addToCart" style='margin-top:-20px;margin-bottom:20px;margin-left:28px; color:black; background:white; border: black;' data-product-id="{{productinfo.get_product_id()}}"> <i class="fa fa-cart-plus"></i> Add to cart </button>
+							<i class="btn btn-danger button-delete fas fa-trash-alt" id="remove" value="remove"  style='margin-top:-20px;margin-bottom:20px;margin-left:28px;' onclick="Remove()"> </i>							
+							
 
 						</div>
 
@@ -68,6 +68,15 @@ const updateWishListHTML = function () {
 		FavItemNumber.innerHTML = ""
 	}
 }
+
+function Remove(){
+	var elem = document.getElementById('remove');
+        elem.parentNode.removeChild(elem);
+        return false;
+}
+
+
+
 function updateProductsInWish(wishproduct) { // 2
 	document.getElementById('flash_2').textContent = 'Item added to Wishlist!'
 		const showFlash = () => {

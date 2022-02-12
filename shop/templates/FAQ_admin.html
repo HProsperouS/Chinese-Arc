@@ -86,15 +86,14 @@
       </tr>
       {% endfor %}
     </tbody>
-    <div class="text-right">
-      <form action="{{url_for('CreateFAQ')}}"  method="POST">
-        <button type="submit" class="btn btn-primary" style="background-color:orange; border: none;"  >
-          <i class="fas fa-plus"></i>
-        </button>
-      </form>
-    </div>
+    <form action="{{url_for('CreateFAQ')}}"  method="POST">
+      <div class="text-right">
+          <button type="submit" class="btn btn-primary" data-toggle="modal" style="background-color:orange; border: none;"  >
+            <i class="fas fa-plus"></i>
+          </button>
+      </div>
+    </form>
   </table>
-  
 </div>
 
 {% for faq in faq_list %}
@@ -121,6 +120,8 @@
     </div>
   </div>
 {% endfor %}
+
+
 
 
 

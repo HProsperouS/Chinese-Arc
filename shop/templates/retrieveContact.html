@@ -119,14 +119,24 @@
                     <div class="tab-pane fade show active" id="nav-adjustment" role="tabpanel" aria-labelledby="nav-adjustment-tab">
                         <table class="table" cellspacing="0">
                             <thead>
+                                {% if count1 == 0 %}
+                                <br>
+                                <h5 class="text-center">There is no customer query.</h5>
+
+                                {% else %}
                                 <tr>
                                     <th>Customer Name</th>
                                     <th>Message</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
+                                {% endif %}
                             </thead>
                             <tbody>
+                                {% if count1 == 0 %}
+                                <p> </p>
+
+                                {% else %}
                                 {% for contact in contact_list %}
                                 {% if contact.get_subject() == 'Cheongsam Adjustment' %}
                                 <tr>
@@ -139,6 +149,7 @@
                                 </tr>
                                 {% endif %}
                                 {% endfor %}
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -147,14 +158,24 @@
                     <div class="tab-pane fade" id="nav-sizing" role="tabpanel" aria-labelledby="nav-sizing-tab">
                         <table class="table" cellspacing="0">
                             <thead>
+                                {% if count2 == 0 %}
+                                <br>
+                                <h5 class="text-center">There is no customer query.</h5>
+                            
+                                {% else %}
                                 <tr>
                                     <th>Customer Name</th>
                                     <th>Message</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
+                                {% endif %}
                             </thead>
                             <tbody>
+                                {% if count2 == 0 %}
+                                <p> </p>
+                            
+                                {% else %}
                                 {% for contact in contact_list %}
                                 {% if contact.get_subject() == 'Sizing' %}
                                 <tr>
@@ -167,6 +188,7 @@
                                 </tr>
                                 {% endif %}
                                 {% endfor %}
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -175,14 +197,24 @@
                     <div class="tab-pane fade" id="nav-appointment" role="tabpanel" aria-labelledby="nav-appointment-tab">
                         <table class="table" cellspacing="0">
                             <thead>
+                                {% if count3 == 0 %}
+                                <br>
+                                <h5 class="text-center">There is no customer query.</h5>
+                            
+                                {% else %}
                                 <tr>
                                     <th>Customer Name</th>
                                     <th>Message</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
+                                {% endif %}
                             </thead>
                             <tbody>
+                                {% if count3 == 0 %}
+                                <p> </p>
+                            
+                                {% else %}
                                 {% for contact in contact_list %}
                                 {% if contact.get_subject() == 'Appointment' %}
                                 <tr>
@@ -195,6 +227,7 @@
                                 </tr>
                                 {% endif %}
                                 {% endfor %}
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -203,14 +236,24 @@
                     <div class="tab-pane fade" id="nav-others" role="tabpanel" aria-labelledby="nav-others-tab">
                         <table class="table" cellspacing="0">
                             <thead>
+                                {% if count4 == 0 %}
+                                <br>
+                                <h5 class="text-center">There is no customer query.</h5>
+                            
+                                {% else %}
                                 <tr>
                                     <th>Customer Name</th>
                                     <th>Message</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
+                                {% endif %}
                             </thead>
                             <tbody>
+                                {% if count4 == 0 %}
+                                <p> </p>
+                            
+                                {% else %}
                                 {% for contact in contact_list %}
                                 {% if contact.get_subject() == 'Others' %}
                                 <tr>
@@ -223,6 +266,7 @@
                                 </tr>
                                 {% endif %}
                                 {% endfor %}
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>

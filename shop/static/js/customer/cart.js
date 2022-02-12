@@ -140,21 +140,11 @@ products.forEach(item => {   // 1
 				basePrice: +productPrice,
 			}
 
-			
-
-			
-
-		
-			
 			updateProductsInCart(product);
 			updateShoppingCartHTML();
 			AddtoCart(product);
 			
 			
-			
-			
-
-
 		}
 		// alert("Item added to cart!"); // Pop up when click on add to cart
 

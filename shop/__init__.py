@@ -31,11 +31,11 @@ from Newsletter import Newsletter
 from Apply_Coupon import Coupon
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
-from EditProduct import UpdateProductForm, CreateProductForm, photos
+# from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
 from ContactReply import ContactReply
 
-from flask_uploads import configure_uploads,UploadSet,IMAGES
+# from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
 from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm, CreateContactReplyForm
@@ -70,8 +70,8 @@ app.config['SECRET_KEY'] = 'Chinese ARC'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images/')
 
 app.config['UPLOAD_EXTENSIONS'] = ['.jpeg', '.jpg', '.png', '.gif']
-photos = UploadSet('photos', IMAGES)
-configure_uploads(app, photos)
+# photos = UploadSet('photos', IMAGES)
+# configure_uploads(app, photos)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -1367,10 +1367,17 @@ def CreateDeliveryFeedback():
                                             CreateDeliveryFeedback_Form.remarks.data,
                                             CreateDeliveryFeedback_Form.create_date.data,
                                             )
+        if len(deliveryfeedback_dict) == 0:
+                    currentid = 1
+        else:
+            #  [-1] means the last element in a sequence
+            last = list(deliveryfeedback_dict.keys())[-1]
+            currentid = last + 1
+        deliveryfeedback.set_id(currentid)
         deliveryfeedback_dict[deliveryfeedback.get_id()] = deliveryfeedback
         db['DeliveryFeedback'] = deliveryfeedback_dict
-
-        return redirect(url_for('home.html'))
+        flash('Delivery Feeback sent sucessfully, Thank You for your','success')
+        return redirect(url_for('home_page'))
     return render_template('CreateDeliveryFeedback.html', form=CreateDeliveryFeedback_Form)
 
 @app.route('/DeleteDeliveryFeedback/<int:id>', methods=['POST'])

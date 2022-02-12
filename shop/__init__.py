@@ -456,11 +456,12 @@ def login_page():
             print(customer_loggedin.get_email())
             print(customer_loggedin.get_password())
             if login_page.email.data == customer_loggedin.get_email() and login_page.password.data == customer_loggedin.get_password():
+                session['true'] = True
                 session['logged_in'] = customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name()
                 session['user_id'] = key
                 customer.append(customer_loggedin)
 
-                flash('Hi'+ " " + customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name() + ", You have sucessful logined")
+                flash('Hi'+ " " + customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name() + ", You have sucessful logined","success")
                 return redirect(url_for('home_page'))
 
             else:
@@ -498,7 +499,7 @@ def update_cust_info(id):
         customer.set_first_name(update_cust_form.first_name.data)
         customer.set_last_name(update_cust_form.last_name.data)
         customer.set_gender(update_cust_form.gender.data)
-        customer.set_birthday(update_cust_form.birthday.data)
+        customer.set_birthdate(update_cust_form.birthdate.data)
         customer.set_city(update_cust_form.city.data)
         customer.set_postal_code(update_cust_form.postal_code.data)
         customer.set_address(update_cust_form.address.data)
@@ -508,8 +509,8 @@ def update_cust_info(id):
         db['customers'] = cust_dict
         db.close()
 
-        flash('Info has been updated sucessfully')
-        return redirect(url_for('profile_page'))
+        flash('Info has been updated sucessfully',"success")
+        return redirect(url_for('update_profile_page'))
     else:
         cust_dict = {}
         db = shelve.open('customer.db', 'r')
@@ -521,20 +522,19 @@ def update_cust_info(id):
         (update_cust_form.first_name.data) = customer.get_first_name()
         (update_cust_form.last_name.data) = customer.get_last_name()
         (update_cust_form.gender.data) = customer.get_gender()
-        (update_cust_form.birthdate.data) = customer.get_birthday()
+        (update_cust_form.birthdate.data) = customer.get_birthdate()
         (update_cust_form.city.data) = customer.get_city()
         (update_cust_form.postal_code.data) = customer.get_postal_code()
         (update_cust_form.address.data) = customer.get_address()
         (update_cust_form.email.data) = customer.get_email()
         (update_cust_form.password.data) = customer.get_password()
 
-        return render_template('register.html', form=update_cust_form)
+        return render_template('updateprofile.html', form=update_cust_form)
 
 
 @app.route('/logout_page')
 def logout_page():
-    session.pop('loggedin', None)
-
+    session.clear()
     return redirect(url_for('home_page'))
 
 
@@ -710,20 +710,6 @@ def accessories_page():
 @app.route('/about_us')
 def about_us_page():
     return render_template('aboutUs.html')
-
-
-
-@app.route('/logout')
-def logout():
-    session.pop('loggedin', None)
-    session.pop('id', None)
-    session.pop('username', None)
-    return redirect(url_for('login'))
-
-
-@app.route('/profile_page')
-def profile_page():
-    return render_template('page-profile-main.html')
 
 
 
@@ -2072,156 +2058,160 @@ def DeleteFeedback(id):
 
 @app.route('/createCustOrder', methods = ['GET', 'POST'])
 def createCustOrder():
-    cust_cart_dict = {}
-    db = shelve.open('custCart.db', 'c')
-    try:
-        cust_cart_dict = db['custCart']
-    except :
-        print("Error in retrieving cust Orders from CustCart.db.")
-    db['custCart'] = cust_cart_dict
-    db.close()
-
-    create_custorder_form = CreateCustOrder(request.form)
-    if request.method == 'POST' and create_custorder_form.validate():
-        cust_order_dict = {}
-        db = shelve.open('CustOrder.db', 'c')
-
-        copy_cart_dict = cust_cart_dict.copy()
-
+    if "true" not in session:
+        flash("Please login as customer first","info")
+        return redirect(url_for("login_page"))
+    else:
+        cust_cart_dict = {}
+        db = shelve.open('custCart.db', 'c')
         try:
-            cust_order_dict = db['CustOrder']
-        except :
-            print("Error in retrieving cust Orders from CustOrder.db.")
-
-        Cust_orders = CustOrder(create_custorder_form.first_name.data,
-                                create_custorder_form.last_name.data,
-                                create_custorder_form.email.data,
-                                create_custorder_form.holder_name.data,
-                                create_custorder_form.card_type.data,
-                                create_custorder_form.card_num.data,
-                                create_custorder_form.cvv.data,
-                                create_custorder_form.city.data,
-                                create_custorder_form.postal_code.data,
-                                create_custorder_form.unit_number.data,
-                                create_custorder_form.create_date.data,
-                                create_custorder_form.modified_date.data,
-                                create_custorder_form.modified_by.data,
-                                create_custorder_form.total.data,
-                                create_custorder_form.discount.data)
-        
-        cust_order_dict[Cust_orders.get_custOrder_id()] = {'order':Cust_orders,'cart':copy_cart_dict} 
-
-        db['CustOrder'] = cust_order_dict
-        db.close()
-
-        try:
-            cust_cart_dict = {}
-            db = shelve.open('custCart.db', 'w')
             cust_cart_dict = db['custCart']
-
-            print(cust_cart_dict)
-
-            cust_cart_dict.clear()
-
-            cust_cart_dict[Cust_orders.get_custOrder_id()] = {'order':Cust_orders,'cart':copy_cart_dict} 
-        except:
-            print('Error in opening db')
-
-            
+        except :
+            print("Error in retrieving cust Orders from CustCart.db.")
         db['custCart'] = cust_cart_dict
         db.close()
 
-        print(cust_order_dict)
-        print(cust_cart_dict)
-        print(copy_cart_dict)
+        create_custorder_form = CreateCustOrder(request.form)
+        if request.method == 'POST' and create_custorder_form.validate():
+            cust_order_dict = {}
+            db = shelve.open('CustOrder.db', 'c')
 
-        refund_order_dict = {}
-        db = shelve.open('refundorder.db', 'c')
-        try:
-            refund_order_dict = db['refundeOrder']
-        except:
-            print('Error in opening db')
+            copy_cart_dict = cust_cart_dict.copy()
 
-        db['refundOrder'] = refund_order_dict 
-        db.close()
+            try:
+                cust_order_dict = db['CustOrder']
+            except :
+                print("Error in retrieving cust Orders from CustOrder.db.")
 
-        delete_order_dict = {}
-        db = shelve.open('deleteorder.db', 'c')
-        try:
-            delete_order_dict = db['deleteOrder']
-        except:
-            print('Error in opening db')
+            Cust_orders = CustOrder(create_custorder_form.first_name.data,
+                                    create_custorder_form.last_name.data,
+                                    create_custorder_form.email.data,
+                                    create_custorder_form.holder_name.data,
+                                    create_custorder_form.card_type.data,
+                                    create_custorder_form.card_num.data,
+                                    create_custorder_form.cvv.data,
+                                    create_custorder_form.city.data,
+                                    create_custorder_form.postal_code.data,
+                                    create_custorder_form.unit_number.data,
+                                    create_custorder_form.create_date.data,
+                                    create_custorder_form.modified_date.data,
+                                    create_custorder_form.modified_by.data,
+                                    create_custorder_form.total.data,
+                                    create_custorder_form.discount.data)
+            
+            cust_order_dict[Cust_orders.get_custOrder_id()] = {'order':Cust_orders,'cart':copy_cart_dict} 
 
-        db['deleteOrder'] = delete_order_dict 
-        db.close()
-
-        flash("Order has been processed successfully! Thank you for shopping with Chinese Arc")
-        return redirect(url_for('order_confirm'))
-    try:  
-        req = request.get_json()
-        name = req['product_name']
-        price = req['product_price']
-        qty = req['product_qty']
-        delete_add = req['function']
-        print(req)
-        try:
-            product_dict = {}
-            db = shelve.open('ProductInfo.db', 'r')
-            product_dict = db['ProductInfo']
-        except IOError:
-            print('An error occurered trying to read PRODUCTINFO.db')
-        finally:
+            db['CustOrder'] = cust_order_dict
             db.close()
 
-        try:
-            cust_cart_dict = {}
-            db = shelve.open('custCart.db', 'w')
-            cust_cart_dict = db['custCart']
-        except:
-            print('Error in opening db')
+            try:
+                cust_cart_dict = {}
+                db = shelve.open('custCart.db', 'w')
+                cust_cart_dict = db['custCart']
 
-        for key in product_dict:
-            product = product_dict.get(key)
-            cust_cart_dict[0] = {'cart':1,'name':'cart','qty':0}
-            if product.get_product_name() == name:          
-                if delete_add == 'add':
-                    count=Count()
-                    cust_cart_dict[count.get_count()] = {'name':name,'price':price,'qty': qty}
-                    print('created')
-                elif delete_add == 'plus':
-                    for key in list(cust_cart_dict):                   
-                        if product.get_product_stock() >= cust_cart_dict[key]['qty']:
+                print(cust_cart_dict)
+
+                cust_cart_dict.clear()
+
+                cust_cart_dict[Cust_orders.get_custOrder_id()] = {'order':Cust_orders,'cart':copy_cart_dict} 
+            except:
+                print('Error in opening db')
+
+                
+            db['custCart'] = cust_cart_dict
+            db.close()
+
+            print(cust_order_dict)
+            print(cust_cart_dict)
+            print(copy_cart_dict)
+
+            refund_order_dict = {}
+            db = shelve.open('refundorder.db', 'c')
+            try:
+                refund_order_dict = db['refundeOrder']
+            except:
+                print('Error in opening db')
+
+            db['refundOrder'] = refund_order_dict 
+            db.close()
+
+            delete_order_dict = {}
+            db = shelve.open('deleteorder.db', 'c')
+            try:
+                delete_order_dict = db['deleteOrder']
+            except:
+                print('Error in opening db')
+
+            db['deleteOrder'] = delete_order_dict 
+            db.close()
+
+            flash("Order has been processed successfully! Thank you for shopping with Chinese Arc")
+            return redirect(url_for('order_confirm'))
+        try:  
+            req = request.get_json()
+            name = req['product_name']
+            price = req['product_price']
+            qty = req['product_qty']
+            delete_add = req['function']
+            print(req)
+            try:
+                product_dict = {}
+                db = shelve.open('ProductInfo.db', 'r')
+                product_dict = db['ProductInfo']
+            except IOError:
+                print('An error occurered trying to read PRODUCTINFO.db')
+            finally:
+                db.close()
+
+            try:
+                cust_cart_dict = {}
+                db = shelve.open('custCart.db', 'w')
+                cust_cart_dict = db['custCart']
+            except:
+                print('Error in opening db')
+
+            for key in product_dict:
+                product = product_dict.get(key)
+                cust_cart_dict[0] = {'cart':1,'name':'cart','qty':0}
+                if product.get_product_name() == name:          
+                    if delete_add == 'add':
+                        count=Count()
+                        cust_cart_dict[count.get_count()] = {'name':name,'price':price,'qty': qty}
+                        print('created')
+                    elif delete_add == 'plus':
+                        for key in list(cust_cart_dict):                   
+                            if product.get_product_stock() >= cust_cart_dict[key]['qty']:
+                                if cust_cart_dict[key]['name'] == name:
+                                    cust_cart_dict[key]['qty'] += 1
+                                    cust_cart_dict[key]['price'] += cust_cart_dict[key]['price']
+                                    print('added')
+                            if product.get_product_stock() < cust_cart_dict[key]['qty']:
+                                cust_cart_dict[key]['qty'] -= 1
+                                
+                                print('Out of stock') 
+                                        
+                    elif delete_add == 'minus':
+                        for key in list(cust_cart_dict):
                             if cust_cart_dict[key]['name'] == name:
-                                cust_cart_dict[key]['qty'] += 1
-                                cust_cart_dict[key]['price'] += cust_cart_dict[key]['price']
-                                print('added')
-                        if product.get_product_stock() < cust_cart_dict[key]['qty']:
-                            cust_cart_dict[key]['qty'] -= 1
-                            
-                            print('Out of stock') 
-                                    
-                elif delete_add == 'minus':
-                    for key in list(cust_cart_dict):
-                        if cust_cart_dict[key]['name'] == name:
-                            cust_cart_dict[key]['qty'] -= 1
-                            cust_cart_dict[key]['price'] -= cust_cart_dict[key]['price']
-                            print('minus')
-                            if cust_cart_dict[key]['qty'] == 0:
+                                cust_cart_dict[key]['qty'] -= 1
+                                cust_cart_dict[key]['price'] -= cust_cart_dict[key]['price']
+                                print('minus')
+                                if cust_cart_dict[key]['qty'] == 0:
+                                    del cust_cart_dict[key]
+                                    print('item is 0 ( deleted )')
+                    elif delete_add == 'delete':
+                        for key in list(cust_cart_dict):
+                            if name == cust_cart_dict[key]['name']:
                                 del cust_cart_dict[key]
-                                print('item is 0 ( deleted )')
-                elif delete_add == 'delete':
-                    for key in list(cust_cart_dict):
-                        if name == cust_cart_dict[key]['name']:
-                            del cust_cart_dict[key]
-                            print('removed')        
-                
+                                print('removed')        
                     
-        print(cust_cart_dict)
-                
-        db['custCart'] = cust_cart_dict
-        db.close()
-    except:
-        print('error in receiving add to cart')
+                        
+            print(cust_cart_dict)
+                    
+            db['custCart'] = cust_cart_dict
+            db.close()
+        except:
+            print('error in receiving add to cart')
     return render_template('Customer_order_form.html', form=create_custorder_form)
 
 @app.route('/order', methods=['GET','POST'])

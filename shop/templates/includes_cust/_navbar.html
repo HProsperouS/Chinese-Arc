@@ -1,11 +1,4 @@
-{% for message in get_flashed_messages() %}
 
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-  {{message}}
-  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
-</div>
-
-{% endfor %}
 <!-- ========================= NAVIGATION  ========================= -->
 <div id="flash_2" class="flash_2"></div>
 <div id="flash" class="flash"></div>
@@ -40,8 +33,12 @@
     		</form> <!-- search-wrap .end// -->
     	</div> <!-- col.// -->
     	    <div class="col-md-5 col-lg-4 col-sm-12 col-12 text-md-right"><div class="mt-3 mt-md-0">
+				{% if session.get('true') != True %}
 				<a href="{{ url_for('login_page') }}" class="btn btn-dark"> Login </a>
-				<a href="{{ url_for('profile_page') }}" class="btn btn-dark"> Profile </a>
+				{% elif session.get('true') == True %}
+				<a href="{{ url_for('logout_page') }}" class="btn btn-dark"> Logout </a>
+				<a href="{{ url_for('update_profile_page') }}" class="btn btn-dark"> Profile </a>
+				{% endif %}
 
 		
 				<button class="btn float-right btn-light d-md-none" type="button" data-toggle="collapse" data-target="#main_nav8" aria-controls="main_nav" aria-expanded="false" aria-label="Toggle navigation">

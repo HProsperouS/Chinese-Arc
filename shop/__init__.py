@@ -2177,7 +2177,7 @@ def createCustOrder():
             db['deleteOrder'] = delete_order_dict 
             db.close()
 
-            flash("Order has been processed successfully! Thank you for shopping with Chinese Arc")
+            flash("Order has been processed successfully! Thank you for shopping with Chinese Arc","info")
             return redirect(url_for('order_confirm'))
         try:  
             req = request.get_json()

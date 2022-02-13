@@ -2058,6 +2058,19 @@ def DeleteFeedback(id):
 
 @app.route('/createCustOrder', methods = ['GET', 'POST'])
 def createCustOrder():
+    try:
+        cust_dict = {}
+        db = shelve.open('customer.db', 'r')
+        cust_dict = db['customers']
+    except IOError:
+        print('An error occurred trying to read')
+    finally:
+        db.close()
+
+    cust_list = []
+    for key in cust_dict:
+        customer = cust_dict.get(key)
+        cust_list.append(customer)
     if "true" not in session:
         flash("Please login as customer first","info")
         return redirect(url_for("login_page"))
@@ -2073,6 +2086,8 @@ def createCustOrder():
 
         create_custorder_form = CreateCustOrder(request.form)
         if request.method == 'POST' and create_custorder_form.validate():
+           
+            
             cust_order_dict = {}
             db = shelve.open('CustOrder.db', 'c')
 
@@ -2212,7 +2227,8 @@ def createCustOrder():
             db.close()
         except:
             print('error in receiving add to cart')
-    return render_template('Customer_order_form.html', form=create_custorder_form)
+    return render_template('Customer_order_form.html', form=create_custorder_form,count=len(cust_list),
+                                cust_list=cust_list)
 
 @app.route('/order', methods=['GET','POST'])
 @login_required

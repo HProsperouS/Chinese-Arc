@@ -241,6 +241,22 @@
                                                 Quantity: {{cust_orders['cart'][5]['qty']}}
                                                 <br>
                                                 <hr>
+                                                {% elif cust_orders['cart'][6] %}
+                                                Name: {{cust_orders['cart'][6]['name']}}
+                                                <br>
+                                                Total: ${{cust_orders['cart'][6]['price']}}
+                                                <br>
+                                                Quantity: {{cust_orders['cart'][6]['qty']}}
+                                                <br>
+                                                <hr>
+                                                {% elif cust_orders['cart'][7] %}
+                                                Name: {{cust_orders['cart'][7]['name']}}
+                                                <br>
+                                                Total: ${{cust_orders['cart'][7]['price']}}
+                                                <br>
+                                                Quantity: {{cust_orders['cart'][7]['qty']}}
+                                                <br>
+                                                <hr>
                                                 
                                                 {% endif %}
                                                 <div class="card">

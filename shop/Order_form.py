@@ -14,9 +14,9 @@ class CreateCustOrder(Form):
     card_type = SelectField('Card Type', [validators.DataRequired(message='Please choose card type')], choices=[('Select', 'Select'), ('Visa', 'Visa'), ('Mastercard', 'Mastercard')], default='')
     holder_name = StringField('Card Holder Name', [validators.Length(min=1, max=150), validators.DataRequired(message='This field is required')])
     cvv = PasswordField('CVV', [validators.Length(min=3,max=3), validators.DataRequired(message='First 3 Numbers only')])
-    city = SelectField('City', [validators.Length(max=200), validators.DataRequired()],choices=[('', 'Select'), ('Singapore', 'Singapore'), ('Malaysia', 'Malaysia'),('USA', 'America')], default='')
+    city = SelectField('City', [validators.Length(max=200), validators.DataRequired()],choices=[('Singapore', 'Singapore'), ('Malaysia', 'Malaysia'),('USA', 'America')], default='')
     postal_code = IntegerField('Postal Code', [validators.DataRequired(message='Numbers only')])
-    unit_number = StringField('Unit Number',  [validators.DataRequired(message = "Enter valid Unit Number please")])
+    unit_number = StringField('Address',  [validators.DataRequired(message = "Enter valid Unit Number please")])
     
     create_date= DateField('Date Created', [validators.DataRequired()],format="%Y-%m-%d", default=datetime.datetime.now())
     modified_by = StringField('Modified By', [validators.Length(min=1, max=50), validators.Optional()])

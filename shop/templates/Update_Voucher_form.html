@@ -24,6 +24,12 @@
     {{ render_field(form.type, class="form-control") }}
   </div>
   <div class="form-group">
+    {{ render_field(form.secret, class="form-control") }}
+  </div>
+  <div class="form-group" style="display: none;" >
+    {{ render_field(form.code, class="form-control",id='discount-code') }}
+  </div>
+  <div class="form-group">
     {{ render_field(form.total, class="form-control") }}
   </div>
   <div class="form-group">
@@ -38,7 +44,7 @@
   <div class="form-group" style="display: none;">
     {{ render_field(form.create_date, class="form-control") }}
   </div>
-  <div class="form-group" style="display: none;">
+  <div class="form-group" style="display: none;" >
     {{ render_field(form.create_by, class="form-control") }}
   </div>
   <div class="form-group" style="display: none;">
@@ -47,6 +53,7 @@
   <div class="form-group" >
     {{ render_field(form.mod_by, class="form-control") }}
   </div>
+  
   
   
  

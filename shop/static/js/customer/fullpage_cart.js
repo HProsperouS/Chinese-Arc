@@ -53,10 +53,10 @@ function ApplyRemove(){
 			document.querySelector('#empty-discount').textContent = 'Please enter a vaild code'
 
 			const timer = setTimeout(empty_display,1000)
+	
+		}
+		else if (document.getElementById('Discount_entry').value != ''){
 
-			
-
-			
 		}
 	}
 	else if (document.getElementById('Discount_entry').value == ''){
@@ -177,20 +177,14 @@ function Checkout(){
 	}
 }
 
-function Discount_expired(){
-	document.getElementById('flash').textContent = 'Voucher Expired!'
-		
-	const showFlash = () => {
-		flash.classList.add("flash--visible")  
-		}
-	const hideFlash = () => {
-		flash.classList.remove("flash--visible")
-		document.getElementById('flash').innerHTML = ''
-		}
-	const btn = document.getElementById('checkout')
+function alert_discount(){
+	document.querySelector('#alert-discount').textContent = ''
+}
 
-	showFlash();
-	setTimeout(hideFlash, 1000);
+function Discount_expired(){
+	document.querySelector('#alert-discount').textContent = 'Code has Expired'
+
+	const timer = setTimeout(alert_discount,1000)
 }
 
 

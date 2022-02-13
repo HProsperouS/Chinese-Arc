@@ -39,6 +39,18 @@
                 </div>
               </div>
             </div>
+            <br>
+            <div class="card">
+              <div class="card-body">
+                {% for order in cust_order_list %}
+                {{ Customer.get_first_name()}}
+                  {{ Customer.get_last_name() }}
+                  {% if Customer.get_last_name() == 'Bob' %}
+                  <span>Hi</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
           </div>
           <div class="col-md-8">
             <div class="card mb-3">

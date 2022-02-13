@@ -54,10 +54,10 @@
                         </article> <!-- gallery-wrap .end// -->
                     </div> <!-- card.// -->
                 </aside>
-                <main class="col-md-6">
+                <main class="col-md-3">
                     <article class="product-info-aside">
 
-                        <h2 class="title mt-3">{{productinfo.get_product_name() }}</h2>
+                        <h2 class="title mt-3 productName">{{productinfo.get_product_name() }}</h2>
                         <a href="#" class="title mb-2">{{ productinfo.get_product_category() }}</a>
 
                         <div class="rating-wrap mb-2">
@@ -78,7 +78,7 @@
                         </div> <!-- rating-wrap.// -->
 
                         <div class="price-wrap">
-                            <var class="price h4">$ {{ productinfo.get_product_price() }}0</var>
+                            <var class="price h4 ">$<span class="priceValue">{{ productinfo.get_product_price() }}</span>0</var>
                             {% if productinfo.get_product_stock() <= 10 %} <span class="badge bg-danger" style="float: right;">
                                 <span class="stockCount" id='stockCount'>{{ productinfo.get_product_stock() }}</span>
                                 left

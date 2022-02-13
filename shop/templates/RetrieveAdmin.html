@@ -48,7 +48,7 @@
                 <th scope="col">Email Address</th>
                 <th scope="col">Roles</th>
                 <th scope="col">Account Status</th>
-                {% if session.get('loggedIn') == 'ChineseArc' %}
+                {% if session.get('acctype') == 'Super Admin' %}
                     <th scope="col" colspan="2" >Opearation</th>
                 {% endif %}
             </tr>
@@ -62,7 +62,7 @@
                 <td>{{ admin.get_roles() }}</td>
                 {% if admin.get_status() == 'Enabled' %}
                     <td><p class="badge badge-pill badge-info" >{{ admin.get_status() }}</p></td>
-                        {% if session.get('loggedIn') == 'ChineseArc' %}
+                        {% if session.get('acctype') == 'Super Admin' %}
                             <td>
                                 <form action="{{url_for('DisableAdmin', id = admin.get_id())}}"  method="POST">
                                 
@@ -100,7 +100,7 @@
                         {% endif %}
                 {% else %}
                     <td><p class="badge badge-pill badge-danger" >{{ admin.get_status() }}</p></td>
-                        {% if session.get('loggedIn') == 'ChineseArc' %}
+                        {% if session.get('acctype') == 'Super Admin' %}
                             <td>
                                 <form action="{{ url_for('EnableAdmin', id = admin.get_id()) }}"  method="POST">
                                     <button type="submit" title="Enable" class="btn btn-success">
@@ -110,7 +110,7 @@
                             </td>
                         {% endif %}
                 {% endif %}
-                    {% if session.get('loggedIn') == 'ChineseArc' %}
+                    {% if session.get('acctype') == 'Super Admin' %}
                         <td>
                             <form action="{{url_for('DeleteAdmin', id = admin.get_id())}}"  method="POST">
                             

@@ -244,6 +244,7 @@ def login_admin():
                     if check_password_hash(admin.password, password):
                         session['login'] = admin.id
                         session['loggedIn'] = admin.username
+                        session['acctype'] = admin.roles
                         flash("Hi," + session.get('loggedIn') + ", "+"Welcome to Chinese Arc ",'success')
                         return redirect(url_for('dashboard',userid=session['login']))
                     else:
@@ -2270,7 +2271,8 @@ def createCustOrder():
            
 
 
-            flash("Order has been processed successfully! Thank you for shopping with Chinese Arc")
+           
+            flash("Order has been processed successfully! Thank you for shopping with Chinese Arc","info")
             return redirect(url_for('order_confirm'))
         try:  
             req = request.get_json()

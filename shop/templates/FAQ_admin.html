@@ -40,12 +40,11 @@
         <td>{{ faq.get_question() }}</td>
         <td>{{ faq.get_create_date() }}</td>
         <td>
+          <!-- Update faq -->
           <form action="{{url_for('update_FAQs', id = faq.get_id())}}"  method="POST">
-            <!-- Button to Open the Modal -->
             <button type="submit" class="btn btn-primary bg-gradient-primary"  data-bs-target="#myModal_{{faq.get_id()}}">
               <i class="fas fa-pen"></i>
             </button>
-            
           </form>
         </td>
         <td>

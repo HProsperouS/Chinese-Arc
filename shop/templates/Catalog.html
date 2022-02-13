@@ -44,27 +44,20 @@
   <p>There are {{ count4 }} products in Accessories</p>
   {% endif %} -->
 </div>
-<div class="row col-12 ">
-  <div class="col-10 col-md-8 col-sm-2">
-    <form>
-      <div class="d-none d-sm-inline-block form-inline navbar-search " style='padding-bottom: 20px;'>
-      <div class="input-group">
-          <input type="text" class="form-control bg-light bvoucher-0 small" placeholder="Product ID..."
-            aria-label="Search" aria-describedby="basic-addon2" id='search-voucher'>
-        <div class="input-group-append">
-              <button class="btn btn-primary voucher-search-button" type="button">
-                  <i class="fas fa-search fa-sm"></i>
-              </button>
-        </div>
-      </div>
-      </div>
-    </form>
+
+<form>
+  <div class="d-none d-sm-inline-block form-inline navbar-search " style='padding-bottom: 20px;'>
+  <div class="input-group">
+      <input type="text" class="form-control bg-light border-0 small" placeholder="Product ID..."
+         aria-label="Search" aria-describedby="basic-addon2">
+     <div class="input-group-append">
+          <button class="btn btn-primary" type="button">
+              <i class="fas fa-search fa-sm"></i>
+          </button>
+     </div>
   </div>
-  <div class="col-2 col-md-4 col-sm-10 text-right">
-    <a href="/CreateProduct" class="btn btn-outline-primary ">Create Product</a>
-    
   </div>
-</div>
+</form>
 
 <div class="wrapper">
     
@@ -83,7 +76,7 @@
     </nav>
     <!-- Section of Featured -->
     <section>
-        <div class="content content-1" style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
+        <div class="content content-1">
         <table class="table ">
           <thead>
             <tr>
@@ -205,7 +198,7 @@
     </section>
     <!-- Section of Cheongsam -->
     <section>
-        <div class="content content-2" style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
+        <div class="content content-2">
         <table class="table ">
           <thead>
             <tr>
@@ -326,7 +319,7 @@
     </section>
     <!-- Section of TangZhuang -->
     <section>
-        <div class="content content-3" style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
+        <div class="content content-3">
         <table class="table ">
           <thead>
             <tr>
@@ -446,7 +439,7 @@
     </section>
     <!-- Section of Cheongsam -->
     <section>
-        <div class="content content-4" style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
+        <div class="content content-4">
         <table class="table ">
           <thead>
             <tr>
@@ -567,30 +560,28 @@
   </section>
   <br>
   <h4 style="color: brown;">Products are low stock</h4>
-  <div style="height: 250px;  overflow-y:scroll; overflow-x: hidden;">
-    <table class="table table-sm table-danger" >
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Product Name</th>
-          <th scope="col">Product Category</th>
-          <th scope="col">Product Stock</th>
-          <th scope="col">Product Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for product in product_list6 %}
-        <tr>
-          <td>{{ product.get_product_id() }}</td>
-          <td>{{ product.get_product_name() }}</td>
-          <td>{{ product.get_product_category() }}</td>
-          <td>{{ product.get_product_stock() }}</td>
-          <td><p class="badge badge-danger">{{ product.get_status() }}</p></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  <table class="table table-sm table-danger">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Product Category</th>
+        <th scope="col">Product Stock</th>
+        <th scope="col">Product Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in product_list6 %}
+      <tr>
+        <td>{{ product.get_product_id() }}</td>
+        <td>{{ product.get_product_name() }}</td>
+        <td>{{ product.get_product_category() }}</td>
+        <td>{{ product.get_product_stock() }}</td>
+        <td><p class="badge badge-danger">{{ product.get_status() }}</p></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 </div>
 <style>

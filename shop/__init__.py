@@ -2475,6 +2475,8 @@ def refund_order(id):
     delete_order_dict[refund_order_id['order'].get_custOrder_id()] = refund_orders
     
     db['deleteOrder'] = delete_order_dict 
+
+
     
     refund_mail2(id)
     
@@ -2821,6 +2823,23 @@ def cust_order_history():
     for key in cust_order_dict:
         cust_order = cust_order_dict.get(key)
         cust_order_list.append(cust_order)
+
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'w')
+        cust_order_dict = db['CustOrder']
+
+        delivered_order_id = cust_order_dict.get(id)
+    
+        delivered_order_id['order'].set_status('Delivered')
+        print(delivered_order_id['order'].get_status())
+        print(delivered_order_id['order'].set_status('Delivered'))
+
+        db['CustOrder'] = cust_order_dict
+    except:
+        print('An error occured when opening CustOrder.db')
+    finally:
+        db.close()
 
     return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 

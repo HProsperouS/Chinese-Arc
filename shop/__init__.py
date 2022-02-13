@@ -1943,6 +1943,7 @@ def send_newsletter(id):
 #brings to customer account page
 @app.route('/base_cust')
 def base_cust():
+
     return render_template('base_cust.html')
 
 @app.route('/dashboard_cust')

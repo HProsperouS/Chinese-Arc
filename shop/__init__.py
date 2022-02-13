@@ -1,5 +1,6 @@
 from email.policy import default
 from itertools import count
+from math import prod
 from msilib import change_sequence
 from re import split, sub, template
 from venv import create
@@ -31,10 +32,10 @@ from Newsletter import Newsletter
 from Apply_Coupon import Coupon
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
-# from EditProduct import UpdateProductForm, CreateProductForm, photos
+from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
 from ContactReply import ContactReply
-
+from earnings import Revenue
 # from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
@@ -737,25 +738,49 @@ def forgot_password_page():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    order_dict = {}
-    db = shelve.open('order.db', 'r')
-    order_dict = db['Orders']
-    db.close()
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'r')
+        cust_order_dict = db['CustOrder']
+    except:
+        print('Unable to read data')
+    finally:
+        db.close()
 
-    order_list = []
-    for key in order_dict:
-        order = order_dict.get(key)
-        order_list.append(order)
+    cust_order_list = []
+    for key in cust_order_dict:
+        cust_order = cust_order_dict.get(key)
+        cust_order_list.append(cust_order)
+    
+    try:
+        delete_order_dict = {}
+        db = shelve.open('deleteorder.db', 'r')
+        delete_order_dict = db['deleteOrder']
+    except:
+        print('Error in opening db')
+    finally:
+        db.close()
 
-    product_dict = {}
-    db = shelve.open('ProductInfo.db', 'r')
-    product_dict = db['ProductInfo']
-    db.close()
+    delete_order_list = []
+    for key in delete_order_dict:
+        delete_order = delete_order_dict.get(key)
+        delete_order_list.append(delete_order)
 
+    try:
+        product_dict = {}
+        db = shelve.open('ProductInfo.db', 'r')
+        product_dict = db['ProductInfo']
+    except IOError:
+        print('An error occurered trying to read PRODUCTINFO.db')
+    finally:
+        db.close()
+
+     # product list of Featured
     product_list = []
     for key in product_dict:
         product = product_dict.get(key)
         product_list.append(product)
+
 
     try:
         admins_dict = {}
@@ -770,12 +795,32 @@ def dashboard():
     for key in admins_dict:
         admin = admins_dict.get(key)
         admins_list.append(admin)
+
+    try:
+      earnings_dict = {}
+      db = shelve.open('Earnings.db', 'r')
+      earnings_dict = db['Earnings']
+    except:
+        print('error in retrieving revenue.ab')
+    finally:
+        db.close
+
+    revenue_list = []
+    for key in earnings_dict:
+        earnings = earnings_dict.get(key)
+        revenue_list.append(earnings)
         
     return render_template('dashboard.html', 
-                            count=len(order_list),
-                            count1 = len(admins_list), 
-                            order_list=order_list,
-                            admins_list=admins_list
+                            count=len(cust_order_list),
+                            count1 = len(admins_list),
+                            count2 = len(delete_order_list),
+                            count3 = len(product_list),
+                            count4 = len(revenue_list),
+                            cust_order_list=cust_order_list,
+                            admins_list=admins_list,
+                            delete_order_list=delete_order_list,
+                            product_list=product_list,
+                            revenue_list=revenue_list
                             )
 
 
@@ -2101,7 +2146,37 @@ def createCustOrder():
 
         create_custorder_form = CreateCustOrder(request.form)
         if request.method == 'POST' and create_custorder_form.validate():
-           
+
+
+            try:
+                product_dict = {}
+                db = shelve.open('ProductInfo.db', 'w')
+                product_dict = db['ProductInfo']
+            except IOError:
+                print('An error occurered trying to read PRODUCTINFO.db')
+            finally:
+                db.close()
+
+            try:
+                cust_cart_dict = {}
+                db = shelve.open('custCart.db', 'r')
+                cust_cart_dict = db['custCart']
+            except:
+                print('Error in opening db')
+
+            for key in product_dict:
+                
+                product = product_dict.get(key)
+                for key in list(cust_cart_dict): 
+                    if product.get_product_name() == cust_cart_dict[key]['name']: 
+                        print('yes') 
+                        Remain_qty = product.get_product_stock() - cust_cart_dict[key]['qty']  
+                        print(Remain_qty)
+                        product.set_product_stock(Remain_qty)
+                        print(product.get_product_stock())
+                       
+                        print('deducted')
+
             
             cust_order_dict = {}
             db = shelve.open('CustOrder.db', 'c')
@@ -2135,6 +2210,7 @@ def createCustOrder():
             db['CustOrder'] = cust_order_dict
             db.close()
 
+            
             try:
                 cust_cart_dict = {}
                 db = shelve.open('custCart.db', 'w')
@@ -2152,8 +2228,7 @@ def createCustOrder():
             db['custCart'] = cust_cart_dict
             db.close()
 
-            print(cust_order_dict)
-            print(cust_cart_dict)
+           
             print(copy_cart_dict)
 
             refund_order_dict = {}
@@ -2175,6 +2250,25 @@ def createCustOrder():
 
             db['deleteOrder'] = delete_order_dict 
             db.close()
+
+             
+            earnings_dict = {}
+            db = shelve.open('Earnings.db', 'c')
+
+            try:
+                earnings_dict = db['Earnings']
+            except :
+                print("Error in retrieving cust Orders from CustOrder.db.")
+
+            Total_Earnings = Revenue(create_custorder_form.total.data )
+
+            earnings_dict['Total'] = Total_Earnings
+
+            db['Earnings'] = earnings_dict
+            db.close()
+
+           
+
 
             flash("Order has been processed successfully! Thank you for shopping with Chinese Arc")
             return redirect(url_for('order_confirm'))

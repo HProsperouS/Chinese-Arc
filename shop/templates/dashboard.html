@@ -32,13 +32,17 @@
                 <div class="card border-left-primary shadow py-2">
                     <div class="card-body no-gutters">
                         <h2 class="col mr-2 ">
-                            Cheongsam
+                            Revenue
                         </h2>
                         <div class="row  align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                     Earnings (Monthly)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    {% for revenue in revenue_list %}
+                                        ${{ revenue.get_total_earnings() }}0
+                                    {% endfor%}
+                                </div>
                             </div>
                             <div class="col-auto btn btn-primary btn-user btn-sm">
                                 <a href="{{ url_for('chart') }}"><i class="fas fa-chart-area fa-5x text-gray-300" ></i></a>
@@ -261,12 +265,13 @@
                      -->
                 </div>
                 <!-- Card Body -->
-                <div class="card-body">
-                    <div class=" pb-2">
-                        {% for order in order_list %}
+                <div class="card-body" style="overflow:hidden;overflow-y:scroll;">
+                 
+                    <div class=" pb-2" >
+                        {% for order in cust_order_list %}
                         <div class="card" >
                             <ul class="list-group list-group-flush ">
-                                <li class="list-group-item" style="background-color: rgb(104, 255, 117); "> Order {{ order.get_order_id() }} has been created </li>
+                                <li class="list-group-item" style="background-color: rgb(104, 255, 117); "> Order {{ order['order'].get_custOrder_id() }} has been created </li>
                             </ul>
                             </div>
                         {% endfor %}
@@ -290,7 +295,7 @@
  
                         
                     </div>
-                    
+                    <br>
                 </div>
             </div>
         </div>

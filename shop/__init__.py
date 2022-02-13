@@ -369,39 +369,50 @@ def RetrieveAdmin():
                             admins_list=admins_list
                             )
 
-# @app.route('/EditAdminProfile/<int:id>/', methods=['GET', 'POST'])
-# @login_required
-# def EditAdminProfile(id):
-#     EditAdminProfile = UpdateAdminForm(request.form)
-#     if request.method == 'POST' and EditAdminProfile.validate():
-#         try:
-#             admins_dict = {}
-#             db = shelve.open('Admin.db', 'w')
-#             admins_dict = db['Admin']
-#         except IOError:
-#             print("An error occured when retrieving from Admin.db")
+@app.route('/EditAdminProfile/<int:id>/', methods=['GET', 'POST'])
+@login_required
+def EditAdminProfile(id):
+    EditAdminProfile = UpdateAdminForm(request.form)
+    if request.method == 'POST' and EditAdminProfile.validate():
+        try:
+            admins_dict = {}
+            db = shelve.open('Admin.db', 'w')
+            admins_dict = db['Admin']
+        except IOError:
+            print("An error occured when retrieving from Admin.db")
 
-#         admin = admins_dict.get(id)
-#         admin.set_username(EditAdminProfile.username.data)
-#         admin.set_email(EditAdminProfile.email.data)
-#         admin.set_gender(EditAdminProfile.gender.data)
-#         admin.set_password(EditAdminProfile.password.data)
-#         db['Admin'] = admins_dict
-#         db.close()
-#         return redirect(url_for('profile_admin'))
-#     else:
-#         try:
-#             admins_dict = {}
-#             db = shelve.open('Admin.db','r')
-#             admins_dict = db['Admin']
-#         except IOError:
-#             print("An error occured when retrieving from Admin.db")
-#         finally:
-#             db.close()
+        hashed_password = generate_password_hash(EditAdminProfile.password.data, method='sha256')
+        admin = admins_dict.get(id)
+        admin.set_username(EditAdminProfile.username.data)
+        admin.set_email(EditAdminProfile.email.data)
+        admin.set_gender(EditAdminProfile.gender.data)
+        admin.set_roles(EditAdminProfile.roles.data)
+        # admin.set_create_date(EditAdminProfile.create_date.data)
+        admin.set_password(hashed_password)
+        db['Admin'] = admins_dict
+        db.close() 
+        flash("You have success updated your profile","info")
+        return redirect(url_for('profile_admin'))
+    else:
+        try:
+            admins_dict = {}
+            db = shelve.open('Admin.db','r')
+            admins_dict = db['Admin']
+        except IOError:
+            print("An error occured when retrieving from Admin.db")
+        finally:
+            db.close()
 
-#         admin = admins_dict.get(id)
+        admin = admins_dict.get(id)
+        EditAdminProfile.username.data = admin.get_username()
+        EditAdminProfile.email.data = admin.get_email()
+        EditAdminProfile.gender.data = admin.get_gender()
+        EditAdminProfile.roles.data = admin.get_roles()
+        EditAdminProfile.create_date.data = admin.get_create_date()
+        # EditAdminProfile.password.data = admin.get_password()
 
-#         return render_template('ChangePassword.html', form=EditAdminProfile)
+
+        return render_template('UpdateAdminProfile.html', form=EditAdminProfile)
 
 
 @app.route('/register_page', methods=['POST', 'GET'])
@@ -469,7 +480,6 @@ def login_page():
 
             else:
                 print('Account or Password is wrong, Please try again.')
-        
     return render_template('login.html', form=login_page)
 
 @app.route('/update_profile_page')
@@ -1990,6 +2000,7 @@ def send_newsletter(id):
 #brings to customer account page
 @app.route('/base_cust')
 def base_cust():
+
     return render_template('base_cust.html')
 
 @app.route('/dashboard_cust')

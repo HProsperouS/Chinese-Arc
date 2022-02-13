@@ -23,8 +23,6 @@
   {% endif %}
 </div>
 
-
-
 <section>
     <div class="table" style="height:650px;overflow:hidden;overflow-y:scroll;">
         <table class="table">
@@ -34,9 +32,9 @@
                   <th>Name</th>
                   <th>Status</th>
                   <th>Date of Order</th>
+                  <th>Operations</th>
                   <th></th>
-                  <th></th>
-                  <th></th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -49,14 +47,166 @@
                     </td>
                     <td>{{ cust_orders['order'].get_create_date() }}</td>
                     <td>
+                      <!-- Eye button -->
+                      <button type="button"  class='btn btn-info' data-bs-toggle="modal" data-bs-target="#myModal_2{{cust_orders['order'].get_custOrder_id()}}" title='Delete'>
+                        <i class="fas fa-eye"></i>
+                      </button> 
+
+                      <!-- the modal -->
+                      <div class="modal" id="myModal_2{{cust_orders['order'].get_custOrder_id()}}">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+
+                            <!-- modal header -->
+                            <div class="modal-header">
+                              <h4 class="modal-title">Order Information</h4>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <!-- modal body -->
+                            <div class="modal-body">
+                              <div class="card-body">
+                                <div class="accordian" id="accordianExample">
+                                  <div class="accordian-item">
+                                    <h2 class="accordian-header" id="headingOne">
+                                      <button  style="background-color: #e4f0ff;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Customer Information
+                                      </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                      <div class="accordian-body">
+                                        <h4 class="card-title" style="color: black;">Personal Information</h4>
+                                        <p class="card-text">Name: {{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</p>
+                                        <p class="card-text">Email: {{ cust_orders['order'].get_email() }}</p>
+                                        <h5 class="card-title" style="color: black;">Card Info</h5>
+                                        <p class="card-text">Card Name: {{ cust_orders['order'].get_holder_name() }}</p>
+                                        <p class="card-text">Card Type: {{ cust_orders['order'].get_card_type() }}</p>
+                                        <p class="card-text">Card Num: {{ cust_orders['order'].get_card_num() }}</p>
+                                        <p class="card-text">CVV: {{ cust_orders['order'].get_cvv() }}</p>
+                                        <h5 class="card-title" style="color: black;">Address</h5>
+                                        <p class="card-text">Address: {{ cust_orders['order'].get_postal_code() }} #{{ cust_orders['order'].get_unit_number() }}</p>
+                                        <h5 class="card-title" style="color: black;">Status</h5>
+                                        <p class="card-text">Status: {{ cust_orders['order'].get_status() }}</p>
+                                        <p class="card-text">Created On: {{ cust_orders['order'].get_create_date() }}</p>
+                                        
+                                        <br>
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="accordian-item">
+                                    <h2 class="accordian-header" id="headingThree">
+                                      <button  style="background-color:#e4f0ff;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                        Order Summary
+                                      </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                      <div class="accordian-body">
+                                        <div class="card">
+                                          <div class="card-body">
+                                            Order ID: {{ cust_orders['order'].get_custOrder_id() }}
+                                          </div>
+                                        </div>
+                                        <br>
+                                        <div class="card">
+                                          <div class="card-body">
+                                            <Strong>Items Ordered</Strong>
+                                            <hr>
+
+                                            
+                                            {% if cust_orders['cart'][1] %} 
+                                            Name: {{cust_orders['cart'][1]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][1]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][1]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][2] %}
+                                            Name: {{cust_orders['cart'][2]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][2]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][2]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][3] %}
+                                            Name: {{cust_orders['cart'][3]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][3]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][3]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][4] %}
+                                            Name: {{cust_orders['cart'][4]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][4]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][4]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][5] %}
+                                            Name: {{cust_orders['cart'][5]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][5]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][5]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][6] %}
+                                            Name: {{cust_orders['cart'][6]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][6]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][6]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][7] %}
+                                            Name: {{cust_orders['cart'][7]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][7]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][7]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% endif %}
+                                            <div class="card">
+                                              <div class="card-body">
+                                                <span class="card-text">Grand Total: </span>
+                                                <span class="card-text" style="float:right;">$<span id="grand-total">{{ cust_orders['order'].get_total() }}</span>0</span>
+                                              </div>
+                                            </div>
+
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+                            <!-- modal footer -->
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+
+
+
+                    <td>
                       <form>
-                  
-                        <!-- Button to Open the Modal -->
-                        <button type="button" class='btn btn-success' style="background-color: rgb(226, 89, 89); border:none; " data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Delete'>
-                          <i class="fa-solid" style="font-weight: bold; color: rgb(103, 26, 26);">Received</i>
+                        <!-- Order received button -->
+                        <button type="button" class='btn btn-success' style="background-color: orange; border:none; " data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Delete'>
+                          <img src="../static/images/like.png" style="height: 23px; width: 23px;"></img>
                         </button>
-                        
-                        
+
                         <!-- The Modal -->
                         <div class="modal" id="myModal_{{cust_orders['order'].get_custOrder_id()}}">
                           <div class="modal-dialog">
@@ -70,7 +220,7 @@
             
                               <!-- Modal body -->
                               <div class="modal-body">
-                                Have you received {{ cust_orders['order'].get_custOrder_id() }} ?
+                                Have you received order <br>{{ cust_orders['order'].get_custOrder_id() }} ?
                               </div>
             
                               <!-- Modal footer -->
@@ -79,135 +229,24 @@
                                 
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
                               </div>
-                                <script>
-                                  function Received() {
-                                    alert("Delivery status confirmed. Thank you")
-                                    
-                                  }
-                                  
-                                </script>
+                              <script>
+                                function Received() {
+                                  alert("Delivery status confirmed. Thank you")
+                                }
+                              </script>
                             </div>
                           </div>
                         </div>
                       </form>
+
                     </td>
                 </tr>
-
                 {% endfor %}
               </tbody>
         </table>
     </div>
 </section>
 </body>
-
-
-
-
-<style>
-   
-    ::selection{
-      background: rgba(23, 98, 184, 0.3);
-    }
-    .wrapper{
-      
-      width: 100%;
-      height: 100%;
-      padding: 25px 30px 30px 30px;
-      border-radius: 5px;
-      background: #fff;
-     
-    }
-    .wrapper header{
-      font-size: 30px;
-      font-weight: 600;
-      padding-bottom: 20px;
-    }
-    .wrapper nav{
-      position: relative;
-      width: 80%;
-      height: 50px;
-      display: flex;
-      margin-bottom: 10px;
-      align-items: center;
-    }
-    .wrapper nav label{
-      display: block;
-      height: 100%;
-      width: 100%;
-      text-align: center;
-      line-height: 50px;
-      cursor: pointer;
-      position: relative;
-      z-index: 1;
-      color: #0f87d8;
-      font-size: 17px;
-      border-radius: 5px;
-      margin: 0 5px;
-      
-      transition: all 0.3s ease;
-    }
-    .wrapper nav label:hover{
-      margin-bottom: 10px;
-      background:#1253a7;
-    }
-    #home:checked ~ nav label.home,
-    #blog:checked ~ nav label.blog,
-    #code:checked ~ nav label.code,
-    #help:checked ~ nav label.help,
-      #about:checked ~ nav label.about{
-      color: #fff;
-    }
-    nav label i{
-      padding-right: 7px;
-    }
-    nav .slider{
-      position: absolute;
-      height: 100%;
-      width: 24%;
-      left: 0;
-      bottom: 0;
-      z-index: 0;
-      border-radius: 5px;
-      background: #175db8;
-      transition: all 0.3s ease;
-     
-    }
-    input[type="radio"]{
-      display: none;
-    }
-    #blog:checked ~ nav .slider{
-      left: 25%;
-    }
-    #code:checked ~ nav .slider{
-      left: 50%;
-    }
-    #help:checked ~ nav .slider{
-      left: 75%;
-    }
-    #about:checked ~ nav .slider{
-      left: 100%;
-    }
-    section .content{
-      display: none;
-      background: #fff;
-    }
-    #home:checked ~ section .content-1,
-    #blog:checked ~ section .content-2,
-    #code:checked ~ section .content-3,
-    #help:checked ~ section .content-4,
-    #about:checked ~ section .content-5{
-      display: block;
-    }
-    section .content .title{
-      font-size: 21px;
-      font-weight: 500;
-      margin: 30px 0 10px 0;
-    }
-    section .content p{
-    text-align: justify;
-    }
-      </style>
-
 
 
 

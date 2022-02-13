@@ -8,7 +8,7 @@ from flask_wtf import FlaskForm
 from flask import Flask, message_flashed, render_template, request, redirect, url_for, session, flash, g
 #from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from sympy import total_degree
+# from sympy import total_degree
 # from sqlalchemy import PrimaryKeyConstraint
 # from flask_bcrypt import Bcrypt
 from wtforms.fields.core import DateField,datetime
@@ -37,7 +37,7 @@ from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
 from ContactReply import ContactReply
 from earnings import Revenue
-# from flask_uploads import configure_uploads,UploadSet,IMAGES
+from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
 from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm, CreateContactReplyForm
@@ -62,6 +62,7 @@ import urllib.request
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from heapq import nlargest
 
 # flask uploads
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -72,8 +73,8 @@ app.config['SECRET_KEY'] = 'Chinese ARC'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images/')
 
 app.config['UPLOAD_EXTENSIONS'] = ['.jpeg', '.jpg', '.png', '.gif']
-# photos = UploadSet('photos', IMAGES)
-# configure_uploads(app, photos)
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -475,7 +476,7 @@ def login_page():
                 session['user_id'] = key
                 customer.append(customer_loggedin)
 
-                flash('Hi'+ " " + customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name() + ", You have sucessful logined","success")
+                flash('Hi'+ " " + customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name() + ", You have successfully logged in","success")
                 return redirect(url_for('home_page'))
 
             else:
@@ -537,7 +538,7 @@ def update_cust_info(id):
         db['customers'] = cust_dict
         db.close()
 
-        flash('Info has been updated sucessfully',"success")
+        flash('Profile has been updated successfully',"success")
         return redirect(url_for('update_profile_page'))
     else:
         cust_dict = {}

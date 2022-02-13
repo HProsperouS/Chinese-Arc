@@ -18,7 +18,7 @@ class Registration(Form):
     birthdate= DateField("Date Of Birth",[validators.DataRequired(message='Enter valid date')],format="%Y-%m-%d")
     postal_code = IntegerField('Postal Code', [validators.NumberRange(min=000000,max=999999), 
                                               validators.DataRequired(message='Please enter valid postal code')])
-    city = SelectField('City', [validators.DataRequired()],choices=[('M', 'Malaysia'), ('S', 'Singapore'), ('USA', 'America')], default='S')
+    city = SelectField('City', [validators.DataRequired()],choices=[('Singapore', 'Singapore')], default='Singapore')
     address = StringField('Address', [validators.Length(min=4, max=50),
                                               validators.DataRequired(message='Please enter a valid address')])
     password = PasswordField('Password', [validators.InputRequired(), validators.Length(min=1,max=100),

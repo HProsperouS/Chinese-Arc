@@ -32,7 +32,7 @@ from Newsletter import Newsletter
 from Apply_Coupon import Coupon
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
-from EditProduct import UpdateProductForm, CreateProductForm, photos
+# from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
 from ContactReply import ContactReply
 from earnings import Revenue
@@ -474,7 +474,7 @@ def login_page():
                 session['user_id'] = key
                 customer.append(customer_loggedin)
 
-                flash('Hi'+ " " + customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name() + ", You have sucessful logined","success")
+                flash('Hi'+ " " + customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name() + ", You have successfully logged in","success")
                 return redirect(url_for('home_page'))
 
             else:
@@ -536,7 +536,7 @@ def update_cust_info(id):
         db['customers'] = cust_dict
         db.close()
 
-        flash('Info has been updated sucessfully',"success")
+        flash('Profile has been updated successfully',"success")
         return redirect(url_for('update_profile_page'))
     else:
         cust_dict = {}

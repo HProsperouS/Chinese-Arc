@@ -8,7 +8,7 @@ from flask_wtf import FlaskForm
 from flask import Flask, message_flashed, render_template, request, redirect, url_for, session, flash, g
 #from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from sympy import total_degree
+# from sympy import total_degree
 # from sqlalchemy import PrimaryKeyConstraint
 # from flask_bcrypt import Bcrypt
 from wtforms.fields.core import DateField,datetime
@@ -33,11 +33,11 @@ from Newsletter import Newsletter
 from Apply_Coupon import Coupon
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
-from EditProduct import UpdateProductForm, CreateProductForm, photos
+# from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
 from ContactReply import ContactReply
 from earnings import Revenue
-from flask_uploads import configure_uploads,UploadSet,IMAGES
+# from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
 from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm, CreateContactReplyForm
@@ -73,8 +73,8 @@ app.config['SECRET_KEY'] = 'Chinese ARC'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images/')
 
 app.config['UPLOAD_EXTENSIONS'] = ['.jpeg', '.jpg', '.png', '.gif']
-photos = UploadSet('photos', IMAGES)
-configure_uploads(app, photos)
+# photos = UploadSet('photos', IMAGES)
+# configure_uploads(app, photos)
 
 login_manager = LoginManager()
 login_manager.init_app(app)

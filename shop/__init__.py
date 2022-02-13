@@ -8,6 +8,7 @@ from flask_wtf import FlaskForm
 from flask import Flask, message_flashed, render_template, request, redirect, url_for, session, flash, g
 #from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from sympy import total_degree
 # from sqlalchemy import PrimaryKeyConstraint
 # from flask_bcrypt import Bcrypt
 from wtforms.fields.core import DateField,datetime
@@ -61,6 +62,7 @@ import urllib.request
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from heapq import nlargest
 
 # flask uploads
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -2158,37 +2160,11 @@ def createCustOrder():
 
         create_custorder_form = CreateCustOrder(request.form)
         if request.method == 'POST' and create_custorder_form.validate():
+            
+            
+            
 
-
-            try:
-                product_dict = {}
-                db = shelve.open('ProductInfo.db', 'w')
-                product_dict = db['ProductInfo']
-            except IOError:
-                print('An error occurered trying to read PRODUCTINFO.db')
-            finally:
-                db.close()
-
-            try:
-                cust_cart_dict = {}
-                db = shelve.open('custCart.db', 'r')
-                cust_cart_dict = db['custCart']
-            except:
-                print('Error in opening db')
-
-            for key in product_dict:
-                
-                product = product_dict.get(key)
-                for key in list(cust_cart_dict): 
-                    if product.get_product_name() == cust_cart_dict[key]['name']: 
-                        print('yes') 
-                        Remain_qty = product.get_product_stock() - cust_cart_dict[key]['qty']  
-                        print(Remain_qty)
-                        product.set_product_stock(Remain_qty)
-                        print(product.get_product_stock())
-                       
-                        print('deducted')
-
+            
             
             cust_order_dict = {}
             db = shelve.open('CustOrder.db', 'c')
@@ -2271,10 +2247,9 @@ def createCustOrder():
                 earnings_dict = db['Earnings']
             except :
                 print("Error in retrieving cust Orders from CustOrder.db.")
+            
 
-            Total_Earnings = Revenue(create_custorder_form.total.data )
-
-            earnings_dict['Total'] = Total_Earnings
+            
 
             db['Earnings'] = earnings_dict
             db.close()

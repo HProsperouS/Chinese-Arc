@@ -48,85 +48,135 @@ function empty_display(){
 	document.querySelector('#empty-discount').textContent =''
 }
 function ApplyRemove(){
-	if (document.getElementById('Apply_Remove').textContent == 'Apply'){
-		if (document.getElementById('Discount_entry').value == ''){
-			document.querySelector('#empty-discount').textContent = 'Please enter a vaild code'
-
-			const timer = setTimeout(empty_display,1000)
+	if ( document.getElementById('grandTotal').textContent == 0){
+		Checkout()
+	}
+	else if ( document.getElementById('grandTotal').textContent != 0){
+		if (document.getElementById('Apply_Remove').textContent == 'Apply'){
+			if (document.getElementById('Discount_entry').value == ''){
+				document.querySelector('#empty-discount').textContent = 'Please enter a vaild code'
 	
-		}
-		else if (document.getElementById('Discount_entry').value != ''){
-
-		}
-	}
-	else if (document.getElementById('Discount_entry').value == ''){
-		document.getElementById('Discount_entry').value = ''
-		document.getElementById('Apply_Remove').textContent ='Apply'
-		var discount = document.getElementById('discount_number').textContent;
-		var discount_pricing = document.getElementById("grandTotal").textContent
-		paymentPrice = parseFloat(discount_pricing) + parseFloat(discount)
-		document.getElementById("grandTotal").textContent = paymentPrice;
+				const timer = setTimeout(empty_display,1000)
 		
-		document.getElementById('discount_number').textContent = 0
-		document.getElementById('code_number').textContent = 'N/A'
-		localStorage.setItem('value', paymentPrice);
-		localStorage.setItem('discount', 0)
+			}
+			else if (document.getElementById('Discount_entry').value != ''){
+	
+				active_discount.forEach(code => {
+					var discount_count = 0; 
+					const discount_code = code.querySelector('.Discount_code').textContent;
+					const discount_value = document.getElementById('Discount_entry')
+					const discount_secret = code.querySelector('.Discount_secret').textContent;
+			
+					
+					if(document.getElementById('Discount_entry').value == code.querySelector('.Discount_code').textContent ){
+				
+						document.getElementById('Apply_Remove').textContent = 'Remove';
+					
+						document.getElementById('discount_number').textContent = discount_secret
+						document.getElementById('code_number').textContent = discount_code
+						// var tick_confirm = document.getElementById('tick_confirm')
+						// tick_confirm.classList.add('far fa-check-circle');
+						var discount_pricing = document.getElementById("grandTotal").textContent
+						paymentPrice = discount_pricing - parseFloat(discount_secret)
+						document.getElementById("grandTotal").textContent = paymentPrice;
+						localStorage.setItem('value', paymentPrice);
+						localStorage.setItem('discount', discount_secret)
+						
+						discount_count +=1
+					}
+					else if (document.getElementById('Discount_entry').value != code.querySelector('.Discount_code').textContent ){
+						
+						document.querySelector('#empty-discount').textContent = 'Please enter a vaild code'
+			
+						const error_code = setTimeout(empty_display,1000)
+					}
+						
+	
+			
+				})
+	
+			}
+		}
+		else if (document.getElementById('Discount_entry').value == ''){
+			document.getElementById('Discount_entry').value = ''
+			document.getElementById('Apply_Remove').textContent ='Apply'
+			var discount = document.getElementById('discount_number').textContent;
+			var discount_pricing = document.getElementById("grandTotal").textContent
+			paymentPrice = parseFloat(discount_pricing) + parseFloat(discount)
+			document.getElementById("grandTotal").textContent = paymentPrice;
+			
+			document.getElementById('discount_number').textContent = 0
+			document.getElementById('code_number').textContent = 'N/A'
+			localStorage.setItem('value', paymentPrice);
+			localStorage.setItem('discount', 0)
+		}
+		else if (document.getElementById('Apply_Remove').textContent == 'Remove'){
+			document.getElementById('Discount_entry').value = ''
+			document.getElementById('Apply_Remove').textContent ='Apply'
+			var discount = document.getElementById('discount_number').textContent;
+			var discount_pricing = document.getElementById("grandTotal").textContent
+			paymentPrice = parseFloat(discount_pricing) + parseFloat(discount)
+			document.getElementById("grandTotal").textContent = paymentPrice;
+			
+			document.getElementById('discount_number').textContent = 0
+			document.getElementById('code_number').textContent = 'N/A'
+			localStorage.setItem('value', paymentPrice);
+			localStorage.setItem('discount', 0)
+		}
 	}
-	else if (document.getElementById('Apply_Remove').textContent == 'Remove'){
-		document.getElementById('Discount_entry').value = ''
-		document.getElementById('Apply_Remove').textContent ='Apply'
-		var discount = document.getElementById('discount_number').textContent;
-		var discount_pricing = document.getElementById("grandTotal").textContent
-		paymentPrice = parseFloat(discount_pricing) + parseFloat(discount)
-		document.getElementById("grandTotal").textContent = paymentPrice;
-		
-		document.getElementById('discount_number').textContent = 0
-		document.getElementById('code_number').textContent = 'N/A'
-		localStorage.setItem('value', paymentPrice);
-		localStorage.setItem('discount', 0)
-	}
+	
 	
 
 }
 
 
+
 active_discount.forEach(code => {
 	code.addEventListener('click', (e) => {
-		getCartSum()
-		var discount_count = 0;
-		console.log('1')
-		const discount_code = code.querySelector('.Discount_code').textContent;
-		const discount_value = document.getElementById('Discount_entry')
-		const discount_secret = code.querySelector('.Discount_secret').textContent
-		
-		discount_value.value = discount_code
+		if ( document.getElementById('grandTotal').textContent == 0){
+			document.querySelector('#alert-discount').textContent = 'Cart is Empty'
 
-		if (discount_value.value == discount_code && discount_count == 0) {
-			document.getElementById('Apply_Remove').textContent = 'Remove';
-			
-			document.getElementById('discount_number').textContent = discount_secret
-			document.getElementById('code_number').textContent = discount_code
-			// var tick_confirm = document.getElementById('tick_confirm')
-			// tick_confirm.classList.add('far fa-check-circle');
-			var discount_pricing = document.getElementById("grandTotal").textContent
-			paymentPrice = discount_pricing - parseFloat(discount_secret)
-			document.getElementById("grandTotal").textContent = paymentPrice;
-			localStorage.setItem('value', paymentPrice);
-			localStorage.setItem('discount', discount_secret)
-			
-			discount_count +=1
-	
-			
-			
+			const timer = setTimeout(alert_discount,1000)
 		}
-		else{
-			console.log('Error')
+		else if ( document.getElementById('grandTotal').textContent != 0){
+			getCartSum()
+			var discount_count = 0;
+			console.log('1')
+			const discount_code = code.querySelector('.Discount_code').textContent;
+			const discount_value = document.getElementById('Discount_entry')
+			const discount_secret = code.querySelector('.Discount_secret').textContent
+			
+			discount_value.value = discount_code
+
+			if (discount_value.value == discount_code && discount_count == 0) {
+				document.getElementById('Apply_Remove').textContent = 'Remove';
+				
+				document.getElementById('discount_number').textContent = discount_secret
+				document.getElementById('code_number').textContent = discount_code
+				// var tick_confirm = document.getElementById('tick_confirm')
+				// tick_confirm.classList.add('far fa-check-circle');
+				var discount_pricing = document.getElementById("grandTotal").textContent
+				paymentPrice = discount_pricing - parseFloat(discount_secret)
+				document.getElementById("grandTotal").textContent = paymentPrice;
+				localStorage.setItem('value', paymentPrice);
+				localStorage.setItem('discount', discount_secret)
+				
+				discount_count +=1
+		
+				
+				
+			}
+			else{
+				console.log('Error')
+			
+			
+			}
+	
+		}
 		
 		
-		}
-	
 	})
-})
+})	
 
 
 function Summary_value(){
@@ -216,7 +266,7 @@ const updateShoppingCartHTML = function () {  // 3
             
 			
 			
-		<div class="card mb-3" style="max-width: 1540px;">
+		<div class="card mb-3 " style="max-width: 1540px;">
 			<div class="row g-0">
 				<div class="col-md-2 col-sm-4">
 					<div class="aside"><img src="${product.image}"></div>
@@ -363,15 +413,22 @@ parentElement.addEventListener('click', (e) => { // Last
 			if (productsInCart[i].id == e.target.dataset.id) {
 				if (isPlusButton) {
 					productsInCart[i].count += 1
+
+					AddtoCart(productsInCart[i])
 					
 				}
 				else if (isMinusButton) {
 					productsInCart[i].count -= 1
+
+					MinusCart(productsInCart[i])
 				}
-				else if (isDeleteButton)
-				productsInCart[i].count = 0
+				else if (isDeleteButton){
+					productsInCart[i].count = 0
 				
-				productsInCart[i].price = productsInCart[i].basePrice * productsInCart[i].count;
+					productsInCart[i].price = productsInCart[i].basePrice * productsInCart[i].count;
+				
+					Deleteitem(productsInCart[i])
+				}
 				
 				
 			}
@@ -388,3 +445,65 @@ parentElement.addEventListener('click', (e) => { // Last
 });
 
 updateShoppingCartHTML();
+
+function AddtoCart(product){
+	console.log('add')
+	for (let i = 0; i < productsInCart.length; i++) {
+		if (productsInCart[i].id == product.id) {
+			if (productsInCart[i].count > 1) {
+				fetch('/createCustOrder',{
+					method:'POST',
+					body: JSON.stringify({
+						function:'plus',product_name : product.name, product_price: product.price, product_qty : product.count
+					}),
+					cache: 'no-cache',
+					headers: new Headers({
+						'content-type': 'application/json'
+					})
+				})
+				
+			}
+			else if (productsInCart[i].count == 1){
+				fetch('/createCustOrder',{
+					method:'POST',
+					body: JSON.stringify({
+						function:'add',product_name : product.name, product_price: product.price, product_qty : product.count
+					}),
+					cache: 'no-cache',
+					headers: new Headers({
+						'content-type': 'application/json'
+					})
+				})
+				
+			}
+		}
+	}
+}
+
+function MinusCart(productsInCart){
+	fetch('/createCustOrder',{
+		method:'POST',
+		body: JSON.stringify({
+			function:'minus',product_name : productsInCart.name, product_price: productsInCart.price, product_qty : productsInCart.count
+		}),
+		cache: 'no-cache',
+		headers: new Headers({
+			'content-type': 'application/json'
+		})
+	})
+
+}
+
+function Deleteitem(productsInCart){
+	fetch('/createCustOrder',{
+		method:'POST',
+		body: JSON.stringify({
+			function:'delete',product_name :productsInCart.name, product_price: productsInCart.price, product_qty : productsInCart.count
+		}),
+		cache: 'no-cache',
+		headers: new Headers({
+			'content-type': 'application/json'
+		})
+	
+	})
+}

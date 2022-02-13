@@ -119,7 +119,7 @@
                                                                     <p class='badge bg-danger Discount_code' id='Discount_code' style="color: white;" data-action='{{voucher.get_voucher_code()}}'>{{voucher.get_voucher_code()}}</p>
                                                                     <h5 class='Discount_secret' id='Discount_secret' style="display:none;">{{voucher.get_voucher_secret()}}</h5>
                                                                     
-                                                                    <h5 class='badge bg-success  w-75' style="color: white;">{{voucher.get_voucher_status()}}</h5>
+                                                                    <h5 class='badge bg-success  w-75' style="color: white;" id="code-status" >{{voucher.get_voucher_status()}}</h5>
                                                                 </div>
                                                             </div>
         
@@ -129,17 +129,18 @@
                                                 {% elif voucher.get_voucher_status() == 'Expired' %}
                                                     
                                                         
-                                                        <div class="card-body" onclick="Discount_expired()">
+                                                            <div class="card-body" onclick="Discount_expired()">
+                                                            
+                                                                <p class='btn btn-danger w-100 ' style="text-align: center;">{{ voucher.get_voucher_name()}}</p>
+                                                                <br>
                                                         
-                                                            <p class='btn btn-danger w-100 ' style="text-align: center;">{{ voucher.get_voucher_name()}}</p>
-                                                            <br>
-                                                    
-                                                            <p class='badge bg-danger  ' style="color: white;" >{{voucher.get_voucher_code()}}</p>
-                                                            <h5 class=''  style="display:none;">{{voucher.get_voucher_secret()}}</h5>
+                                                                <p class='badge bg-danger  ' style="color: white;" >{{voucher.get_voucher_code()}}</p>
+                                                                <h5 class=''  style="display:none;">{{voucher.get_voucher_secret()}}</h5>
+                                                            
+                                                                <h5 class='badge bg-danger  w-75' style="color: white;" id="code-status">{{voucher.get_voucher_status()}}</h5>
+                                                            </div>
+                                                            <hr>
                                                         
-                                                            <h5 class='badge bg-danger  w-75' style="color: white;">{{voucher.get_voucher_status()}}</h5>
-                                                        </div>
-                                                        <hr>
                                                 
                                                 {% endif %}
                                             {% endfor %}

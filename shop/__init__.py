@@ -484,8 +484,23 @@ def update_profile_page():
     for key in cust_dict:
         customer = cust_dict.get(key)
         cust_list.append(customer)
+    
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'r')
+        cust_order_dict = db['CustOrder']
+    except:
+        print('Unable to read data')
+    finally:
+        db.close()
+
+    cust_order_list = []
+    for key in cust_order_dict:
+        cust_order = cust_order_dict.get(key)
+        cust_order_list.append(cust_order)
+
     return render_template('profile.html', count=len(cust_list),
-                           cust_list=cust_list)
+                           cust_list=cust_list, count2=len(cust_order_list), cust_order_list=cust_order_list)
                            
 @app.route('/update_customer_info/<int:id>', methods=['GET', 'POST'])
 def update_cust_info(id):
@@ -2111,6 +2126,7 @@ def createCustOrder():
                                     create_custorder_form.create_date.data,
                                     create_custorder_form.modified_date.data,
                                     create_custorder_form.modified_by.data,
+                                    create_custorder_form.status.data,
                                     create_custorder_form.total.data,
                                     create_custorder_form.discount.data)
             

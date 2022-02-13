@@ -21,7 +21,7 @@ class CreateCustOrder(Form):
     create_date= DateField('Date Created', [validators.DataRequired()],format="%Y-%m-%d", default=datetime.datetime.now())
     modified_by = StringField('Modified By', [validators.Length(min=1, max=50), validators.Optional()])
     modified_date = DateField('Modified Date', [validators.Optional()])
-    status = SelectField('Status', [validators.DataRequired(message='Please choose card type')], choices=[('Pending', 'Pending'), ('Undelivered', 'Undelivered'), ('Delivered', 'Delivered')], default='Pending')
+    status = SelectField('Status', [validators.DataRequired(message='Please choose card type')], choices=[('Pending', 'Pending')], default='Pending')
     total = FloatField('Grand Total')
     discount = FloatField('Discount')
 class CustOrderUpdate(Form):

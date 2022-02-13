@@ -65,7 +65,7 @@ const updateShoppingCartHTML = function () {  // 3
 							
 						</div>
 						<div class="row" >
-							<i class="btn btn-danger button-delete fas fa-trash-alt"  data-id=${product.id} style='margin-top:-20px;margin-bottom:20px;margin-left:28px;' onclick='Delete()'> </i>
+							<i class="btn btn-danger button-delete fas fa-trash-alt"  data-id=${product.id} style='margin-top:-20px;margin-bottom:20px;margin-left:28px;'> </i>
 						</div>
 						
 					</div>

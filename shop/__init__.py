@@ -386,9 +386,11 @@ def EditAdminProfile(id):
         admin.set_email(EditAdminProfile.email.data)
         admin.set_gender(EditAdminProfile.gender.data)
         admin.set_roles(EditAdminProfile.roles.data)
+        # admin.set_create_date(EditAdminProfile.create_date.data)
         admin.set_password(hashed_password)
         db['Admin'] = admins_dict
         db.close() 
+        flash("You have success updated your profile","info")
         return redirect(url_for('profile_admin'))
     else:
         try:
@@ -405,6 +407,7 @@ def EditAdminProfile(id):
         EditAdminProfile.email.data = admin.get_email()
         EditAdminProfile.gender.data = admin.get_gender()
         EditAdminProfile.roles.data = admin.get_roles()
+        EditAdminProfile.create_date.data = admin.get_create_date()
         # EditAdminProfile.password.data = admin.get_password()
 
 

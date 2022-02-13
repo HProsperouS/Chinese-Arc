@@ -20,40 +20,45 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="text-right">Profile Admin</h4>
                 </div>
-                <form method="POST" action=""></form>
+                <form method="POST" action="">
                     <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Username</label>
+                        <div class="col-md-6">
                             <p class="form-group">
                                 {{ render_field(form.username, class="form-control") }}
                             </p>
                         </div>
-                        <div class="col-md-6"><label class="labels">Gender</label>
+                        <div class="col-md-6">
                             <p class="form-group">
                                 {{ render_field(form.gender, class="form-check", style="list-style-type:none;" ) }}
                             </p>
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Email Address</label>
+                        <div class="col-md-6">
                             <p class="form-group">
                                 {{ render_field(form.email, class="form-control",readOnly=True) }}
                             </p>
                         </div>
-                        <div class="col-md-6"><label class="labels">Roles</label>
+                        <div class="col-md-6">
                             <p class="form-group">
                                 {{ render_field(form.roles, class="form-control") }}
                             </p>
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Password</label>
+                        <div class="col-md-6">
                             <p class="form-group">
                                 {{ render_field(form.password, class="form-control") }}
                             </p>
                         </div>
-                        <div class="col-md-6"><label class="labels">Confirm</label>
+                        <div class="col-md-6">
                             <p class="form-group">
                                 {{ render_field(form.confirm,class="form-control" ) }}
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            <p class="form-group">
+                                {{ render_field(form.create_date, class="form-control",readOnly=True ) }}
                             </p>
                         </div>
                     </div>

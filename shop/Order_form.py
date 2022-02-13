@@ -9,7 +9,7 @@ from wtforms.widgets import PasswordInput
 class CreateCustOrder(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    email = EmailField('Email Address', [validators.DataRequired(message='Please enter a valid email address')])
+    email = EmailField('Email Address', [validators.DataRequired(message='Please enter a valid email address'),validators.Email()])
     card_num = IntegerField('Card Number', [validators.DataRequired(message='Please enter the 16-digit card number')])
     card_type = SelectField('Card Type', [validators.DataRequired(message='Please choose card type')], choices=[('Select', 'Select'), ('Visa', 'Visa'), ('Mastercard', 'Mastercard')], default='')
     holder_name = StringField('Card Holder Name', [validators.Length(min=1, max=150), validators.DataRequired(message='This field is required')])

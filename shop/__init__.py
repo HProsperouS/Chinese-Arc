@@ -1497,12 +1497,13 @@ def create_subscriptions():
         db['Subscriptions'] = subscriptions_dict
 
         create_subscriptions_form.email.data = subscriptions.get_email()
+        subscriptions_id = subscriptions.get_subscriptions_id()
         sender_email = "testingusers1236@gmail.com"
         receiver_email = subscriptions.get_email()
         password = "dG09#G.@Yg23G"
 
         message = MIMEMultipart("alternative")
-        message["Subject"] = "Newsletter Subscription"
+        message["Subject"] = 'Newsletter Subscription' + ' ( ' + str(subscriptions_id) + ' ) '
         message["From"] = sender_email
         message["To"] = receiver_email
 
@@ -1777,21 +1778,7 @@ def update_subscriptions(id):
 
         return render_template('updateSubscriptions.html', form=update_subscriptions_form)
 
-@app.route('/deleteSubscriptions/<uuid:id>', methods=['POST'])
-@login_required
-def delete_subscriptions(id):
-    subscriptions_dict = {}
-    db = shelve.open('subscriptions.db', 'w')
-    subscriptions_dict = db['Subscriptions']
 
-    subscriptions_dict.pop(id)
-
-    db['Subscriptions'] = subscriptions_dict
-    db.close()
-
-    flash("Subscription have been deleted")
-
-    return redirect(url_for('retrieve_subscriptions'))
 
 @app.route('/createUnsubscribe', methods=['GET', 'POST'])
 def create_unsubscribe():
@@ -1805,11 +1792,40 @@ def create_unsubscribe():
         except:
             print("Error in retrieving Unsubscribe from unsubscribe.db.")
 
-        unsubscribe = Unsubscribe(create_unsubscribe_form.email.data, 
+        unsubscribe = Unsubscribe(create_unsubscribe_form.sub_id.data,
+                                    create_unsubscribe_form.email.data, 
                                     create_unsubscribe_form.reason.data)
 
         unsubscribe_dict[unsubscribe.get_unsubscribe_id()] = unsubscribe
         db['Unsubscribe'] = unsubscribe_dict
+
+        #getting the sub_id input from unsubscribe:
+        create_unsubscribe_form.sub_id.data = unsubscribe.get_sub_id()
+
+        #checking with the subscriptions_dict:
+        subscriptions_dict = {}
+        db = shelve.open('subscriptions.db', 'r')
+        subscriptions_dict = db['Subscriptions']
+        db.close()
+
+        subscriptions_list = []
+        for key in subscriptions_dict:
+            subscriptions = subscriptions_dict.get(key)
+            sub_uuid = subscriptions.get_subscriptions_id()
+            subscriptions_list.append(sub_uuid)
+
+        # removing those who requested to be unsubscribed:
+        for i in subscriptions_list:
+            if unsubscribe.get_sub_id() == str(i):
+                subscriptions_dict = {}
+                db = shelve.open('subscriptions.db', 'w')
+                subscriptions_dict = db['Subscriptions']
+
+                id = subscriptions.get_subscriptions_id()
+                subscriptions_dict.pop(id)
+
+                db['Subscriptions'] = subscriptions_dict
+                db.close()
 
         db.close()
 

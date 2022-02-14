@@ -32,7 +32,7 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th></th>
-                <th></th>
+                
             </tr>
         </thead>
         <tbody>
@@ -43,41 +43,6 @@
                 <td>{{ subscriptions.get_last_name() }}</td>
                 <td>{{ subscriptions.get_email() }}</td>
                 <td><a href="/updateSubscriptions/{{subscriptions.get_subscriptions_id()}}" class="btn btn-warning"><i class="fas fa-pen"></i></a></td>
-                <td>
-                    <form action="{{url_for('delete_subscriptions', id=subscriptions.get_subscriptions_id())}}" method="POST">
-                        <!-- Button to Open the Modal -->
-                        <button type="button" title="Delete" class="btn btn-danger " data-bs-toggle="modal"
-                            data-bs-target="#myModal_{{subscriptions.get_subscriptions_id()}}">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                        
-                        <!-- The Modal -->
-                        <div class="modal" id="myModal_{{subscriptions.get_subscriptions_id()}}">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                        
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Delete Confirmation</h4>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                        
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                        Are you sure you want to delete {{subscriptions.get_email()}}?
-                                    </div>
-                        
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <input type="submit" value="Delete" class="btn btn-danger">
-                        
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -93,6 +58,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>Subscription ID</th>
                 <th>Email</th>
                 <th>Reason For Unsubscribing</th>
                 <th></th>
@@ -102,6 +68,7 @@
         <tbody>
             {% for unsubscribe in unsubscribe_list %}
             <tr>
+                <td>{{ unsubscribe.get_sub_id() }}</td>
                 <td>{{ unsubscribe.get_email() }}</td>
                 <td>{{ unsubscribe.get_reason() }}</td>
                 <td></td>

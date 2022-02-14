@@ -209,7 +209,8 @@
                                                 Quantity: {{cust_orders['cart'][1]['qty']}}
                                                 <br>
                                                 <hr>
-                                                {% elif cust_orders['cart'][2] %}
+                                                {% endif %}
+                                                {% if cust_orders['cart'][2] %}
                                                 Name: {{cust_orders['cart'][2]['name']}}
                                                 <br>
                                                 Total: ${{cust_orders['cart'][2]['price']}}
@@ -217,7 +218,8 @@
                                                 Quantity: {{cust_orders['cart'][2]['qty']}}
                                                 <br>
                                                 <hr>
-                                                {% elif cust_orders['cart'][3] %}
+                                                {% endif %}
+                                                {% if cust_orders['cart'][3] %}
                                                 Name: {{cust_orders['cart'][3]['name']}}
                                                 <br>
                                                 Total: ${{cust_orders['cart'][3]['price']}}
@@ -225,7 +227,8 @@
                                                 Quantity: {{cust_orders['cart'][3]['qty']}}
                                                 <br>
                                                 <hr>
-                                                {% elif cust_orders['cart'][4] %}
+                                                {% endif %}
+                                                {% if cust_orders['cart'][4] %}
                                                 Name: {{cust_orders['cart'][4]['name']}}
                                                 <br>
                                                 Total: ${{cust_orders['cart'][4]['price']}}
@@ -233,7 +236,8 @@
                                                 Quantity: {{cust_orders['cart'][4]['qty']}}
                                                 <br>
                                                 <hr>
-                                                {% elif cust_orders['cart'][5] %}
+                                                {% endif %}
+                                                {% if cust_orders['cart'][5] %}
                                                 Name: {{cust_orders['cart'][5]['name']}}
                                                 <br>
                                                 Total: ${{cust_orders['cart'][5]['price']}}
@@ -241,7 +245,8 @@
                                                 Quantity: {{cust_orders['cart'][5]['qty']}}
                                                 <br>
                                                 <hr>
-                                                {% elif cust_orders['cart'][6] %}
+                                                {% endif %}
+                                                {% if cust_orders['cart'][6] %}
                                                 Name: {{cust_orders['cart'][6]['name']}}
                                                 <br>
                                                 Total: ${{cust_orders['cart'][6]['price']}}
@@ -249,7 +254,8 @@
                                                 Quantity: {{cust_orders['cart'][6]['qty']}}
                                                 <br>
                                                 <hr>
-                                                {% elif cust_orders['cart'][7] %}
+                                                {% endif %}
+                                                {% if cust_orders['cart'][7] %}
                                                 Name: {{cust_orders['cart'][7]['name']}}
                                                 <br>
                                                 Total: ${{cust_orders['cart'][7]['price']}}
@@ -453,7 +459,7 @@
   }
   .wrapper nav{
     position: relative;
-    width: 80%;
+    width: 100%;
     height: 50px;
     display: flex;
     margin-bottom: 10px;

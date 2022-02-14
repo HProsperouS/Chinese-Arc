@@ -1492,7 +1492,9 @@ def create_subscriptions():
         except:
             print("Error in retrieving Subscriptions from subscriptions.db.")
 
-        subscriptions = Subscriptions(create_subscriptions_form.first_name.data, create_subscriptions_form.last_name.data, create_subscriptions_form.email.data)
+        subscriptions = Subscriptions(create_subscriptions_form.first_name.data, 
+                                        create_subscriptions_form.last_name.data, 
+                                        create_subscriptions_form.email.data)
         subscriptions_dict[subscriptions.get_subscriptions_id()] = subscriptions
         db['Subscriptions'] = subscriptions_dict
 
@@ -1739,11 +1741,47 @@ def retrieve_subscriptions():
         unsubscribe = unsubscribe_dict.get(key)
         unsubscribe_list.append(unsubscribe)
 
+    #counting average rating for subscription:
+    rating_list = []
+    for key in unsubscribe_dict:
+        unsubscribe = unsubscribe_dict.get(key)
+        rating = unsubscribe.get_rating()
+        rating_list.append(int(rating))
+
+    #counting of each reason:
+    irrelevant_list = []
+    for key in unsubscribe_dict:
+        irrelevant = unsubscribe_dict.get(key)
+        if irrelevant.get_reason() == 'Irrelevant Content':
+            irrelevant_list.append(irrelevant)
+
+    many_list = []
+    for key in unsubscribe_dict:
+        many = unsubscribe_dict.get(key)
+        if many.get_reason() == 'Too many emails':
+            many_list.append(many)
+
+    preferences_list = []
+    for key in unsubscribe_dict:
+        preferences = unsubscribe_dict.get(key)
+        if preferences.get_reason() == 'Not tailored to my preferences':
+            preferences_list.append(preferences)
+
     return render_template('retrieveSubscriptions.html', 
                             count=len(subscriptions_list), 
                             subscriptions_list=subscriptions_list,
                             count1=len(unsubscribe_list), 
-                            unsubscribe_list=unsubscribe_list)
+                            unsubscribe_list=unsubscribe_list,
+                            count2=len(irrelevant_list), 
+                            irrelevant_list=irrelevant_list,
+                            count3=len(many_list), 
+                            many_list=many_list,
+                            count4=len(preferences_list), 
+                            preferences_list=preferences_list,
+                            count5=len(rating_list),
+                            sum1 = sum(rating_list), 
+                            rating_list=rating_list
+                            )
 
 @app.route('/updateSubscriptions/<uuid:id>/', methods=['GET', 'POST'])
 @login_required
@@ -1778,8 +1816,6 @@ def update_subscriptions(id):
 
         return render_template('updateSubscriptions.html', form=update_subscriptions_form)
 
-
-
 @app.route('/createUnsubscribe', methods=['GET', 'POST'])
 def create_unsubscribe():
     create_unsubscribe_form = CreateUnsubscribeForm(request.form)
@@ -1793,8 +1829,10 @@ def create_unsubscribe():
             print("Error in retrieving Unsubscribe from unsubscribe.db.")
 
         unsubscribe = Unsubscribe(create_unsubscribe_form.sub_id.data,
-                                    create_unsubscribe_form.email.data, 
-                                    create_unsubscribe_form.reason.data)
+                                    create_unsubscribe_form.email.data,
+                                    create_unsubscribe_form.rating.data, 
+                                    create_unsubscribe_form.reason.data,
+                                    create_unsubscribe_form.explaination.data)
 
         unsubscribe_dict[unsubscribe.get_unsubscribe_id()] = unsubscribe
         db['Unsubscribe'] = unsubscribe_dict
@@ -1831,22 +1869,6 @@ def create_unsubscribe():
 
         return redirect(url_for('home_page'))
     return render_template('createUnsubscribe.html', form=create_unsubscribe_form)
-
-@app.route('/deleteUnsubscribe/<uuid:id>', methods=['POST'])
-def delete_unsubscribe(id):
-    unsubscribe_dict = {}
-    db = shelve.open('unsubscribe.db', 'w')
-    unsubscribe_dict = db['Unsubscribe']
-
-    unsubscribe_dict.pop(id)
-
-    db['Unsubscribe'] = unsubscribe_dict
-    db.close()
-
-    flash("A subscription have been removed")
-
-    return redirect(url_for('retrieve_subscriptions'))
-
 
 @app.route('/createNewsletter', methods=['GET', 'POST'])
 @login_required

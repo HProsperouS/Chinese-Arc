@@ -19,7 +19,15 @@
         </div>
         <br>
         <div class="form-group">
-            {{ render_field(form.reason, class="form-control") }}
+          {{ render_field(form.rating, class="form-control") }}
+        </div>
+        <br>
+        <div class="form-group">
+          {{ render_field(form.reason, class="form-control") }}
+        </div>
+        <br>
+        <div class="form-group">
+            {{ render_field(form.explaination, class="form-control") }}
         </div>
         <input type="submit" value="Submit" class="btn" id="unsubscribe"/>
     </form>

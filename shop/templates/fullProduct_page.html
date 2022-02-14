@@ -7,7 +7,7 @@
     {% for productinfo in productinfo_list %}
     <!-- ========================= SECTION CONTENT ========================= -->
     <section class="section-content bg-white padding-y">
-        <div class="container">
+        <div class=" container">
 
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -28,8 +28,8 @@
             </nav>
 
             <!-- ============================ ITEM DETAIL ======================== -->
-            <div class="row">
-                <aside class="col-md-6">
+            <div class="row product-item">
+                <aside class="col-md-5">
                     <div class="card">
                         <article class="gallery-wrap">
                             <div class="img-big-wrap">
@@ -54,7 +54,7 @@
                         </article> <!-- gallery-wrap .end// -->
                     </div> <!-- card.// -->
                 </aside>
-                <main class="col-md-6">
+                <main class="col-md-7">
                     <article class="product-info-aside">
 
                         <h2 class="title mt-3">{{productinfo.get_product_name() }}</h2>
@@ -126,7 +126,8 @@
                             <div>
                                 <div>
                                     <button class="btn btn-outline-danger addToCart" data-product-id="{{productinfo.get_product_id()}}">
-                                        <i class="fa fa-cart-plus"></i> Add to cart </button>
+                                        <i class="fa fa-cart-plus"></i> Add to cart 
+                                    </button>
                                     <a href="#" class="btn btn-light addToWish"><i class="fa fa-heart"></i> Wishlist </a>
                                 </div>
                             </div>

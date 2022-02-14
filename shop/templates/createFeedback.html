@@ -12,8 +12,9 @@
     {% block content %}
    
     {% from "_formHelper.html" import render_field %}
-    <form class = "col-11" style="margin-left: 50px;" method="POST" action="">
-        <h3><strong>Product Feedback</strong></h3>
+  <h3 style="font-size: 45px; text-align: center; padding-top: 15px;"><strong>Product Feedback</strong></h3>
+    <form class = "col-11" style="text-align: justify; margin-left: 70px;" method="POST" action="">
+        
         <div class="form-group">
             {{ render_field(form.product_name, class="form-control", style="list-style-type:none; display:inline;") }}
         </div>

@@ -5,7 +5,7 @@ from msilib import change_sequence
 from re import split, sub, template
 from venv import create
 from flask_wtf import FlaskForm
-from flask import Flask, message_flashed, render_template, request, redirect, url_for, session, flash, g
+from flask import Flask, message_flashed, render_template, request, redirect, url_for, session, flash
 #from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 # from sympy import total_degree
@@ -2145,6 +2145,72 @@ def createCustOrder():
     for key in cust_dict:
         customer = cust_dict.get(key)
         cust_list.append(customer)
+    try:  
+        req = request.get_json()
+        name = req['product_name']
+        price = req['product_price']
+        qty = req['product_qty']
+        delete_add = req['function']
+        print(req)
+        try:
+            product_dict = {}
+            db = shelve.open('ProductInfo.db', 'r')
+            product_dict = db['ProductInfo']
+        except IOError:
+            print('An error occurered trying to read PRODUCTINFO.db')
+        finally:
+            db.close()
+
+        try:
+            cust_cart_dict = {}
+            db = shelve.open('custCart.db', 'w')
+            cust_cart_dict = db['custCart']
+        except:
+            print('Error in opening db')
+
+        for key in product_dict:
+            product = product_dict.get(key)
+            cust_cart_dict[0] = {'cart':1,'name':'cart','qty':0}
+            if product.get_product_name() == name:          
+                if delete_add == 'add':
+                    count=Count()
+                    cust_cart_dict[count.get_count()] = {'name':name,'price':price,'qty': qty}
+                    print('created')
+                elif delete_add == 'plus':
+                    for key in list(cust_cart_dict):                   
+                        if product.get_product_stock() >= cust_cart_dict[key]['qty']:
+                            if cust_cart_dict[key]['name'] == name:
+                                cust_cart_dict[key]['qty'] += 1
+                                cust_cart_dict[key]['price'] += price
+                                print('added')
+                        if product.get_product_stock() < cust_cart_dict[key]['qty']:
+                            cust_cart_dict[key]['qty'] -= 1
+                            
+                            print('Out of stock') 
+                                    
+                elif delete_add == 'minus':
+                    for key in list(cust_cart_dict):
+                        if cust_cart_dict[key]['name'] == name:
+                            cust_cart_dict[key]['qty'] -= 1
+                            cust_cart_dict[key]['price'] -= price
+                            print('minus')
+                            if cust_cart_dict[key]['qty'] == 0:
+                                del cust_cart_dict[key]
+                                print('item is 0 ( deleted )')
+                elif delete_add == 'delete':
+                    for key in list(cust_cart_dict):
+                        if name == cust_cart_dict[key]['name']:
+                            del cust_cart_dict[key]
+                            print('removed')        
+                
+                    
+        print(cust_cart_dict)
+                
+        db['custCart'] = cust_cart_dict
+        db.close()
+    except:
+        print('error in receiving add to cart')
+        
     if "true" not in session:
         flash("Please login as customer first","info")
         return redirect(url_for("login_page"))
@@ -2161,9 +2227,7 @@ def createCustOrder():
         create_custorder_form = CreateCustOrder(request.form)
         if request.method == 'POST' and create_custorder_form.validate():
             
-            
-            
-
+           
             
             
             cust_order_dict = {}
@@ -2260,71 +2324,7 @@ def createCustOrder():
            
             flash("Order has been processed successfully! Thank you for shopping with Chinese Arc","info")
             return redirect(url_for('order_confirm'))
-        try:  
-            req = request.get_json()
-            name = req['product_name']
-            price = req['product_price']
-            qty = req['product_qty']
-            delete_add = req['function']
-            print(req)
-            try:
-                product_dict = {}
-                db = shelve.open('ProductInfo.db', 'r')
-                product_dict = db['ProductInfo']
-            except IOError:
-                print('An error occurered trying to read PRODUCTINFO.db')
-            finally:
-                db.close()
-
-            try:
-                cust_cart_dict = {}
-                db = shelve.open('custCart.db', 'w')
-                cust_cart_dict = db['custCart']
-            except:
-                print('Error in opening db')
-
-            for key in product_dict:
-                product = product_dict.get(key)
-                cust_cart_dict[0] = {'cart':1,'name':'cart','qty':0}
-                if product.get_product_name() == name:          
-                    if delete_add == 'add':
-                        count=Count()
-                        cust_cart_dict[count.get_count()] = {'name':name,'price':price,'qty': qty}
-                        print('created')
-                    elif delete_add == 'plus':
-                        for key in list(cust_cart_dict):                   
-                            if product.get_product_stock() >= cust_cart_dict[key]['qty']:
-                                if cust_cart_dict[key]['name'] == name:
-                                    cust_cart_dict[key]['qty'] += 1
-                                    cust_cart_dict[key]['price'] += cust_cart_dict[key]['price']
-                                    print('added')
-                            if product.get_product_stock() < cust_cart_dict[key]['qty']:
-                                cust_cart_dict[key]['qty'] -= 1
-                                
-                                print('Out of stock') 
-                                        
-                    elif delete_add == 'minus':
-                        for key in list(cust_cart_dict):
-                            if cust_cart_dict[key]['name'] == name:
-                                cust_cart_dict[key]['qty'] -= 1
-                                cust_cart_dict[key]['price'] -= cust_cart_dict[key]['price']
-                                print('minus')
-                                if cust_cart_dict[key]['qty'] == 0:
-                                    del cust_cart_dict[key]
-                                    print('item is 0 ( deleted )')
-                    elif delete_add == 'delete':
-                        for key in list(cust_cart_dict):
-                            if name == cust_cart_dict[key]['name']:
-                                del cust_cart_dict[key]
-                                print('removed')        
-                    
-                        
-            print(cust_cart_dict)
-                    
-            db['custCart'] = cust_cart_dict
-            db.close()
-        except:
-            print('error in receiving add to cart')
+    
     return render_template('Customer_order_form.html', form=create_custorder_form,count=len(cust_list),
                                 cust_list=cust_list)
 

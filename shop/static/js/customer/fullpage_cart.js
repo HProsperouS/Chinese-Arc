@@ -367,7 +367,7 @@ products.forEach(item => {   // 1
 		if (e.target.classList.contains('addToCart')) {
 			const productID = e.target.dataset.productId;
 			const productName = item.querySelector('.productName').innerHTML;
-			var productPrice = item.querySelector('.priceValue').innerHTML;
+			const productPrice = item.querySelector('.priceValue').innerHTML;
 			const productImage = item.querySelector('img').src;
 			let product = {
 				name: productName,
@@ -392,17 +392,7 @@ products.forEach(item => {   // 1
 
 
 
-function product_qty(){
-	for (let i = 0; i < productsInCart.length; i++) {
-		var stock = document.getElementById('stockCount').textContent
-		sessionStorage.setItem('qty',productsInCart[i].count)
-		var product_stock = sessionStorage.getItem('qty')
-		document.getElementById('stockCount').innerHTML = parseFloat(stock) - product_stock
 
-		
-	}
-	
-}
 
 parentElement.addEventListener('click', (e) => { // Last
 	const isPlusButton = e.target.classList.contains('plus');
@@ -414,11 +404,15 @@ parentElement.addEventListener('click', (e) => { // Last
 				if (isPlusButton) {
 					productsInCart[i].count += 1
 
+					productsInCart[i].price = productsInCart[i].basePrice * productsInCart[i].count;
+
 					AddtoCart(productsInCart[i])
 					
 				}
 				else if (isMinusButton) {
 					productsInCart[i].count -= 1
+
+					productsInCart[i].price = productsInCart[i].basePrice * productsInCart[i].count;
 
 					MinusCart(productsInCart[i])
 				}
@@ -454,7 +448,7 @@ function AddtoCart(product){
 				fetch('/createCustOrder',{
 					method:'POST',
 					body: JSON.stringify({
-						function:'plus',product_name : product.name, product_price: product.price, product_qty : product.count
+						function:'plus',product_name : product.name, product_price: product.basePrice, product_qty : product.count
 					}),
 					cache: 'no-cache',
 					headers: new Headers({
@@ -467,7 +461,7 @@ function AddtoCart(product){
 				fetch('/createCustOrder',{
 					method:'POST',
 					body: JSON.stringify({
-						function:'add',product_name : product.name, product_price: product.price, product_qty : product.count
+						function:'add',product_name : product.name, product_price: product.basePrice, product_qty : product.count
 					}),
 					cache: 'no-cache',
 					headers: new Headers({
@@ -484,7 +478,7 @@ function MinusCart(productsInCart){
 	fetch('/createCustOrder',{
 		method:'POST',
 		body: JSON.stringify({
-			function:'minus',product_name : productsInCart.name, product_price: productsInCart.price, product_qty : productsInCart.count
+			function:'minus',product_name : productsInCart.name, product_price: productsInCart.basePrice, product_qty : productsInCart.count
 		}),
 		cache: 'no-cache',
 		headers: new Headers({

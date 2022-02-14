@@ -130,35 +130,33 @@
                             <div class="card shadow mb-4">
                                 <!-- Card Body -->
                                 <div class="card-body">
-                        
-                                    <div class="row text-center">
-                                        <div class="col-sm-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title text-danger">Average Rating</h5>
-                                                    <h4 class="card-text">{{ sum1/count5 }}</h4>
-                                                </div>
+
+                                    <!-- Border Left Utilities -->
+                                    <div>
+                                    
+                                        <div class="card mb-4 py-3 border-left-primary">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-danger">Average Newsletter Rating</h5>
+                                                <p class="card-text">{{ sum1/count5 }}</p>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title text-danger">Common Unsubscription Reason</h5>
-                                                        <h4 class="card-text">Irrelevant Content: {{ count2 }}</h4>
-                                                        <h4 class="card-text">Too many emails: {{ count3 }}</h4>
-                                                        <h4 class="card-text">Not tailored to preferences: {{ count4 }}</h4>
-                                                </div>
+                                    
+                                        <div class="card mb-4 py-3 border-left-secondary">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-danger">Common Unsubscription Reasons</h5>
+                                                <p class="card-text">Irrelevant Content: {{ count2 }}</p>
+                                                <p class="card-text">Too many emails: {{ count3 }}</p>
+                                                <p class="card-text">Not tailored to preferences: {{ count4 }}</p>
                                             </div>
                                         </div>
-                                        <br>
-                                        <div class="col-sm">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title text-danger">Additional Comments</h5>
-                                                    <h4 class="card-text">{{ unsubscribe.get_explaination() }}</h4>
-                                                </div>
+
+                                        <div class="card mb-4 py-3 border-left-success">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-danger">Additional Comments</h5>
+                                                <p class="card-text">{{ unsubscribe.get_explaination() }}</p>
                                             </div>
                                         </div>
+        
                                     </div>
                                 </div>
                             </div>

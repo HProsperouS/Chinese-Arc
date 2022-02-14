@@ -25,7 +25,7 @@
 <body>
 {% block content %}
 
-<h1 class="display-4 " style="margin-left: 50px; padding-top: 20px; font-weight: 500; font-size: 40px;">My Order History</h1>
+<h1 class="display-4 " style="margin-left: 50px; padding-top: 20px; font-weight: 500; font-size: 40px;">My Purchase History</h1>
 <div style="margin-left: 50px; padding-bottom: 30px;">
   {% if count == 0 %}
   <p>There are no orders.</p>
@@ -57,7 +57,7 @@
                     <td>{{ cust_orders['order'].get_custOrder_id() }}</td>
                     <td >{{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</td>
                     <td> 
-                      <button class="badge bg-success"  style="font-size: 15px; border: none;" onclick="Received()"> {{ cust_orders['order'].get_status() }}</button>
+                      <h5 class="badge bg-success"  style="font-size: 15px; border: none;" > {{ cust_orders['order'].get_status() }}</h5>
                       
                     </td>
                     <td>{{ cust_orders['order'].get_create_date() }}</td>
@@ -249,15 +249,10 @@
             
                               <!-- Modal footer -->
                               <div class="modal-footer">
-                                <input type="submit" id="received" value="Order Received" class="btn btn-success" onclick="Received()">
+                                <input type="submit" id="received" value="Order Received" class="btn btn-success" >
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
                               </div>
-                              <script>
-                                function Received() {
-                                  document.getElementById("received").value="Delivered";
-                                  
-                                }
-                              </script>
+                              
                             </div>
                           </div>
                         </div>

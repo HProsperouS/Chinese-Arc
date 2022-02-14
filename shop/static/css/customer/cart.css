@@ -84,7 +84,7 @@ body {
   .openCart {
     font-size: 13px;
     cursor: pointer;
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255); */
     color: rgb(0, 0, 0);
     padding: 4px 15px;
     border-color: solid rgb(0, 0, 0);
@@ -94,7 +94,7 @@ body {
   .openWish {
     font-size: 13px;
     cursor: pointer;
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255); */
     color: rgb(0, 0, 0);
     padding: 4px 15px;
     border-color: solid rgb(0, 0, 0);

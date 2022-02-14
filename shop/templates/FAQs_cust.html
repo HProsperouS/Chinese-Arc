@@ -19,14 +19,14 @@
 
 <div class="accordion" id="accordionPanelsStayOpenExample">
 {% for faq in faq_list %}
-<div class="container align-items-center justify-content-center " id="accordionExample">
+<div class="container align-items-center justify-content-center " >
   <div class="accordion-item">
-    <h2 class="accordion-header" id="{{ faq.get_id() }}">
+    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
       <button  style="background-color: rgba(255, 255, 255, 0.272); color: rgb(126, 39, 39); font-weight: bold;", class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree{{ faq.get_id() }}" aria-expanded="true" aria-controls="collapseThree{{ faq.get_id() }}">
         {{ faq.get_question() }} 
       </button>
     </h2>
-    <div id="collapseThree{{ faq.get_id() }}" class="accordion-collapse show" aria-labelledby="{{ faq.get_id() }}" data-bs-parent="#accordionExample">
+    <div id="collapseThree{{ faq.get_id() }}" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
       <div class="accordion-body" style="background-color: rgba(238, 192, 192, 0.272);">
         {{ faq.get_answer() }}      
       </div>

@@ -367,7 +367,7 @@ products.forEach(item => {   // 1
 		if (e.target.classList.contains('addToCart')) {
 			const productID = e.target.dataset.productId;
 			const productName = item.querySelector('.productName').innerHTML;
-			const productPrice = item.querySelector('.priceValue').innerHTML;
+			var productPrice = item.querySelector('.priceValue').innerHTML;
 			const productImage = item.querySelector('img').src;
 			let product = {
 				name: productName,
@@ -414,17 +414,11 @@ parentElement.addEventListener('click', (e) => { // Last
 				if (isPlusButton) {
 					productsInCart[i].count += 1
 
-					
-					productsInCart[i].price = productsInCart[i].basePrice * productsInCart[i].count
-
 					AddtoCart(productsInCart[i])
 					
 				}
 				else if (isMinusButton) {
 					productsInCart[i].count -= 1
-
-					
-					productsInCart[i].price = productsInCart[i].basePrice * productsInCart[i].count
 
 					MinusCart(productsInCart[i])
 				}

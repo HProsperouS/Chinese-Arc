@@ -33,11 +33,11 @@ from Newsletter import Newsletter
 from Apply_Coupon import Coupon
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
-from EditProduct import UpdateProductForm, CreateProductForm, photos
+# from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
 from ContactReply import ContactReply
 from earnings import Revenue
-from flask_uploads import configure_uploads,UploadSet,IMAGES
+# from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration,  CreateFAQForm
 from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm, CreateContactReplyForm
@@ -73,8 +73,8 @@ app.config['SECRET_KEY'] = 'Chinese ARC'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images/')
 
 app.config['UPLOAD_EXTENSIONS'] = ['.jpeg', '.jpg', '.png', '.gif']
-photos = UploadSet('photos', IMAGES)
-configure_uploads(app, photos)
+# photos = UploadSet('photos', IMAGES)
+# configure_uploads(app, photos)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -2475,6 +2475,8 @@ def refund_order(id):
     delete_order_dict[refund_order_id['order'].get_custOrder_id()] = refund_orders
     
     db['deleteOrder'] = delete_order_dict 
+
+
     
     refund_mail2(id)
     
@@ -2821,6 +2823,23 @@ def cust_order_history():
     for key in cust_order_dict:
         cust_order = cust_order_dict.get(key)
         cust_order_list.append(cust_order)
+
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'w')
+        cust_order_dict = db['CustOrder']
+
+        delivered_order_id = cust_order_dict.get(id)
+    
+        delivered_order_id['order'].set_status('Delivered')
+        print(delivered_order_id['order'].get_status())
+        print(delivered_order_id['order'].set_status('Delivered'))
+
+        db['CustOrder'] = cust_order_dict
+    except:
+        print('An error occured when opening CustOrder.db')
+    finally:
+        db.close()
 
     return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 

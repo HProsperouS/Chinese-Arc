@@ -49,6 +49,7 @@ class CreateNewsletterForm(Form):
     create_by = StringField('Created By', [validators.DataRequired()])
 
 class CreateUnsubscribeForm(Form):
+    sub_id = StringField('Subscription ID', [validators.Length(min=1, max=150), validators.DataRequired()])
     email = StringField('Email Address', [validators.Length(min=1, max=150), validators.DataRequired()])
     reason = TextAreaField('Why do you want to unsubscribe?', [validators.DataRequired()])
 

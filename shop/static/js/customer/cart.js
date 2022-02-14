@@ -140,9 +140,26 @@ products.forEach(item => {   // 1
 				basePrice: parseInt(productPrice),
 			}
 
-			updateProductsInCart(product);
-			updateShoppingCartHTML();
-			AddtoCart(product);
+			if (item.querySelector('#stockCount').innerHTML <= 0){
+				document.getElementById('flash').textContent = 'Out of Stock!'
+				const showFlash = () => {
+					flash.classList.add("flash--visible_2")  
+					}
+				const hideFlash = () => {
+					flash.classList.remove("flash--visible_2")
+					document.getElementById('flash').innerHTML = ''
+					}
+				// const btn = document.getElementById('checkout')
+
+				showFlash();
+				setTimeout(hideFlash, 1000);
+			}
+			else if(item.querySelector('#stockCount').innerHTML > 0){
+				updateProductsInCart(product);
+				updateShoppingCartHTML();
+				AddtoCart(product);
+			}
+			
 			
 			
 		}

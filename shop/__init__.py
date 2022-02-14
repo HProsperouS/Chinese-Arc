@@ -2210,7 +2210,7 @@ def createCustOrder():
         db.close()
     except:
         print('error in receiving add to cart')
-        
+
     if "true" not in session:
         flash("Please login as customer first","info")
         return redirect(url_for("login_page"))
@@ -2226,9 +2226,37 @@ def createCustOrder():
 
         create_custorder_form = CreateCustOrder(request.form)
         if request.method == 'POST' and create_custorder_form.validate():
+
+            try:
+                cust_cart_dict = {}
+                db = shelve.open('custCart.db', 'r')
+                cust_cart_dict = db['custCart']
+            except:
+                print('Error in opening cart db')
+            finally:
+                db.close()
+
             
-           
+            productinfo_dict = {}
+            db = shelve.open('ProductInfo.db', 'w')
+            productinfo_dict = db['ProductInfo']
+
             
+
+            for key in productinfo_dict:
+                product = productinfo_dict.get(key)
+                for key in list(cust_cart_dict):                   
+                    if product.get_product_name() == cust_cart_dict[key]['name']:
+                        stock = cust_cart_dict[key]['qty']
+                        remain = product.get_product_stock() - stock
+                        product.set_product_stock(remain)
+                        print(remain)
+            try:
+                db['ProductInfo'] =  productinfo_dict 
+            except:
+                print('error in opening product.db')
+            finally:
+                db.close()
             
             cust_order_dict = {}
             db = shelve.open('CustOrder.db', 'c')

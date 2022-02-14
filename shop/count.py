@@ -8,5 +8,5 @@ class Count():
         
         return self.__count
     
-    def set_count(self, order_id):
-        self.__count = order_id
+    def set_count(self, count):
+        self.__count = count

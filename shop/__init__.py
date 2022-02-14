@@ -2,6 +2,7 @@ from email.policy import default
 from itertools import count
 from math import prod
 from msilib import change_sequence
+from operator import methodcaller
 from re import split, sub, template
 from venv import create
 from flask_wtf import FlaskForm
@@ -2311,6 +2312,7 @@ def createCustOrder():
            
             print(copy_cart_dict)
 
+            # Refund
             refund_order_dict = {}
             db = shelve.open('refundorder.db', 'c')
             try:
@@ -2321,6 +2323,7 @@ def createCustOrder():
             db['refundOrder'] = refund_order_dict 
             db.close()
 
+            # Delete
             delete_order_dict = {}
             db = shelve.open('deleteorder.db', 'c')
             try:
@@ -2331,7 +2334,18 @@ def createCustOrder():
             db['deleteOrder'] = delete_order_dict 
             db.close()
 
-             
+            # Delivered
+            delivered_order_dict = {}
+            db = shelve.open('deliveredorder.db', 'c')
+            try:
+                delivered_order_dict = db['deliveredOrder']
+            except:
+                print('Error in opening db')
+            
+            db['deliveredOrder'] = delivered_order_dict
+            db.close()
+
+            #  Earnings
             earnings_dict = {}
             db = shelve.open('Earnings.db', 'c')
 
@@ -2339,17 +2353,10 @@ def createCustOrder():
                 earnings_dict = db['Earnings']
             except :
                 print("Error in retrieving cust Orders from CustOrder.db.")
-            
-
-            
-
+        
             db['Earnings'] = earnings_dict
             db.close()
 
-           
-
-
-           
             flash("Order has been processed successfully! Thank you for shopping with Chinese Arc","info")
             return redirect(url_for('order_confirm'))
     
@@ -2446,7 +2453,7 @@ def delete_order(id):
     
     
     deleted_orders = (deleted_order_id['order'].get_custOrder_id(),deleted_order_id['order'].get_status())
-    delete_order_dict[deleted_order_id['order'].get_custOrder_id()] =  deleted_orders
+    delete_order_dict[deleted_order_id['order'].get_custOrder_id()] = deleted_orders
     
     db['deleteOrder'] = delete_order_dict 
 
@@ -2504,12 +2511,8 @@ def refund_order(id):
     
     db['deleteOrder'] = delete_order_dict 
 
-
-    
     refund_mail2(id)
     
-    
-     
     flash('Order has been refunded sucessfully','success')
 
     return render_template('refund.html', count=len(cust_order_list), cust_order_list=cust_order_list)
@@ -2836,7 +2839,7 @@ def contactReply_email(id):
         server.login(sender, password)
         server.send_message(msg)
 
-@app.route('/cust_order_history')
+@app.route('/cust_order_history', methods = ['GET','POST'])
 def cust_order_history():
     try:
         cust_order_dict = {}
@@ -2852,6 +2855,11 @@ def cust_order_history():
         cust_order = cust_order_dict.get(key)
         cust_order_list.append(cust_order)
 
+    return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
+
+@app.route('/deliveredOrder/<uuid:id>',methods = ['POST'])
+def deliverOrder(id):
+
     try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'w')
@@ -2863,13 +2871,30 @@ def cust_order_history():
         print(delivered_order_id['order'].get_status())
         print(delivered_order_id['order'].set_status('Delivered'))
 
+
         db['CustOrder'] = cust_order_dict
     except:
         print('An error occured when opening CustOrder.db')
     finally:
         db.close()
 
-    return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
+    try:
+        delete_order_dict = {}
+        db = shelve.open('deleteorder.db', 'w')
+        delete_order_dict = db['deleteOrder']
+    except:
+        print('error in opening delete db')
+    
+
+    delivered_order = (delivered_order_id['order'].get_custOrder_id(), delivered_order_id['order'].get_status())
+    delete_order_dict[delivered_order_id['order'].get_custOrder_id()] = delivered_order
+
+    db['deleteOrder'] = delete_order_dict 
+
+    flash('Order has been delivered to customer successfully', 'success')
+
+    return redirect('cust_order_history.html')
+   
 
 @app.route('/fullProduct/<int:id>')
 def full_product_page(id):

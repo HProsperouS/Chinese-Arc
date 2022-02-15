@@ -1815,12 +1815,13 @@ def create_unsubscribe():
 
         # removing those who requested to be unsubscribed:
         for i in subscriptions_list:
-            if unsubscribe.get_sub_id() == str(i):
+            if create_unsubscribe_form.sub_id.data == str(i):
                 subscriptions_dict = {}
                 db = shelve.open('subscriptions.db', 'w')
                 subscriptions_dict = db['Subscriptions']
 
-                id = subscriptions.get_subscriptions_id()
+                id = i
+                print(id)
                 subscriptions_dict.pop(id)
 
                 db['Subscriptions'] = subscriptions_dict

@@ -1,10 +1,6 @@
 import imp
 import csv
 from json import load
-# from openpyx import Workbook, load_workbook
-from openpyxl.utils import get_column_letter
-# from openpyxl import Workbook, load_workbook
-# from openpyxl.utils import get_column_letter
 from email.policy import default
 from itertools import count
 from math import prod
@@ -12,33 +8,20 @@ from msilib import change_sequence
 from operator import methodcaller
 from re import split, sub, template
 from venv import create
-from flask_wtf import FlaskForm
-from flask import Flask, message_flashed, render_template, request, redirect, url_for, session, flash
-#from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-# from sympy import total_degree
-# from sqlalchemy import PrimaryKeyConstraint
-# from flask_bcrypt import Bcrypt
-from wtforms.fields.core import DateField,datetime
-import shelve, cust_order,Date
-from Order import Order
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_login import LoginManager, UserMixin, login_required
+import shelve
 from HomeAnnouncement import HomeAnnouncement
 from FAQ import FAQ
 from Feedback import Feedback
 from cust_order import CustOrder
 from Unsubscribe import Unsubscribe
 from count import Count
-# from Forms import ApplyVoucher
 from voucher import Voucher
 from Subscriptions import Subscriptions
 import functools
-from Forms import CreateOrderForm, Registration,  CreateFAQForm, Login
-from Forms import CreateOrderForm, Registration,  CreateFAQForm
-from Order_form import CreateCustOrder,CustOrderUpdate
-# from EditProduct import UpdateProductForm, CreateProductForm, photos
-
+from Order_form import CreateCustOrder
 from Newsletter import Newsletter
-from Apply_Coupon import Coupon
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
 from EditProduct import UpdateProductForm, CreateProductForm, photos
@@ -47,15 +30,9 @@ from ContactReply import ContactReply
 from earnings import Revenue
 from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
-from Forms import Registration,  CreateFAQForm
-from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm, CreateContactReplyForm
+from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm, CreateContactReplyForm,CreateDeliveryFeedbackForm, CreateFeedbackForm,Registration,  CreateFAQForm, Login,CreateOrderForm, Registration, CreateFAQForm, CreateFeedbackForm
 from DeliveryFeedback import DeliveryFeedback
-from Forms import Registration, CreateFAQForm,CreateDeliveryFeedbackForm, CreateFeedbackForm
-from Forms import Registration,  CreateFAQForm
 from Voucher_form import CreateVoucherForm, UpdateVoucherForm
-
-from Forms import CreateOrderForm, Registration, CreateFAQForm, CreateFeedbackForm
-
 from werkzeug.datastructures import CombinedMultiDict
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash

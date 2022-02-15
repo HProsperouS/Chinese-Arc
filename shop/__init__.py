@@ -2659,7 +2659,70 @@ def cust_order_history():
 
     return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 
-   
+@app.route('/deliveredOrder/<uuid:id>', methods = ['POST'])
+def delivered_order(id):
+        delivered_order_dict = {}
+        db = shelve.open('deliveredorder.db', 'c')
+        try:
+            delivered_order_dict = db['deliveredOrder']
+        except:
+            print('Error in opening db')
+        
+        db['deliveredOrder'] = delivered_order_dict
+        db.close()
+
+
+        try:
+            cust_order_dict = {}
+            db = shelve.open('CustOrder.db', 'r')
+            cust_order_dict = db['CustOrder']
+
+            cust_order_list = []
+            order = cust_order_dict.get(id)
+            cust_order_list.append(order)
+
+            db['CustOrder'] = cust_order_dict
+            flash('Order has been deleted sucessfully')
+        except:
+            print('An error occured when opening CustOrder.db')
+        finally:
+            db.close()
+
+        try:
+            cust_order_dict = {}
+            db = shelve.open('CustOrder.db', 'w')
+            cust_order_dict = db['CustOrder']
+
+            delivered_order_id = cust_order_dict.get(id)
+        
+            delivered_order_id['order'].set_status('Delivered')
+            print(delivered_order_id['order'].get_status())
+            print(delivered_order_id['order'].set_status('Delivered'))
+
+            db['CustOrder'] = cust_order_dict
+        except:
+            print('An error occured when opening CustOrder.db')
+        finally:
+            db.close()
+        
+        try:
+            delete_order_dict = {}
+            db = shelve.open('deleteorder.db', 'w')
+            delete_order_dict = db['deleteOrder']
+        except:
+            print('error in opening delete db')
+    
+        
+        delivered_orders = (delivered_order_id['order'].get_custOrder_id(),delivered_order_id['order'].get_status())
+        delete_order_dict[delivered_order_id['order'].get_custOrder_id()] = delivered_orders
+        
+        db['deleteOrder'] = delete_order_dict 
+
+        return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
+
+
+
+
 
 @app.route('/fullpage_cart')
 def fullpage_cart():

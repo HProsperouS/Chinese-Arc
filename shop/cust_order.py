@@ -7,8 +7,6 @@ from uuid import uuid4
 class CustOrder(Customer.Customer,fakeinheritence):
     count_id = 0
 
-
-
     def __init__(self, first_name, last_name, email, holder_name, card_type, card_num, cvv, city, postal_code, unit_number, create_date, modified_date, modified_by,status,total,discount ):
         super().__init__(first_name, last_name,"", "", city, postal_code,"", "", email)
         fakeinheritence.__init__(self,create_date,"", modified_date,modified_by)
@@ -57,7 +55,6 @@ class CustOrder(Customer.Customer,fakeinheritence):
         return self.__discount
 
     def get_status(self):
-        
         return self.__status
 
     

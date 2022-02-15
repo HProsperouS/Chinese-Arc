@@ -219,7 +219,7 @@
 
 
                     <td>
-                      <form>
+                      <form action="{{url_for('delivered_order', id = cust_orders['order'].get_custOrder_id())}}"  method="POST">
                         <!-- Order received button -->
                         <button type="button" class='btn btn-success' style="background-color: orange; border:none; " data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Product Received'>
                           <img src="../static/images/like.png" style="height: 23px; width: 23px;"></img>
@@ -238,7 +238,7 @@
             
                               <!-- Modal body -->
                               <div class="modal-body">
-                                Have you received order <br>{{ cust_orders['order'].get_custOrder_id() }} ?
+                                Have you received Order ID<br>{{ cust_orders['order'].get_custOrder_id() }} ?
                               </div>
             
                               <!-- Modal footer -->
@@ -254,6 +254,9 @@
                     </td>
                 </tr>
                 {% endfor %}
+              </tbody>
+              <tbody>
+              
               </tbody>
         </table>
     </div>

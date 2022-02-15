@@ -29,6 +29,10 @@
                             <button type="button" class="btn btn-success">
                                 0
                             </button>
+                            {% elif count1 == 1 or count1 == 2 %}
+                            <button type="button" class="btn btn-warning">
+                                {{ count1 }}
+                            </button>
                             {% else %}
                             <button type="button" class="btn btn-danger">
                                 {{ count1 }}
@@ -41,6 +45,10 @@
                             {% if count2 == 0 %}
                             <button type="button" class="btn btn-success">
                                 0
+                            </button>
+                            {% elif count2 == 1 or count2 == 2 %}
+                            <button type="button" class="btn btn-warning">
+                                {{ count2 }}
                             </button>
                             {% else %}
                             <button type="button" class="btn btn-danger">
@@ -55,6 +63,10 @@
                             <button type="button" class="btn btn-success">
                                 0
                             </button>
+                            {% elif count3 == 1 or count3 == 2 %}
+                            <button type="button" class="btn btn-warning">
+                                {{ count3 }}
+                            </button>
                             {% else %}
                             <button type="button" class="btn btn-danger">
                                 {{ count3 }}
@@ -67,6 +79,10 @@
                             {% if count4 == 0 %}
                             <button type="button" class="btn btn-success">
                                 0
+                            </button>
+                            {% elif count4 == 1 or count4 == 2 %}
+                            <button type="button" class="btn btn-warning">
+                                {{ count4 }}
                             </button>
                             {% else %}
                             <button type="button" class="btn btn-danger">

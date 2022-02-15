@@ -29,7 +29,8 @@
 <div style="margin-left: 50px; padding-top: 15px;" >
   <nav aria-label="breadcrumb" class="main-breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('home_page') }}">Home</a></li>
+      <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
       <li class="breadcrumb-item"><a href="{{ url_for('update_profile_page')}}">User Profile</a></li>
       <li class="breadcrumb-item active" aria-current="page">Order History</li>
     </ol>
@@ -93,7 +94,7 @@
                       <!-- the modal -->
                       <div class="modal"   id="myModal_2{{cust_orders['order'].get_custOrder_id()}}">
                         <div class="modal-dialog">
-                          <div class="modal-content" style="width: 50rem;">
+                          <div class="modal-content" style="width: 50rem; ">
 
                             <!-- modal header -->
                             <div class="modal-header">
@@ -218,7 +219,7 @@
 
 
                     <td>
-                      <form>
+                      <form action="{{url_for('delivered_order', id = cust_orders['order'].get_custOrder_id())}}"  method="POST">
                         <!-- Order received button -->
                         <button type="button" class='btn btn-success' style="background-color: orange; border:none; " data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Product Received'>
                           <img src="../static/images/like.png" style="height: 23px; width: 23px;"></img>

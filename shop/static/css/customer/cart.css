@@ -89,6 +89,7 @@ body {
     padding: 4px 15px;
     border-color: solid rgb(0, 0, 0);
     border-radius:5px; ;
+    
   }
 
   .openWish {
@@ -152,11 +153,11 @@ body {
 .shoppingCartButton {
     cursor: pointer;
 }
-
+/* 
 .shoppingCartButton:hover,
 .account:hover * {
     color: #0e5e53;
-}
+} */
 
 .producstOnCart {
     -ms-overflow-style: none;
@@ -216,32 +217,6 @@ body {
     display: flex;
 }
 
-/* .producstOnCart img {
-    width: 10px;
-} */
-
-/* .producstOnCart .top {
-    display: flex;
-    background-color: #616161;
-    text-align: center;
-    padding: 10px 0;
-    position: sticky;
-    top: 0;
-    width: 100%;
-} */
-
-/* .top button {
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    margin-left: 10px;
-    color: #c24c37;
-    cursor: pointer;
-} */
-
-/* .top button:hover {
-    color: #e40505;
-} */
 
 .top h3 {
     position: absolute;

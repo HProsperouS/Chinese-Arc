@@ -2637,9 +2637,8 @@ def fullpage_cart():
         order = voucher_dict.get(key)
         voucher_list.append(order)
 
-    
-    
     return render_template('fullpage_cart.html',count=len(voucher_list),voucher_list=voucher_list)
+
 @app.route('/order_confirm')
 def order_confirm():
 
@@ -2883,21 +2882,36 @@ def cust_order_history():
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'r')
         cust_order_dict = db['CustOrder']
+
+        cust_order_list = []
+        order = cust_order_dict.get(id)
+        cust_order_list.append(order)
+
+        db['CustOrder'] = cust_order_dict
+        flash('Order has been deleted sucessfully')
+        
     except:
-        print('Unable to read data')
+        print('An error occured when opening CustOrder.db')
     finally:
         db.close()
+  
+def delivered_order(id):
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'r')
+        cust_order_dict = db['CustOrder']
 
-    cust_order_list = []
-    for key in cust_order_dict:
-        cust_order = cust_order_dict.get(key)
-        cust_order_list.append(cust_order)
+        cust_order_list = []
+        order = cust_order_dict.get(id)
+        cust_order_list.append(order)
 
-    return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
-
-@app.route('/deliveredOrder/<uuid:id>',methods = ['POST'])
-def deliverOrder(id):
-
+        db['CustOrder'] = cust_order_dict
+        flash('Order has been deleted sucessfully')
+        
+    except:
+        print('An error occured when opening CustOrder.db')
+    finally:
+        db.close()
     try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'w')
@@ -2929,10 +2943,10 @@ def deliverOrder(id):
 
     db['deleteOrder'] = delete_order_dict 
 
-    flash('Order has been delivered to customer successfully', 'success')
-
-    return redirect('cust_order_history.html')
+    flash('Order has been delivered successfully', 'success')
+    return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
    
+    
 
 @app.route('/fullProduct/<int:id>')
 def full_product_page(id):

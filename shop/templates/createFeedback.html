@@ -13,7 +13,8 @@
     <div style="margin-left: 70px;  padding-top: 15px;">
         <nav aria-label="breadcrumb" class="main-breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('home_page') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
             <li class="breadcrumb-item"><a href="{{ url_for('update_profile_page')}}">User Profile</a></li>
             <li class="breadcrumb-item"><a href="{{ url_for('cust_order_history')}}">Order History</a></li>
             <li class="breadcrumb-item active" aria-current="page">Product Feedback</li>

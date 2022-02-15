@@ -1913,6 +1913,19 @@ def retrieve_newsletter():
         newsletter = newsletter_dict.get(key)
         newsletter_list.append(newsletter)
 
+    subscriptions_dict = {}
+    db = shelve.open('subscriptions.db', 'r')
+    subscriptions_dict = db['Subscriptions']
+    db.close()
+
+    subscriptions_list = []
+    for key in subscriptions_dict:
+        subscriptions = subscriptions_dict.get(key)
+        email = subscriptions.get_email()
+        subscriptions_list.append(email)
+
+    print(subscriptions_list)
+
     return render_template('retrieveNewsletter.html', count=len(newsletter_list), newsletter_list=newsletter_list)
 
 @app.route('/updateNewsletter/<uuid:id>/', methods=['GET', 'POST'])
@@ -1993,47 +2006,57 @@ def send_newsletter(id):
     create_newsletter_form.message.data = newsletter.get_message()
     create_newsletter_form.newsletter_name.data = newsletter.get_newsletter_name()
 
-    sender_email = "testingusers1236@gmail.com"
-    receiver_email = "lnnathida@gmail.com"
-    password = "dG09#G.@Yg23G"
-
-    message = MIMEMultipart("alternative")
-    message["Subject"] = newsletter.get_newsletter_name()
-    message["From"] = sender_email
-    message["To"] = receiver_email
-
-    # Create the plain-text and HTML version of your message
-    text = """\
-    
-    """
-    html = """\
-    <html>
-    <body>
-    </body>
-    </html>
-    """
-
-    # Turn these into plain/html MIMEText objects
-    part1 = MIMEText(text, "plain")
-    part2 = MIMEText(html, "html")
-    part3 = MIMEText(newsletter.get_message(), "html")
-
-    # Add HTML/plain-text parts to MIMEMultipart message
-    # The email client will try to render the last part first
-    message.attach(part1)
-    message.attach(part2)
-    message.attach(part3)
-
-    # Create secure connection with server and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-        server.login(sender_email, password)
-        server.sendmail(
-            sender_email, receiver_email, message.as_string()
-        )
-
-    db['Newsletter'] = newsletter_dict
+    subscriptions_dict = {}
+    db = shelve.open('subscriptions.db', 'r')
+    subscriptions_dict = db['Subscriptions']
     db.close()
+
+    subscriptions_list = []
+    for key in subscriptions_dict:
+        subscriptions = subscriptions_dict.get(key)
+        email = subscriptions.get_email()
+        subscriptions_list.append(email)
+
+    
+    for i in subscriptions_list:
+        sender_email = "testingusers1236@gmail.com"
+        receiver_email = i
+        password = "dG09#G.@Yg23G"
+
+        message = MIMEMultipart("alternative")
+        message["Subject"] = newsletter.get_newsletter_name()
+        message["From"] = sender_email
+        message["To"] = receiver_email
+
+        # Create the plain-text and HTML version of your message
+        text = """\
+        
+        """
+        html = """\
+        <html>
+        <body>
+        </body>
+        </html>
+        """
+
+        # Turn these into plain/html MIMEText objects
+        part1 = MIMEText(text, "plain")
+        part2 = MIMEText(html, "html")
+        part3 = MIMEText(newsletter.get_message(), "html")
+
+        # Add HTML/plain-text parts to MIMEMultipart message
+        # The email client will try to render the last part first
+        message.attach(part1)
+        message.attach(part2)
+        message.attach(part3)
+
+        # Create secure connection with server and send email
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(
+                sender_email, receiver_email, message.as_string()
+            )
 
     return render_template('sendNewsletter.html')
 

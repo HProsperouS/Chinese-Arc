@@ -76,7 +76,7 @@
     </nav>
     <!-- Section of Featured -->
     <section>
-        <div class="content content-1">
+        <div class="content content-1" style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
         <table class="table ">
           <thead>
             <tr>
@@ -198,7 +198,7 @@
     </section>
     <!-- Section of Cheongsam -->
     <section>
-        <div class="content content-2">
+        <div class="content content-2" style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
         <table class="table ">
           <thead>
             <tr>
@@ -319,7 +319,7 @@
     </section>
     <!-- Section of TangZhuang -->
     <section>
-        <div class="content content-3">
+        <div class="content content-3" style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
         <table class="table ">
           <thead>
             <tr>
@@ -439,7 +439,7 @@
     </section>
     <!-- Section of Cheongsam -->
     <section>
-        <div class="content content-4">
+        <div class="content content-4" style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
         <table class="table ">
           <thead>
             <tr>
@@ -560,29 +560,30 @@
   </section>
   <br>
   <h4 style="color: brown;">Products are low stock</h4>
-  <table class="table table-sm table-danger">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Product Name</th>
-        <th scope="col">Product Category</th>
-        <th scope="col">Product Stock</th>
-        <th scope="col">Product Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for product in product_list6 %}
-      <tr>
-        <td>{{ product.get_product_id() }}</td>
-        <td>{{ product.get_product_name() }}</td>
-        <td>{{ product.get_product_category() }}</td>
-        <td>{{ product.get_product_stock() }}</td>
-        <td><p class="badge badge-danger">{{ product.get_status() }}</p></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
+  <div style="height: 400px;  overflow-y:scroll; overflow-x: hidden;">
+    <table class="table table-sm table-danger">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Product Name</th>
+          <th scope="col">Product Category</th>
+          <th scope="col">Product Stock</th>
+          <th scope="col">Product Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in product_list6 %}
+        <tr>
+          <td>{{ product.get_product_id() }}</td>
+          <td>{{ product.get_product_name() }}</td>
+          <td>{{ product.get_product_category() }}</td>
+          <td>{{ product.get_product_stock() }}</td>
+          <td><p class="badge badge-danger">{{ product.get_status() }}</p></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 <style>
     ::selection{

@@ -1,7 +1,7 @@
 import imp
 import csv
 from json import load
-from openpyx import Workbook, load_workbook
+# from openpyx import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 # from openpyxl import Workbook, load_workbook
 # from openpyxl.utils import get_column_letter
@@ -1513,7 +1513,7 @@ def create_subscriptions():
         password = "dG09#G.@Yg23G"
 
         message = MIMEMultipart("alternative")
-        message["Subject"] = 'Newsletter Subscription' + ' ( ' + str(subscriptions_id) + ' ) '
+        message["Subject"] = 'Newsletter Subscription' + ' ( Subscription ID: ' + str(subscriptions_id) + ' ) '
         message["From"] = sender_email
         message["To"] = receiver_email
 

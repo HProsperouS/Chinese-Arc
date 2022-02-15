@@ -25,6 +25,12 @@
 <body>
   
 {% block content %}
+{% for message in get_flashed_messages(with_categories=True) %}
+<div class="alert alert-{{ message[0] }}">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ message[1] }}
+</div>
+{% endfor %}
   <!-- Breadcrumb -->
 <div style="margin-left: 50px; padding-top: 15px;" >
   <nav aria-label="breadcrumb" class="main-breadcrumb">
@@ -238,7 +244,7 @@
             
                               <!-- Modal body -->
                               <div class="modal-body">
-                                Have you received order <br>{{ cust_orders['order'].get_custOrder_id() }} ?
+                                Have you received Order ID<br>{{ cust_orders['order'].get_custOrder_id() }} ?
                               </div>
             
                               <!-- Modal footer -->
@@ -254,6 +260,9 @@
                     </td>
                 </tr>
                 {% endfor %}
+              </tbody>
+              <tbody>
+              
               </tbody>
         </table>
     </div>

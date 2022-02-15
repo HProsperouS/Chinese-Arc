@@ -280,36 +280,23 @@
                                               </div>
       
                                             </div>
-                                            
-                                          
-                                          
-                                          
                                         </div>
                                       </div>
-                                
-                                      
-                                    
                                   </div>
                                 </div>
                               </div>
                           </div>
-        
                           <!-- Modal footer -->
                           <div class="modal-footer">
-                            
-                            
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                           </div>
         
                         </div>
                       </div>
                     </div>
-                    
                   </div>
                   <div class="col-2">
                     <form action="{{url_for('refund_order', id = cust_orders['order'].get_custOrder_id())}}"  method="POST">
-                
-                  
                       <button type="button"  class='btn btn-warning' data-bs-toggle="modal" data-bs-target="#myModal_1{{cust_orders['order'].get_custOrder_id()}}" title='Refund' >
                         <i class="fas fa-hand-holding-usd" alt='refund'></i>
                       </button>

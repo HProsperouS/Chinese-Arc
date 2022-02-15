@@ -1486,6 +1486,7 @@ def RetrieveDeliveryFeedback():
     return render_template('RetrieveDeliveryFeedback.html', count=len(deliveryfeedback_list),
                         deliveryfeedback_list=deliveryfeedback_list)
 
+#Subscription Function: Create
 @app.route('/createSubscriptions', methods=['GET', 'POST'])
 def create_subscriptions():
     create_subscriptions_form = CreateSubscriptionsForm(request.form)
@@ -1495,6 +1496,7 @@ def create_subscriptions():
 
         try:
             subscriptions_dict = db['Subscriptions']
+
         except:
             print("Error in retrieving Subscriptions from subscriptions.db.")
 
@@ -1719,28 +1721,34 @@ def create_subscriptions():
 
         db.close()
 
-        flash("You have successfully subscribed to TCA Newsletter")
+        flash("You have successfully subscribed to TCA Newsletter", "success")
 
         return redirect(url_for('home_page'))
     return render_template('createSubscriptions.html', form=create_subscriptions_form)
 
+# Subscription function: retrieve subscription + unsubscription
 @app.route('/retrieveSubscriptions')
 @login_required
 def retrieve_subscriptions():
-    subscriptions_dict = {}
-    db = shelve.open('subscriptions.db', 'r')
-    subscriptions_dict = db['Subscriptions']
-    db.close()
+    try:
+        subscriptions_dict = {}
+        db = shelve.open('subscriptions.db', 'r')
+        subscriptions_dict = db['Subscriptions']
+
+        unsubscribe_dict = {}
+        db = shelve.open('unsubscribe.db', 'r')
+        unsubscribe_dict = db['Unsubscribe']
+
+    except IOError:
+        print('An error occurred trying to read DB')
+
+    finally:
+        db.close()
 
     subscriptions_list = []
     for key in subscriptions_dict:
         subscriptions = subscriptions_dict.get(key)
         subscriptions_list.append(subscriptions)
-
-    unsubscribe_dict = {}
-    db = shelve.open('unsubscribe.db', 'r')
-    unsubscribe_dict = db['Unsubscribe']
-    db.close()
 
     unsubscribe_list = []
     for key in unsubscribe_dict:
@@ -1789,39 +1797,7 @@ def retrieve_subscriptions():
                             rating_list=rating_list
                             )
 
-@app.route('/updateSubscriptions/<uuid:id>/', methods=['GET', 'POST'])
-@login_required
-def update_subscriptions(id):
-    update_subscriptions_form = CreateSubscriptionsForm(request.form)
-    if request.method == 'POST' and update_subscriptions_form.validate():
-        subscriptions_dict = {}
-        db = shelve.open('subscriptions.db', 'w')
-        subscriptions_dict = db['Subscriptions']
-
-        subscriptions = subscriptions_dict.get(id)
-        subscriptions.set_first_name(update_subscriptions_form.first_name.data)
-        subscriptions.set_last_name(update_subscriptions_form.last_name.data)
-        subscriptions.set_email(update_subscriptions_form.email.data)
-
-        db['Subscriptions'] = subscriptions_dict
-        db.close()
-
-        flash("Subscription have been updated")
-
-        return redirect(url_for('retrieve_subscriptions'))
-    else:
-        subscriptions_dict = {}
-        db = shelve.open('subscriptions.db', 'r')
-        subscriptions_dict = db['Subscriptions']
-        db.close()
-
-        subscriptions = subscriptions_dict.get(id)
-        update_subscriptions_form.first_name.data = subscriptions.get_first_name()
-        update_subscriptions_form.last_name.data = subscriptions.get_last_name()
-        update_subscriptions_form.email.data = subscriptions.get_email()
-
-        return render_template('updateSubscriptions.html', form=update_subscriptions_form)
-
+# Unsubscribe function: create
 @app.route('/createUnsubscribe', methods=['GET', 'POST'])
 def create_unsubscribe():
     create_unsubscribe_form = CreateUnsubscribeForm(request.form)
@@ -1847,10 +1823,16 @@ def create_unsubscribe():
         create_unsubscribe_form.sub_id.data = unsubscribe.get_sub_id()
 
         #checking with the subscriptions_dict:
-        subscriptions_dict = {}
-        db = shelve.open('subscriptions.db', 'r')
-        subscriptions_dict = db['Subscriptions']
-        db.close()
+        try:
+            subscriptions_dict = {}
+            db = shelve.open('subscriptions.db', 'r')
+            subscriptions_dict = db['Subscriptions']
+
+        except:
+            print('An error occurred trying to read DB')
+
+        finally:
+            db.close()
 
         subscriptions_list = []
         for key in subscriptions_dict:
@@ -1876,6 +1858,7 @@ def create_unsubscribe():
         return redirect(url_for('home_page'))
     return render_template('createUnsubscribe.html', form=create_unsubscribe_form)
 
+# Newsletter function: create
 @app.route('/createNewsletter', methods=['GET', 'POST'])
 @login_required
 def create_newsletter():
@@ -1905,21 +1888,39 @@ def create_newsletter():
         return redirect(url_for('retrieve_newsletter'))
     return render_template('createNewsletter.html', form=create_newsletter_form)
 
+# Newsletter function: retrieve
 @app.route('/retrieveNewsletter')
 @login_required
 def retrieve_newsletter():
-    newsletter_dict = {}
-    db = shelve.open('newsletter.db', 'r')
-    newsletter_dict = db['Newsletter']
-    db.close()
+    try:
+        newsletter_dict = {}
+        db = shelve.open('newsletter.db', 'r')
+        newsletter_dict = db['Newsletter']
+
+        subscriptions_dict = {}
+        db = shelve.open('subscriptions.db', 'r')
+        subscriptions_dict = db['Subscriptions']
+
+    except:
+        print('An error occurred trying to read DB')
+
+    finally:
+        db.close()
 
     newsletter_list = []
     for key in newsletter_dict:
         newsletter = newsletter_dict.get(key)
         newsletter_list.append(newsletter)
 
+    subscriptions_list = []
+    for key in subscriptions_dict:
+        subscriptions = subscriptions_dict.get(key)
+        email = subscriptions.get_email()
+        subscriptions_list.append(email)
+
     return render_template('retrieveNewsletter.html', count=len(newsletter_list), newsletter_list=newsletter_list)
 
+# Newsletter function: update
 @app.route('/updateNewsletter/<uuid:id>/', methods=['GET', 'POST'])
 @login_required
 def update_newslette(id):
@@ -1969,22 +1970,28 @@ def update_newslette(id):
         
         return render_template('updateNewsletter.html', form=update_newsletter_form)
 
+# Newsletter function: delete
 @app.route('/deleteNewsletter/<uuid:id>', methods=['POST'])
 @login_required
 def delete_newsletter(id):
-    newsletter_dict = {}
-    db = shelve.open('newsletter.db', 'w')
-    newsletter_dict = db['Newsletter']
+    try:
+        newsletter_dict = {}
+        db = shelve.open('newsletter.db', 'w')
+        newsletter_dict = db['Newsletter']
+        newsletter_dict.pop(id)
+        db['Newsletter'] = newsletter_dict
 
-    newsletter_dict.pop(id)
+    except:
+        print('An error occurred trying to read DB')
 
-    db['Newsletter'] = newsletter_dict
-    db.close()
+    finally:
+        db.close()
 
     flash("Newsletter have been deleted")
 
     return redirect(url_for('retrieve_newsletter'))
 
+# Newsletter function: send newsletter to subscribers
 @app.route('/sendNewsletter/<uuid:id>')
 @login_required
 def send_newsletter(id):
@@ -1998,60 +2005,71 @@ def send_newsletter(id):
     create_newsletter_form.message.data = newsletter.get_message()
     create_newsletter_form.newsletter_name.data = newsletter.get_newsletter_name()
 
-    sender_email = "testingusers1236@gmail.com"
-    receiver_email = "lnnathida@gmail.com"
-    password = "dG09#G.@Yg23G"
-
-    message = MIMEMultipart("alternative")
-    message["Subject"] = newsletter.get_newsletter_name()
-    message["From"] = sender_email
-    message["To"] = receiver_email
-
-    # Create the plain-text and HTML version of your message
-    text = """\
-    
-    """
-    html = """\
-    <html>
-    <body>
-    </body>
-    </html>
-    """
-
-    # Turn these into plain/html MIMEText objects
-    part1 = MIMEText(text, "plain")
-    part2 = MIMEText(html, "html")
-    part3 = MIMEText(newsletter.get_message(), "html")
-
-    # Add HTML/plain-text parts to MIMEMultipart message
-    # The email client will try to render the last part first
-    message.attach(part1)
-    message.attach(part2)
-    message.attach(part3)
-
-    # Create secure connection with server and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-        server.login(sender_email, password)
-        server.sendmail(
-            sender_email, receiver_email, message.as_string()
-        )
-
-    db['Newsletter'] = newsletter_dict
+    subscriptions_dict = {}
+    db = shelve.open('subscriptions.db', 'r')
+    subscriptions_dict = db['Subscriptions']
     db.close()
+
+    subscriptions_list = []
+    for key in subscriptions_dict:
+        subscriptions = subscriptions_dict.get(key)
+        email = subscriptions.get_email()
+        subscriptions_list.append(email)
+
+    
+    for i in subscriptions_list:
+        sender_email = "testingusers1236@gmail.com"
+        receiver_email = i
+        password = "dG09#G.@Yg23G"
+
+        message = MIMEMultipart("alternative")
+        message["Subject"] = newsletter.get_newsletter_name()
+        message["From"] = sender_email
+        message["To"] = receiver_email
+
+        # Create the plain-text and HTML version of your message
+        text = """\
+        
+        """
+        html = """\
+        <html>
+        <body>
+        </body>
+        </html>
+        """
+
+        # Turn these into plain/html MIMEText objects
+        part1 = MIMEText(text, "plain")
+        part2 = MIMEText(html, "html")
+        part3 = MIMEText(newsletter.get_message(), "html")
+
+        # Add HTML/plain-text parts to MIMEMultipart message
+        # The email client will try to render the last part first
+        message.attach(part1)
+        message.attach(part2)
+        message.attach(part3)
+
+        # Create secure connection with server and send email
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(
+                sender_email, receiver_email, message.as_string()
+            )
 
     return render_template('sendNewsletter.html')
 
-#brings to customer account page
-@app.route('/base_cust')
-def base_cust():
+# #brings to customer account page
+# @app.route('/base_cust')
+# def base_cust():
 
-    return render_template('base_cust.html')
+#     return render_template('base_cust.html')
 
-@app.route('/dashboard_cust')
-def dashboard_cust():
-    return render_template('dashboard_cust.html')
+# @app.route('/dashboard_cust')
+# def dashboard_cust():
+#     return render_template('dashboard_cust.html')
 
+# Product Feedback function: create
 @app.route('/CreateFeedback',methods=['GET','POST'])
 def CreateFeedback():
     CreateFeedback_Form = CreateFeedbackForm(request.form)
@@ -2075,10 +2093,13 @@ def CreateFeedback():
                                             )
         feedback_dict[feedback.get_feedback_id()] = feedback
         db['Feedback'] = feedback_dict
-        flash('Feedback has sent sucessfully')
-        return redirect(url_for('CreateFeedback'))
+
+        flash('Your feedback has been sent sucessfully', 'success')
+
+        return redirect(url_for('cust_order_history'))
     return render_template('CreateFeedback.html', form=CreateFeedback_Form)
 
+# Product Feedback function: retrieve
 @app.route('/RetrieveFeedback',methods=['GET','POST'])
 def RetrieveFeedback():
     try:
@@ -2095,9 +2116,9 @@ def RetrieveFeedback():
         feedback = feedback_dict.get(key)
         feedback_list.append(feedback)
 
-    return render_template('RetrieveFeedback.html', count=len(feedback_list),
-                        feedback_list=feedback_list)
+    return render_template('RetrieveFeedback.html', count=len(feedback_list),feedback_list=feedback_list)
 
+# Product Feedback function: update
 @app.route('/updateFeedback/<uuid:id>/', methods=['GET', 'POST'])
 def UpdateFeedback(id):
     UpdateFeedback_Form = CreateFeedbackForm(request.form)
@@ -2154,6 +2175,7 @@ def UpdateFeedback(id):
         
         return render_template('updateFeedback.html', form=UpdateFeedback_Form)
 
+# Product Feedback function: delete
 @app.route('/deleteFeedback/<uuid:id>', methods=['POST'])
 def DeleteFeedback(id):
     try:
@@ -2514,8 +2536,6 @@ def delete_order(id):
     except:
         print('error in opening delete db')
     
-    
-    
     deleted_orders = (deleted_order_id['order'].get_custOrder_id(),deleted_order_id['order'].get_status())
     delete_order_dict[deleted_order_id['order'].get_custOrder_id()] = deleted_orders
     
@@ -2646,7 +2666,84 @@ def refund_mail2(id):
         server.login(sender, password)
         server.send_message(msg)
 
+@app.route('/cust_order_history', methods = ['GET','POST'])
+def cust_order_history():
+    try:
+        cust_order_dict = {}
+        db = shelve.open('CustOrder.db', 'r')
+        cust_order_dict = db['CustOrder']
+    except:
+        print('Unable to read data')
+    finally:
+        db.close()
 
+    cust_order_list = []
+    for key in cust_order_dict:
+        cust_order = cust_order_dict.get(key)
+        cust_order_list.append(cust_order)
+
+    return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
+
+@app.route('/deliveredOrder/<uuid:id>', methods = ['POST'])
+def delivered_order(id):
+        delivered_order_dict = {}
+        db = shelve.open('deliveredorder.db', 'c')
+        try:
+            delivered_order_dict = db['deliveredOrder']
+        except:
+            print('Error in opening db')
+        
+        db['deliveredOrder'] = delivered_order_dict
+        db.close()
+
+
+        try:
+            cust_order_dict = {}
+            db = shelve.open('CustOrder.db', 'r')
+            cust_order_dict = db['CustOrder']
+
+            cust_order_list = []
+            order = cust_order_dict.get(id)
+            cust_order_list.append(order)
+
+            db['CustOrder'] = cust_order_dict
+            flash('Order has been deleted sucessfully')
+        except:
+            print('An error occured when opening CustOrder.db')
+        finally:
+            db.close()
+
+        try:
+            cust_order_dict = {}
+            db = shelve.open('CustOrder.db', 'w')
+            cust_order_dict = db['CustOrder']
+
+            delivered_order_id = cust_order_dict.get(id)
+        
+            delivered_order_id['order'].set_status('Delivered')
+            print(delivered_order_id['order'].get_status())
+            print(delivered_order_id['order'].set_status('Delivered'))
+
+            db['CustOrder'] = cust_order_dict
+        except:
+            print('An error occured when opening CustOrder.db')
+        finally:
+            db.close()
+        
+        try:
+            delete_order_dict = {}
+            db = shelve.open('deleteorder.db', 'w')
+            delete_order_dict = db['deleteOrder']
+        except:
+            print('error in opening delete db')
+    
+        
+        delivered_orders = (delivered_order_id['order'].get_custOrder_id(),delivered_order_id['order'].get_status())
+        delete_order_dict[delivered_order_id['order'].get_custOrder_id()] = delivered_orders
+        
+        db['deleteOrder'] = delete_order_dict 
+
+        return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 
 @app.route('/fullpage_cart')
 def fullpage_cart():
@@ -2715,6 +2812,7 @@ def fullpage_wish():
    
     return render_template('fullpage_wish.html')
 
+# Contact Us(Enquiry): create
 @app.route('/createContact', methods=['GET', 'POST'])
 def create_contact():
     create_contact_form = CreateContactForm(request.form)
@@ -2738,15 +2836,24 @@ def create_contact():
 
         db.close()
 
+        flash("Your enquiry has been sent succesfully. Please look out for a email from us soon.", "success")
+
         return redirect(url_for('home_page'))
     return render_template('createContact.html', form=create_contact_form)
 
+# Contact Us(Enquiry): retrieve
 @app.route('/retrieveContact')
 def retrieve_contact():
-    contact_dict = {}
-    db = shelve.open('contact.db', 'r')
-    contact_dict = db['Contact']
-    db.close()
+    try:
+        contact_dict = {}
+        db = shelve.open('contact.db', 'r')
+        contact_dict = db['Contact']
+
+    except(IOError):
+        print('Unable to read data')
+
+    finally:
+        db.close()
 
     contact_list = []
     for key in contact_dict:
@@ -2790,19 +2897,7 @@ def retrieve_contact():
                             count4=len(others_list)
                             )
 
-@app.route('/deleteContact/<uuid:id>', methods=['POST'])
-def delete_contact(id):
-    contact_dict = {}
-    db = shelve.open('contact.db', 'w')
-    contact_dict = db['Contact']
-
-    contact_dict.pop(id)
-
-    db['Contact'] = contact_dict
-    db.close()
-
-    return redirect(url_for('retrieve_contact'))
-
+# Contact Us(Enquiry): reply to customer's enquiry + delete enquiry
 @app.route('/createContactReply/<uuid:id>/', methods=['GET', 'POST'])
 def create_contactReply(id):
     create_contactReply_form = CreateContactReplyForm(request.form)
@@ -2826,154 +2921,83 @@ def create_contactReply(id):
         contactReply_email(id)
 
         # deleting the query after reply
-        contact_dict = {}
-        db = shelve.open('contact.db', 'w')
-        contact_dict = db['Contact']
+        try:
+            contact_dict = {}
+            db = shelve.open('contact.db', 'w')
+            contact_dict = db['Contact']
 
-        contact_dict.pop(id)
+            contact_dict.pop(id)
 
-        db['Contact'] = contact_dict
-        db.close()
+            db['Contact'] = contact_dict
+
+        except(IOError):
+            print('Unable to read data')
+
+        finally:
+            db.close()
 
         return redirect(url_for('retrieve_contact'))
     return render_template('createContactReply.html', form=create_contactReply_form)
 
+# Contact Us(Enquiry): email
 def contactReply_email(id):
     try:
-        create_contact_form = CreateContactForm(request.form)
         contact_dict = {}
         db = shelve.open('contact.db', 'r')
         contact_dict = db['Contact']
 
-        create_contactReply_form = CreateContactReplyForm(request.form)
         contactReply_dict = {}
         db = shelve.open('contactReply.db', 'r')
         contactReply_dict = db['ContactReply']
 
     except:
-        print('error in opening db')
+        print('An error occuured while opeing DB')
+
     finally:
         db.close()
 
     contact = contact_dict.get(id)
     contactReply = contactReply_dict.get(id)
     if contact == contactReply:
-        create_contact_form.email.data = contact.get_email()
-        create_contact_form.subject.data = contact.get_subject()
-        create_contact_form.first_name.data = contact.get_first_name()
-        create_contact_form.last_name.data = contact.get_last_name()
-        # create_contactReply_form.reply.data = contactReply.get_reply()
+        contact.email.data = contact.get_email()
+        contact.subject.data = contact.get_subject()
+        contact.first_name.data = contact.get_first_name()
+        contact.last_name.data = contact.get_last_name()
+
+    for key in contactReply_dict:
+        contactReply = contactReply_dict.get(key)
+        reply = contactReply.get_reply()
 
     sender = password = ""
     port = 465
     sender = 'testingusers1236@gmail.com'
     password = 'dG09#G.@Yg23G'
 
-    recieve = contact.get_email()
+    reciever = contact.get_email()
     first_name = contact.get_first_name()
     last_name = contact.get_last_name()
-    # reply = contactReply.get_reply(id)
 
-    msg = EmailMessage()
-    msg['Subject'] = 'The Chinese Arc Query Reply' + ' ( ' + first_name + last_name + ' ) '
-    msg['From'] = sender
-    msg['To'] = recieve
+    message = MIMEMultipart("alternative")
+    message["Subject"] = 'The Chinese Arc Query Reply: ' + contact.get_subject()
+    message["From"] = sender
+    message["To"] = reciever
 
-    msg.add_alternative("""\
-    <!DOCTYPE html>
-    <html lang="en">
+    # Turn these into plain/html MIMEText objects
+    part1 = MIMEText(reply, "html")
 
-    <body>
-        <h3 style='color:black;'> Query Reply </h3>
-        <h4>
-            Hellooo
-        </h4>
+    # Add HTML/plain-text parts to MIMEMultipart message
+    # The email client will try to render the last part first
+    message.attach(part1)
 
-    <h3> Natthida </h3>
-    </body>
-       
-
-    </html>
-    """, subtype='html')
-
+    # Create secure connection with server and send email
     context = ssl.create_default_context()
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         server.login(sender, password)
-        server.send_message(msg)
+        server.sendmail(
+            sender, reciever, message.as_string()
+        )
 
-@app.route('/cust_order_history', methods = ['GET','POST'])
-def cust_order_history():
-    try:
-        cust_order_dict = {}
-        db = shelve.open('CustOrder.db', 'r')
-        cust_order_dict = db['CustOrder']
-
-        cust_order_list = []
-        order = cust_order_dict.get(id)
-        cust_order_list.append(order)
-
-        db['CustOrder'] = cust_order_dict
-        flash('Order has been deleted sucessfully')
-        
-    except:
-        print('An error occured when opening CustOrder.db')
-    finally:
-        db.close()
-  
-def delivered_order(id):
-    try:
-        cust_order_dict = {}
-        db = shelve.open('CustOrder.db', 'r')
-        cust_order_dict = db['CustOrder']
-
-        cust_order_list = []
-        order = cust_order_dict.get(id)
-        cust_order_list.append(order)
-
-        db['CustOrder'] = cust_order_dict
-        flash('Order has been deleted sucessfully')
-        
-    except:
-        print('An error occured when opening CustOrder.db')
-    finally:
-        db.close()
-    try:
-        cust_order_dict = {}
-        db = shelve.open('CustOrder.db', 'w')
-        cust_order_dict = db['CustOrder']
-
-        delivered_order_id = cust_order_dict.get(id)
-    
-        delivered_order_id['order'].set_status('Delivered')
-        print(delivered_order_id['order'].get_status())
-        print(delivered_order_id['order'].set_status('Delivered'))
-
-
-        db['CustOrder'] = cust_order_dict
-    except:
-        print('An error occured when opening CustOrder.db')
-    finally:
-        db.close()
-
-    try:
-        delete_order_dict = {}
-        db = shelve.open('deleteorder.db', 'w')
-        delete_order_dict = db['deleteOrder']
-    except:
-        print('error in opening delete db')
-    
-
-    delivered_order = (delivered_order_id['order'].get_custOrder_id(), delivered_order_id['order'].get_status())
-    delete_order_dict[delivered_order_id['order'].get_custOrder_id()] = delivered_order
-
-    db['deleteOrder'] = delete_order_dict 
-
-    flash('Order has been delivered successfully', 'success')
-    return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
-   
-    
-
+# Full product page
 @app.route('/fullProduct/<int:id>')
 def full_product_page(id):
     try:

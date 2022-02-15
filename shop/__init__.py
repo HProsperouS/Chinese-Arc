@@ -2943,8 +2943,7 @@ def delivered_order(id):
 
     db['deleteOrder'] = delete_order_dict 
 
-
-
+    flash('Order has been delivered successfully', 'success')
     return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
    
     

@@ -953,10 +953,6 @@ def delete_voucher(id):
 
 
 
-@app.route('/settings')
-@login_required
-def settings():
-    return render_template('settings.html')
 
 
 @app.route('/catalog')

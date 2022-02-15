@@ -1,3 +1,8 @@
+import imp
+from json import load
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
+
 from email.policy import default
 from itertools import count
 from math import prod
@@ -751,6 +756,31 @@ def forgot_password_page():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+
+    wb = load_workbook('shop/static/data/testing.xlsx')
+    ws = wb.active
+    total_revenue = 0
+    for row in range(2,30):
+        chr = get_column_letter(4)
+        item_total = ws[chr + str(row)].value
+        
+        total_revenue += int(item_total)
+    
+    try:
+        earnings_dict = {}
+        db = shelve.open('Earnings.db', 'w')
+        earnings_dict = db['Earnings']
+    except:
+        print('earnings cant be opened')
+
+    
+
+    db['Earnings'] = earnings_dict
+    db.close()
+
+
+  
+    db['Vouchers'] = voucher_dict
     try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'r')
@@ -833,7 +863,9 @@ def dashboard():
                             admins_list=admins_list,
                             delete_order_list=delete_order_list,
                             product_list=product_list,
-                            revenue_list=revenue_list
+                            revenue_list=revenue_list,
+                            earnings_dict=earnings_dict
+
                             )
 
 
@@ -2215,6 +2247,7 @@ def createCustOrder():
         flash("Please login as customer first","info")
         return redirect(url_for("login_page"))
     else:
+        earnings_dict = {}
         cust_cart_dict = {}
         db = shelve.open('custCart.db', 'c')
         try:
@@ -2241,7 +2274,8 @@ def createCustOrder():
             db = shelve.open('ProductInfo.db', 'w')
             productinfo_dict = db['ProductInfo']
 
-            
+            wb = load_workbook('shop/static/data/testing.xlsx')
+            ws = wb.active
 
             for key in productinfo_dict:
                 product = productinfo_dict.get(key)
@@ -2250,13 +2284,30 @@ def createCustOrder():
                         stock = cust_cart_dict[key]['qty']
                         remain = product.get_product_stock() - stock
                         product.set_product_stock(remain)
-                        print(remain)
+                        for row in range(1,20):
+                            for col in range(1,4):
+                                chr = get_column_letter(col)
+                                if ws[chr + str(row)].value == cust_cart_dict[key]['name']:
+                                    ws[get_column_letter(col+1) + str(row )] = ws[get_column_letter(col+1) + str(row )].value + int(cust_cart_dict[key]['qty'])
+                                    ws[get_column_letter(col+3) + str(row)] = ws[get_column_letter(col+1) + str(row )].value * ws[get_column_letter(col+2) + str(row)].value
+            wb.save('shop/static/data/testing.xlsx')
             try:
                 db['ProductInfo'] =  productinfo_dict 
             except:
                 print('error in opening product.db')
             finally:
                 db.close()
+           
+        
+            earnings_dict = {}
+            db = shelve.open('Earnings.db', 'c')
+
+            try:
+                earnings_dict = db['Earnings']
+            except:
+                print("Error in retrieving Users from order.db.")
+            
+            
             
             cust_order_dict = {}
             db = shelve.open('CustOrder.db', 'c')
@@ -2332,20 +2383,7 @@ def createCustOrder():
             db.close()
 
              
-            earnings_dict = {}
-            db = shelve.open('Earnings.db', 'c')
-
-            try:
-                earnings_dict = db['Earnings']
-            except :
-                print("Error in retrieving cust Orders from CustOrder.db.")
             
-
-            
-
-            db['Earnings'] = earnings_dict
-            db.close()
-
            
 
 
@@ -2490,6 +2528,8 @@ def refund_order(id):
         print('An error occured when opening CustOrder.db')
     finally:
         db.close()
+
+    
     
     try:
         delete_order_dict = {}

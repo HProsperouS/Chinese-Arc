@@ -10,21 +10,10 @@
 
 <body>
     {% block content %}
-    <div style="margin-left: 70px;  padding-top: 15px;">
-        <nav aria-label="breadcrumb" class="main-breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url_for('home_page') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
-            <li class="breadcrumb-item"><a href="{{ url_for('update_profile_page')}}">User Profile</a></li>
-            <li class="breadcrumb-item"><a href="{{ url_for('cust_order_history')}}">Order History</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Product Feedback</li>
-          </ol>
-        </nav>
-      </div>
+   
     {% from "_formHelper.html" import render_field %}
-  <h3 style="font-size: 45px; text-align: center; padding-top: 15px;"><strong>Product Feedback</strong></h3>
-    <form class = "col-11" style="text-align: justify; margin-left: 70px;" method="POST" action="">
-        
+    <form class = "col-11" style="margin-left: 50px;" method="POST" action="">
+        <h3><strong>Product Feedback</strong></h3>
         <div class="form-group">
             {{ render_field(form.product_name, class="form-control", style="list-style-type:none; display:inline;") }}
         </div>

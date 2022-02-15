@@ -23,20 +23,8 @@
 <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}">
 <body>
-  
 {% block content %}
-  <!-- Breadcrumb -->
-<div style="margin-left: 50px; padding-top: 15px;" >
-  <nav aria-label="breadcrumb" class="main-breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ url_for('home_page') }}">Home</a></li>
-      <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
-      <li class="breadcrumb-item"><a href="{{ url_for('update_profile_page')}}">User Profile</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Order History</li>
-    </ol>
-  </nav>
-</div>
-  <!-- /Breadcrumb -->
+
 <h1 class="display-4 " style="margin-left: 50px; padding-top: 20px; font-weight: 500; font-size: 40px;">My Order History</h1>
 <div style="margin-left: 50px; padding-bottom: 30px;">
   {% if count == 0 %}
@@ -47,7 +35,6 @@
   <p>There are {{ count }} orders.</p>
   {% endif %}
 </div>
-      
 
 <section style="margin-left: 50px;">
     <div class="table" style="height:650px;overflow:hidden;overflow-y:scroll;">
@@ -70,7 +57,7 @@
                     <td>{{ cust_orders['order'].get_custOrder_id() }}</td>
                     <td >{{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</td>
                     <td> 
-                      <h5 class="badge bg-success"  style="font-size: 15px; border: none;" > {{ cust_orders['order'].get_status() }}</h5>
+                      <button class="badge bg-success"  style="font-size: 15px; border: none;" onclick="Received()"> {{ cust_orders['order'].get_status() }}</button>
                       
                     </td>
                     <td>{{ cust_orders['order'].get_create_date() }}</td>
@@ -92,118 +79,137 @@
                       </button> 
 
                       <!-- the modal -->
-                      <div class="modal"   id="myModal_2{{cust_orders['order'].get_custOrder_id()}}">
+                      <div class="modal" id="myModal_2{{cust_orders['order'].get_custOrder_id()}}">
                         <div class="modal-dialog">
-                          <div class="modal-content" style="width: 50rem; ">
+                          <div class="modal-content">
 
                             <!-- modal header -->
                             <div class="modal-header">
-                              <h4 class="modal-title" style="font-size: 35px; font-weight: 400;">Order Information 
-                                <div > <h6> Order ID: {{ cust_orders['order'].get_custOrder_id() }}</h6></div>
-                             </h4>
+                              <h4 class="modal-title">Order Information</h4>
                               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
                             <!-- modal body -->
-                            <div class="modal-body" >
-                              <div class="card-deck" style="width: 50rem;">
-                               
-                                <div class="card" >
-                                 
-                                  <div class="card-body">
-                                    <h5 class="card-title">Customer Details</h5>
-                                    
-                               
-                                    <p class="card-text">Name: {{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</p>
-                                    <p class="card-text">Email: {{ cust_orders['order'].get_email() }}</p>
-                                    <h5 class="card-title" style="color: black;">Card Info</h5>
-                                    <p class="card-text">Card Name: {{ cust_orders['order'].get_holder_name() }}</p>
-                                    <p class="card-text">Card Type: {{ cust_orders['order'].get_card_type() }}</p>
-                                    <p class="card-text">Card Num: {{ cust_orders['order'].get_card_num() }}</p>
-                                    <p class="card-text">CVV: {{ cust_orders['order'].get_cvv() }}</p>
-                                    <h5 class="card-title" style="color: black;">Address</h5>
-                                    <p class="card-text">Address: {{ cust_orders['order'].get_postal_code() }} #{{ cust_orders['order'].get_unit_number() }}</p>
-                                    <h5 class="card-title" style="color: black;">Status</h5>
-                                    <p class="card-text">Status: {{ cust_orders['order'].get_status() }}</p>
-                                    <p class="card-text">Created On: {{ cust_orders['order'].get_create_date() }}</p>                                   
-                                    <br>
+                            <div class="modal-body">
+                              <div class="card-body">
+                                <div class="accordian" id="accordianExample">
+                                  <div class="accordian-item">
+                                    <h2 class="accordian-header" id="headingOne">
+                                      <button  style="background-color: #e4f0ff;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Customer Information
+                                      </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                      <div class="accordian-body">
+                                        <h4 class="card-title" style="color: black;">Personal Information</h4>
+                                        <p class="card-text">Name: {{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</p>
+                                        <p class="card-text">Email: {{ cust_orders['order'].get_email() }}</p>
+                                        <h5 class="card-title" style="color: black;">Card Info</h5>
+                                        <p class="card-text">Card Name: {{ cust_orders['order'].get_holder_name() }}</p>
+                                        <p class="card-text">Card Type: {{ cust_orders['order'].get_card_type() }}</p>
+                                        <p class="card-text">Card Num: {{ cust_orders['order'].get_card_num() }}</p>
+                                        <p class="card-text">CVV: {{ cust_orders['order'].get_cvv() }}</p>
+                                        <h5 class="card-title" style="color: black;">Address</h5>
+                                        <p class="card-text">Address: {{ cust_orders['order'].get_postal_code() }} #{{ cust_orders['order'].get_unit_number() }}</p>
+                                        <h5 class="card-title" style="color: black;">Status</h5>
+                                        <p class="card-text">Status: {{ cust_orders['order'].get_status() }}</p>
+                                        <p class="card-text">Created On: {{ cust_orders['order'].get_create_date() }}</p>                                   
+                                        <br>
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>
+                                  
+                                  <div class="accordian-item">
+                                    <h2 class="accordian-header" id="headingThree">
+                                      <button  style="background-color:#e4f0ff;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                        Order Summary
+                                      </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                      <div class="accordian-body">
+                                        <div class="card">
+                                          <div class="card-body">
+                                            Order ID: {{ cust_orders['order'].get_custOrder_id() }}
+                                          </div>
+                                        </div>
+                                        <br>
+                                        <div class="card">
+                                          <div class="card-body">
+                                            <Strong>Items Ordered</Strong>
+                                            <hr>
 
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h5 class="card-title">Purchanse Details</h5>
-                       
-                                    <Strong>Items Ordered</Strong>
-                                    <hr>
+                                            
+                                            {% if cust_orders['cart'][1] %} 
+                                            Name: {{cust_orders['cart'][1]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][1]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][1]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][2] %}
+                                            Name: {{cust_orders['cart'][2]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][2]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][2]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][3] %}
+                                            Name: {{cust_orders['cart'][3]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][3]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][3]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][4] %}
+                                            Name: {{cust_orders['cart'][4]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][4]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][4]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][5] %}
+                                            Name: {{cust_orders['cart'][5]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][5]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][5]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][6] %}
+                                            Name: {{cust_orders['cart'][6]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][6]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][6]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% elif cust_orders['cart'][7] %}
+                                            Name: {{cust_orders['cart'][7]['name']}}
+                                            <br>
+                                            Total: ${{cust_orders['cart'][7]['price']}}
+                                            <br>
+                                            Quantity: {{cust_orders['cart'][7]['qty']}}
+                                            <br>
+                                            <hr>
+                                            {% endif %}
+                                            <div class="card">
+                                              <div class="card-body">
+                                                <span class="card-text">Grand Total: </span>
+                                                <span class="card-text" style="float:right;">$<span id="grand-total">{{ cust_orders['order'].get_total() }}</span>0</span>
+                                              </div>
+                                            </div>
 
-                                    
-                                    {% if cust_orders['cart'][1] %} 
-                                    Name: {{cust_orders['cart'][1]['name']}}
-                                    <br>
-                                    Total: ${{cust_orders['cart'][1]['price']}}
-                                    <br>
-                                    Quantity: {{cust_orders['cart'][1]['qty']}}
-                                    <br>
-                                    <hr>
-                                    {% elif cust_orders['cart'][2] %}
-                                    Name: {{cust_orders['cart'][2]['name']}}
-                                    <br>
-                                    Total: ${{cust_orders['cart'][2]['price']}}
-                                    <br>
-                                    Quantity: {{cust_orders['cart'][2]['qty']}}
-                                    <br>
-                                    <hr>
-                                    {% elif cust_orders['cart'][3] %}
-                                    Name: {{cust_orders['cart'][3]['name']}}
-                                    <br>
-                                    Total: ${{cust_orders['cart'][3]['price']}}
-                                    <br>
-                                    Quantity: {{cust_orders['cart'][3]['qty']}}
-                                    <br>
-                                    <hr>
-                                    {% elif cust_orders['cart'][4] %}
-                                    Name: {{cust_orders['cart'][4]['name']}}
-                                    <br>
-                                    Total: ${{cust_orders['cart'][4]['price']}}
-                                    <br>
-                                    Quantity: {{cust_orders['cart'][4]['qty']}}
-                                    <br>
-                                    <hr>
-                                    {% elif cust_orders['cart'][5] %}
-                                    Name: {{cust_orders['cart'][5]['name']}}
-                                    <br>
-                                    Total: ${{cust_orders['cart'][5]['price']}}
-                                    <br>
-                                    Quantity: {{cust_orders['cart'][5]['qty']}}
-                                    <br>
-                                    <hr>
-                                    {% elif cust_orders['cart'][6] %}
-                                    Name: {{cust_orders['cart'][6]['name']}}
-                                    <br>
-                                    Total: ${{cust_orders['cart'][6]['price']}}
-                                    <br>
-                                    Quantity: {{cust_orders['cart'][6]['qty']}}
-                                    <br>
-                                    <hr>
-                                    {% elif cust_orders['cart'][7] %}
-                                    Name: {{cust_orders['cart'][7]['name']}}
-                                    <br>
-                                    Total: ${{cust_orders['cart'][7]['price']}}
-                                    <br>
-                                    Quantity: {{cust_orders['cart'][7]['qty']}}
-                                    <br>
-                                    <hr>
-                                    {% endif %}
-                                    
-                                    <strong>
-                                      <span class="card-text">Grand Total: </span>
-                                      <span class="card-text" style="float:right;">$<span id="grand-total">{{ cust_orders['order'].get_total() }}</span>0</span>
-                                    </strong>
-                                   
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
+
                                 </div>
-                                
                               </div>
                             </div>
                             <!-- modal footer -->
@@ -243,10 +249,15 @@
             
                               <!-- Modal footer -->
                               <div class="modal-footer">
-                                <input type="submit" id="received" value="Order Received" class="btn btn-success" >
+                                <input type="submit" id="received" value="Order Received" class="btn btn-success" onclick="Received()">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
                               </div>
-                              
+                              <script>
+                                function Received() {
+                                  document.getElementById("received").value="Delivered";
+                                  
+                                }
+                              </script>
                             </div>
                           </div>
                         </div>

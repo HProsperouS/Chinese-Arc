@@ -2853,70 +2853,60 @@ def create_contactReply(id):
 
 def contactReply_email(id):
     try:
-        create_contact_form = CreateContactForm(request.form)
         contact_dict = {}
         db = shelve.open('contact.db', 'r')
         contact_dict = db['Contact']
 
-        create_contactReply_form = CreateContactReplyForm(request.form)
         contactReply_dict = {}
         db = shelve.open('contactReply.db', 'r')
         contactReply_dict = db['ContactReply']
 
     except:
-        print('error in opening db')
+        print('An error occuured while opeing DB')
+
     finally:
         db.close()
 
     contact = contact_dict.get(id)
     contactReply = contactReply_dict.get(id)
     if contact == contactReply:
-        create_contact_form.email.data = contact.get_email()
-        create_contact_form.subject.data = contact.get_subject()
-        create_contact_form.first_name.data = contact.get_first_name()
-        create_contact_form.last_name.data = contact.get_last_name()
-        # create_contactReply_form.reply.data = contactReply.get_reply()
+        contact.email.data = contact.get_email()
+        contact.subject.data = contact.get_subject()
+        contact.first_name.data = contact.get_first_name()
+        contact.last_name.data = contact.get_last_name()
+
+    for key in contactReply_dict:
+        contactReply = contactReply_dict.get(key)
+        reply = contactReply.get_reply()
 
     sender = password = ""
     port = 465
     sender = 'testingusers1236@gmail.com'
     password = 'dG09#G.@Yg23G'
 
-    recieve = contact.get_email()
+    reciever = contact.get_email()
     first_name = contact.get_first_name()
     last_name = contact.get_last_name()
-    # reply = contactReply.get_reply(id)
 
-    msg = EmailMessage()
-    msg['Subject'] = 'The Chinese Arc Query Reply' + ' ( ' + first_name + last_name + ' ) '
-    msg['From'] = sender
-    msg['To'] = recieve
+    message = MIMEMultipart("alternative")
+    message["Subject"] = 'The Chinese Arc Query Reply: ' + contact.get_subject()
+    message["From"] = sender
+    message["To"] = reciever
 
-    msg.add_alternative("""\
-    <!DOCTYPE html>
-    <html lang="en">
+    # Turn these into plain/html MIMEText objects
+    part1 = MIMEText(reply, "html")
 
-    <body>
-        <h3 style='color:black;'> Query Reply </h3>
-        <h4>
-            Hellooo
-        </h4>
+    # Add HTML/plain-text parts to MIMEMultipart message
+    # The email client will try to render the last part first
+    message.attach(part1)
 
-    <h3> Natthida </h3>
-    </body>
-       
-
-    </html>
-    """, subtype='html')
-
+    # Create secure connection with server and send email
     context = ssl.create_default_context()
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         server.login(sender, password)
-        server.send_message(msg)
-
-
-    
+        server.sendmail(
+            sender, reciever, message.as_string()
+        )
 
 @app.route('/fullProduct/<int:id>')
 def full_product_page(id):

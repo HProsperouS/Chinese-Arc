@@ -206,6 +206,11 @@
             scales: {
               y: {
                 beginAtZero: true
+              },
+              x: {
+                ticks:{
+                  display:false
+                }
               }
             }
           }
@@ -229,6 +234,11 @@
             scales: {
               y: {
                 beginAtZero: true
+              },
+              x: {
+                ticks:{
+                  display:false
+                }
               }
             }
           }
@@ -252,8 +262,18 @@
             maintainAspectRatio:false,
             scales: {
               y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks:{
+                  display:false
+                }
+
+              },
+              x: {
+                ticks:{
+                  display:false
+                }
               }
+              
             }
           }
           
@@ -271,7 +291,7 @@
       
       async function getData() {
           // const response = await fetch('testdata.csv');
-          let response = await fetch('../static/data/ZonAnn.Ts+dSST.csv');
+          let response = await fetch('../static/data/Total.csv');
           const data = await response.text();
           let years = [];
           let temps = [];
@@ -279,7 +299,7 @@
           rows.forEach(row => {
             const cols = row.split(',');
             years.push(cols[0]);
-            temps.push(14 + parseFloat(cols[1]));
+            temps.push(parseFloat(cols[1]));
           });
           return { years, temps };
         }

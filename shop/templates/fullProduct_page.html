@@ -79,11 +79,20 @@
 
                         <div class="price-wrap">
                             <var class="price h4">$ {{ productinfo.get_product_price() }}0</var>
-                            {% if productinfo.get_product_stock() <= 10 %} <span class="badge bg-danger" style="float: right;">
-                                <span class="stockCount" id='stockCount'>{{ productinfo.get_product_stock() }}</span>
-                                left
-                                </span>
-                            {% endif %}
+                            {% if productinfo.get_product_stock() <= 10 %}
+										<span class="badge bg-danger" style="float: right;" >
+											<span class="stockCount" id='stockCount'>{{ productinfo.get_product_stock() }}</span>
+											left
+										</span>
+								{% elif productinfo.get_product_stock() >= 10 %}
+									<span class="badge bg-success" style="float: right;" >
+										<span class="stockCount" id='stockCount'>{{ productinfo.get_product_stock() }}</span>
+										left
+									</span>
+							
+
+									
+								{% endif %}
                         </div> <!-- price-wrap.// -->
 
                         <hr>

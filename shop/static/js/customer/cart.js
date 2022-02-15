@@ -126,6 +126,7 @@ products.forEach(item => {   // 1
 	item.addEventListener('click', (e) => {
 
 		if (e.target.classList.contains('addToCart')) {
+			console.log('hi')
 			const productID = e.target.dataset.productId;
 			const productName = item.querySelector('.productName').innerHTML;
 			const productPrice = item.querySelector('.priceValue').innerHTML;
@@ -169,56 +170,7 @@ products.forEach(item => {   // 1
 
 });
 
-products_2.forEach(item => {   // 1
 
-	item.addEventListener('click', (e) => {
-
-		console.log('hi')
-
-		if (e.target.classList.contains('addToCart')) {
-			console.log('yes')
-			const productID = e.target.dataset.productId;
-			const productName = item.querySelector('.productName').innerHTML;
-			const productPrice = item.querySelector('.priceValue').innerHTML;
-			const productImage = item.querySelector('img').src;
-		
-			let product = {
-				name: productName,
-				image: productImage,
-				id: productID,
-				count:1,
-				price: +productPrice,
-				basePrice: parseInt(productPrice),
-			}
-
-			if (item.querySelector('#stockCount').innerHTML <= 0){
-				document.getElementById('flash').textContent = 'Out of Stock!'
-				const showFlash = () => {
-					flash.classList.add("flash--visible_2")  
-					}
-				const hideFlash = () => {
-					flash.classList.remove("flash--visible_2")
-					document.getElementById('flash').innerHTML = ''
-					}
-				// const btn = document.getElementById('checkout')
-
-				showFlash();
-				setTimeout(hideFlash, 1000);
-			}
-			else if(item.querySelector('#stockCount').innerHTML > 0){
-				updateProductsInCart(product);
-				updateShoppingCartHTML();
-				AddtoCart(product);
-			}
-			
-			
-			
-		}
-		// alert("Item added to cart!"); // Pop up when click on add to cart
-
-	});
-
-});
 
 parentElement.addEventListener('click', (e) => { // Last
 	const isPlusButton = e.target.classList.contains('button-plus');

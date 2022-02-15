@@ -7,7 +7,11 @@
 <link
     href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
     rel="stylesheet">
-<body>
+<script type="text/javascript" src="https://unpkg.com/xlsx/dist/shim.min.js">
+</script>
+<script type="text/javascript" src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+
+<body onload="converttoCSV()">
 {% block content %}
 <!-- Page Heading -->
 <!--<div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -330,7 +334,9 @@
         </div>
     </div>
     </div>
-   
+  
+ 
+    
 
 
 
@@ -355,6 +361,10 @@
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
     
+    <script>
+        
+
+    </script>
 
     <script>
         drawChart()
@@ -392,13 +402,18 @@
       
       // config 
           let config = {
-            type: 'line',
+            type: 'bar',
             data,
             options: {
               maintainAspectRatio:false,
               scales: {
                 y: {
                   beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        display: false
+                    }
                 }
               }
             }
@@ -421,7 +436,7 @@
         
         async function getData() {
             // const response = await fetch('testdata.csv');
-            let response = await fetch('../static/data/ZonAnn.Ts+dSST.csv');
+            let response = await fetch('../static/data/Total.csv');
             const data = await response.text();
             let years = [];
             let temps = [];
@@ -429,7 +444,7 @@
             rows.forEach(row => {
               const cols = row.split(',');
               years.push(cols[0]);
-              temps.push(14 + parseFloat(cols[1]));
+              temps.push(parseFloat(cols[1]));
             });
             return { years, temps };
           }

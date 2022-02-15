@@ -1,3 +1,8 @@
+import imp
+import csv
+from json import load
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
 from email.policy import default
 from itertools import count
 from math import prod
@@ -2265,7 +2270,7 @@ def createCustOrder():
 
         create_custorder_form = CreateCustOrder(request.form)
         if request.method == 'POST' and create_custorder_form.validate():
-
+            
             try:
                 cust_cart_dict = {}
                 db = shelve.open('custCart.db', 'r')
@@ -2280,8 +2285,6 @@ def createCustOrder():
             db = shelve.open('ProductInfo.db', 'w')
             productinfo_dict = db['ProductInfo']
 
-            
-
             for key in productinfo_dict:
                 product = productinfo_dict.get(key)
                 for key in list(cust_cart_dict):                   
@@ -2290,6 +2293,29 @@ def createCustOrder():
                         remain = product.get_product_stock() - stock
                         product.set_product_stock(remain)
                         print(remain)
+                        with open('shop/static/data/Total.csv','r') as csv_file:
+                            l=[]
+                            csv_reader = csv.reader(csv_file)
+                            Found = False
+                            for line in csv_reader:
+                                if line[0] == cust_cart_dict[key]['name']:
+                                    Found=True
+                                    line[1] = str(cust_cart_dict[key]['price'] + int(line[1]))
+                                l.append(line)
+                        csv_file.close()
+
+                        if Found == False:
+                            print('student not found')
+                        else:
+                            with open('shop/static/data/Total.csv','w+',newline='') as csv_file_2:
+                                writer = csv.writer(csv_file_2)
+                                writer.writerows(l)
+                                csv_file_2.seek(0)
+                                reader = csv.reader(csv_file_2)
+                                for row in reader:
+                                    print(row)
+                                csv_file_2.close()
+
             try:
                 db['ProductInfo'] =  productinfo_dict 
             except:

@@ -40,7 +40,7 @@ class CreateOrderForm(Form):
 class CreateSubscriptionsForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    email = StringField('Email Address', [validators.Length(min=1, max=150), validators.DataRequired()])
+    email = StringField('Email Address', [validators.Email(), validators.DataRequired(message='Please enter a valid email')])
 
 class CreateNewsletterForm(Form):
     newsletter_name = StringField('Name of Newsletter', [validators.DataRequired()])
@@ -50,7 +50,7 @@ class CreateNewsletterForm(Form):
 
 class CreateUnsubscribeForm(Form):
     sub_id = StringField('Subscription ID', [validators.Length(min=1, max=150), validators.DataRequired()])
-    email = StringField('Email Address', [validators.Length(min=1, max=150), validators.DataRequired()])
+    email = StringField('Email Address', [validators.Email(), validators.DataRequired(message='Please enter a valid email')])
     rating = SelectField('Rating',[validators.DataRequired()], choices=[('1','1 Star'),('2','2 Stars'),('3','3 Stars'),('4','4 Stars'),('5','5 Stars')])
     reason = SelectField('What is your reason for unsubscribing? ', [validators.DataRequired()], choices=[('Irrelevant Content'), ('Too many emails'), ('Not tailored to my preferences')], default='')
     explaination = TextAreaField('Any further explaination?', [validators.Length(min=1, max=150),validators.Optional()])
@@ -106,16 +106,14 @@ class UpdateAdminForm(Form):
     confirm = PasswordField("Confirm Password", validators=[validators.DataRequired(message="Please Fill This Field")])
 
 class CreateContactForm(Form):
-    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    email = StringField('Email address', [validators.DataRequired(),validators.Length(min=4, max=150, message='Please enter a valid email'),validators.Email()])
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired(message="Please Fill This Field")])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired(message="Please Fill This Field")])
+    email = StringField('Email Address', [validators.Email(), validators.DataRequired(message='Please enter a valid email')])
     subject = SelectField('Subject', [validators.DataRequired()], choices=[('Select'), ('Cheongsam Adjustment'), ('Sizing'), ('Appointment'), ('Others')], default='')
-    message = TextAreaField('Message', [validators.Optional()])
+    message = TextAreaField('Message', [validators.DataRequired(message="Please Fill This Field")])
 
 class CreateContactReplyForm(Form):
-    # subject = StringField('Subject', [validators.Length(min=1, max=150), validators.DataRequired()])
-    # recipient = StringField('Recipient', [validators.Length(min=1, max=150), validators.DataRequired()])
-    reply = TextAreaField('Reply', [validators.Optional()])
+    reply = TextAreaField('Reply', [validators.DataRequired(message="Please Fill This Field")])
     create_by = StringField('Admin', [validators.Length(min=1, max=150), validators.DataRequired()])
     create_date = create_date= DateField('Date Updated/Created', [validators.DataRequired()],format="%Y-%m-%d", default=datetime.datetime.now())
 

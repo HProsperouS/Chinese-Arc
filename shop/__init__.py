@@ -1,7 +1,7 @@
 import imp
 import csv
 from json import load
-from openpyxl import Workbook, load_workbook
+from openpyx import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from email.policy import default
 from itertools import count

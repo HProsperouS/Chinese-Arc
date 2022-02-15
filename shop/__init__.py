@@ -2876,74 +2876,22 @@ def contactReply_email(id):
         server.login(sender, password)
         server.send_message(msg)
 
-@app.route('/cust_order_history', methods = ['GET','POST'])
+@app.route('/cust_order_history')
 def cust_order_history():
     try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'r')
         cust_order_dict = db['CustOrder']
-
-        cust_order_list = []
-        order = cust_order_dict.get(id)
-        cust_order_list.append(order)
-
-        db['CustOrder'] = cust_order_dict
-        flash('Order has been deleted sucessfully')
-        
     except:
-        print('An error occured when opening CustOrder.db')
-    finally:
-        db.close()
-  
-def delivered_order(id):
-    try:
-        cust_order_dict = {}
-        db = shelve.open('CustOrder.db', 'r')
-        cust_order_dict = db['CustOrder']
-
-        cust_order_list = []
-        order = cust_order_dict.get(id)
-        cust_order_list.append(order)
-
-        db['CustOrder'] = cust_order_dict
-        flash('Order has been deleted sucessfully')
-        
-    except:
-        print('An error occured when opening CustOrder.db')
-    finally:
-        db.close()
-    try:
-        cust_order_dict = {}
-        db = shelve.open('CustOrder.db', 'w')
-        cust_order_dict = db['CustOrder']
-
-        delivered_order_id = cust_order_dict.get(id)
-    
-        delivered_order_id['order'].set_status('Delivered')
-        print(delivered_order_id['order'].get_status())
-        print(delivered_order_id['order'].set_status('Delivered'))
-
-
-        db['CustOrder'] = cust_order_dict
-    except:
-        print('An error occured when opening CustOrder.db')
+        print('Unable to read data')
     finally:
         db.close()
 
-    try:
-        delete_order_dict = {}
-        db = shelve.open('deleteorder.db', 'w')
-        delete_order_dict = db['deleteOrder']
-    except:
-        print('error in opening delete db')
-    
+    cust_order_list = []
+    for key in cust_order_dict:
+        cust_order = cust_order_dict.get(key)
+        cust_order_list.append(cust_order)
 
-    delivered_order = (delivered_order_id['order'].get_custOrder_id(), delivered_order_id['order'].get_status())
-    delete_order_dict[delivered_order_id['order'].get_custOrder_id()] = delivered_order
-
-    db['deleteOrder'] = delete_order_dict 
-
-    flash('Order has been delivered successfully', 'success')
     return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
    
     

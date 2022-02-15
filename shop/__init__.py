@@ -2113,8 +2113,7 @@ def RetrieveFeedback():
         feedback = feedback_dict.get(key)
         feedback_list.append(feedback)
 
-    return render_template('RetrieveFeedback.html', count=len(feedback_list),
-                        feedback_list=feedback_list)
+    return render_template('RetrieveFeedback.html', count=len(feedback_list),feedback_list=feedback_list)
 
 @app.route('/updateFeedback/<uuid:id>/', methods=['GET', 'POST'])
 def UpdateFeedback(id):

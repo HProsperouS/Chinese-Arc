@@ -49,9 +49,11 @@ class CreateNewsletterForm(Form):
     create_by = StringField('Created By', [validators.DataRequired()])
 
 class CreateUnsubscribeForm(Form):
+    sub_id = StringField('Subscription ID', [validators.Length(min=1, max=150), validators.DataRequired()])
     email = StringField('Email Address', [validators.Length(min=1, max=150), validators.DataRequired()])
-    reason = TextAreaField('Why do you want to unsubscribe?', [validators.DataRequired()])
-
+    rating = SelectField('Rating',[validators.DataRequired()], choices=[('1','1 Star'),('2','2 Stars'),('3','3 Stars'),('4','4 Stars'),('5','5 Stars')])
+    reason = SelectField('What is your reason for unsubscribing? ', [validators.DataRequired()], choices=[('Irrelevant Content'), ('Too many emails'), ('Not tailored to my preferences')], default='')
+    explaination = TextAreaField('Any further explaination?', [validators.Length(min=1, max=150),validators.Optional()])
 
 class CreateFAQForm(Form):
     question = StringField('Question', [validators.Length(min=1,max=800), validators.DataRequired(message="This field is required")])

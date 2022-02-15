@@ -17,41 +17,6 @@
     {% endif %}
 </div>
 
-<!-- <div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Subject</th>
-                <th>Message</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for contact in contact_list %}
-            <tr>
-                <td>{{ contact.get_contact_id() }}</td>
-                <td>{{ contact.get_first_name() }}</td>
-                <td>{{ contact.get_last_name() }}</td>
-                <td>{{ contact.get_email() }}</td>
-                <td>{{ contact.get_subject() }}</td>
-                <td>{{ contact.get_message() }}</td>
-                <td><a href="#" class="btn btn-warning">Update</a></td>
-                <td>
-                    <form action="{{url_for('delete_contact', id=contact.get_contact_id())}}" method="POST">
-                        <input type="submit" value="Delete" class="btn btn-danger">
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div> -->
-
 <section>
     <div>
         <div class="row">

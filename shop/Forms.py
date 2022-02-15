@@ -46,7 +46,7 @@ class CreateNewsletterForm(Form):
     newsletter_name = StringField('Name of Newsletter', [validators.DataRequired()])
     message = TextAreaField('Newsletter Content', [validators.DataRequired()])
     create_date = DateField('Date Updated/Created', format="%Y-%m-%d", default=datetime.datetime.now())
-    create_by = StringField('Created By', [validators.DataRequired()])
+    create_by = StringField('Admin', [validators.DataRequired()])
 
 class CreateUnsubscribeForm(Form):
     sub_id = StringField('Subscription ID', [validators.Length(min=1, max=150), validators.DataRequired()])

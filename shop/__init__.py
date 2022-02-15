@@ -1481,6 +1481,7 @@ def RetrieveDeliveryFeedback():
     return render_template('RetrieveDeliveryFeedback.html', count=len(deliveryfeedback_list),
                         deliveryfeedback_list=deliveryfeedback_list)
 
+#Subscription Function: Create
 @app.route('/createSubscriptions', methods=['GET', 'POST'])
 def create_subscriptions():
     create_subscriptions_form = CreateSubscriptionsForm(request.form)
@@ -1490,6 +1491,7 @@ def create_subscriptions():
 
         try:
             subscriptions_dict = db['Subscriptions']
+
         except:
             print("Error in retrieving Subscriptions from subscriptions.db.")
 
@@ -1714,28 +1716,34 @@ def create_subscriptions():
 
         db.close()
 
-        flash("You have successfully subscribed to TCA Newsletter")
+        flash("You have successfully subscribed to TCA Newsletter", "success")
 
         return redirect(url_for('home_page'))
     return render_template('createSubscriptions.html', form=create_subscriptions_form)
 
+# Subscription function: retrieve subscription + unsubscription
 @app.route('/retrieveSubscriptions')
 @login_required
 def retrieve_subscriptions():
-    subscriptions_dict = {}
-    db = shelve.open('subscriptions.db', 'r')
-    subscriptions_dict = db['Subscriptions']
-    db.close()
+    try:
+        subscriptions_dict = {}
+        db = shelve.open('subscriptions.db', 'r')
+        subscriptions_dict = db['Subscriptions']
+
+        unsubscribe_dict = {}
+        db = shelve.open('unsubscribe.db', 'r')
+        unsubscribe_dict = db['Unsubscribe']
+
+    except IOError:
+        print('An error occurred trying to read DB')
+
+    finally:
+        db.close()
 
     subscriptions_list = []
     for key in subscriptions_dict:
         subscriptions = subscriptions_dict.get(key)
         subscriptions_list.append(subscriptions)
-
-    unsubscribe_dict = {}
-    db = shelve.open('unsubscribe.db', 'r')
-    unsubscribe_dict = db['Unsubscribe']
-    db.close()
 
     unsubscribe_list = []
     for key in unsubscribe_dict:
@@ -1784,39 +1792,7 @@ def retrieve_subscriptions():
                             rating_list=rating_list
                             )
 
-@app.route('/updateSubscriptions/<uuid:id>/', methods=['GET', 'POST'])
-@login_required
-def update_subscriptions(id):
-    update_subscriptions_form = CreateSubscriptionsForm(request.form)
-    if request.method == 'POST' and update_subscriptions_form.validate():
-        subscriptions_dict = {}
-        db = shelve.open('subscriptions.db', 'w')
-        subscriptions_dict = db['Subscriptions']
-
-        subscriptions = subscriptions_dict.get(id)
-        subscriptions.set_first_name(update_subscriptions_form.first_name.data)
-        subscriptions.set_last_name(update_subscriptions_form.last_name.data)
-        subscriptions.set_email(update_subscriptions_form.email.data)
-
-        db['Subscriptions'] = subscriptions_dict
-        db.close()
-
-        flash("Subscription have been updated")
-
-        return redirect(url_for('retrieve_subscriptions'))
-    else:
-        subscriptions_dict = {}
-        db = shelve.open('subscriptions.db', 'r')
-        subscriptions_dict = db['Subscriptions']
-        db.close()
-
-        subscriptions = subscriptions_dict.get(id)
-        update_subscriptions_form.first_name.data = subscriptions.get_first_name()
-        update_subscriptions_form.last_name.data = subscriptions.get_last_name()
-        update_subscriptions_form.email.data = subscriptions.get_email()
-
-        return render_template('updateSubscriptions.html', form=update_subscriptions_form)
-
+# Unsubscribe function: create
 @app.route('/createUnsubscribe', methods=['GET', 'POST'])
 def create_unsubscribe():
     create_unsubscribe_form = CreateUnsubscribeForm(request.form)
@@ -1842,10 +1818,16 @@ def create_unsubscribe():
         create_unsubscribe_form.sub_id.data = unsubscribe.get_sub_id()
 
         #checking with the subscriptions_dict:
-        subscriptions_dict = {}
-        db = shelve.open('subscriptions.db', 'r')
-        subscriptions_dict = db['Subscriptions']
-        db.close()
+        try:
+            subscriptions_dict = {}
+            db = shelve.open('subscriptions.db', 'r')
+            subscriptions_dict = db['Subscriptions']
+
+        except:
+            print('An error occurred trying to read DB')
+
+        finally:
+            db.close()
 
         subscriptions_list = []
         for key in subscriptions_dict:
@@ -1871,6 +1853,7 @@ def create_unsubscribe():
         return redirect(url_for('home_page'))
     return render_template('createUnsubscribe.html', form=create_unsubscribe_form)
 
+# Newsletter function: create
 @app.route('/createNewsletter', methods=['GET', 'POST'])
 @login_required
 def create_newsletter():
@@ -1900,23 +1883,29 @@ def create_newsletter():
         return redirect(url_for('retrieve_newsletter'))
     return render_template('createNewsletter.html', form=create_newsletter_form)
 
+# Newsletter function: retrieve
 @app.route('/retrieveNewsletter')
 @login_required
 def retrieve_newsletter():
-    newsletter_dict = {}
-    db = shelve.open('newsletter.db', 'r')
-    newsletter_dict = db['Newsletter']
-    db.close()
+    try:
+        newsletter_dict = {}
+        db = shelve.open('newsletter.db', 'r')
+        newsletter_dict = db['Newsletter']
+
+        subscriptions_dict = {}
+        db = shelve.open('subscriptions.db', 'r')
+        subscriptions_dict = db['Subscriptions']
+
+    except:
+        print('An error occurred trying to read DB')
+
+    finally:
+        db.close()
 
     newsletter_list = []
     for key in newsletter_dict:
         newsletter = newsletter_dict.get(key)
         newsletter_list.append(newsletter)
-
-    subscriptions_dict = {}
-    db = shelve.open('subscriptions.db', 'r')
-    subscriptions_dict = db['Subscriptions']
-    db.close()
 
     subscriptions_list = []
     for key in subscriptions_dict:
@@ -1924,10 +1913,9 @@ def retrieve_newsletter():
         email = subscriptions.get_email()
         subscriptions_list.append(email)
 
-    print(subscriptions_list)
-
     return render_template('retrieveNewsletter.html', count=len(newsletter_list), newsletter_list=newsletter_list)
 
+# Newsletter function: update
 @app.route('/updateNewsletter/<uuid:id>/', methods=['GET', 'POST'])
 @login_required
 def update_newslette(id):
@@ -1977,22 +1965,28 @@ def update_newslette(id):
         
         return render_template('updateNewsletter.html', form=update_newsletter_form)
 
+# Newsletter function: delete
 @app.route('/deleteNewsletter/<uuid:id>', methods=['POST'])
 @login_required
 def delete_newsletter(id):
-    newsletter_dict = {}
-    db = shelve.open('newsletter.db', 'w')
-    newsletter_dict = db['Newsletter']
+    try:
+        newsletter_dict = {}
+        db = shelve.open('newsletter.db', 'w')
+        newsletter_dict = db['Newsletter']
+        newsletter_dict.pop(id)
+        db['Newsletter'] = newsletter_dict
 
-    newsletter_dict.pop(id)
+    except:
+        print('An error occurred trying to read DB')
 
-    db['Newsletter'] = newsletter_dict
-    db.close()
+    finally:
+        db.close()
 
     flash("Newsletter have been deleted")
 
     return redirect(url_for('retrieve_newsletter'))
 
+# Newsletter function: send newsletter to subscribers
 @app.route('/sendNewsletter/<uuid:id>')
 @login_required
 def send_newsletter(id):
@@ -2060,16 +2054,17 @@ def send_newsletter(id):
 
     return render_template('sendNewsletter.html')
 
-#brings to customer account page
-@app.route('/base_cust')
-def base_cust():
+# #brings to customer account page
+# @app.route('/base_cust')
+# def base_cust():
 
-    return render_template('base_cust.html')
+#     return render_template('base_cust.html')
 
-@app.route('/dashboard_cust')
-def dashboard_cust():
-    return render_template('dashboard_cust.html')
+# @app.route('/dashboard_cust')
+# def dashboard_cust():
+#     return render_template('dashboard_cust.html')
 
+# Product Feedback function: create
 @app.route('/CreateFeedback',methods=['GET','POST'])
 def CreateFeedback():
     CreateFeedback_Form = CreateFeedbackForm(request.form)
@@ -2093,10 +2088,13 @@ def CreateFeedback():
                                             )
         feedback_dict[feedback.get_feedback_id()] = feedback
         db['Feedback'] = feedback_dict
-        flash('Feedback has sent sucessfully')
-        return redirect(url_for('CreateFeedback'))
+
+        flash('Your feedback has been sent sucessfully', 'success')
+
+        return redirect(url_for('cust_order_history'))
     return render_template('CreateFeedback.html', form=CreateFeedback_Form)
 
+# Product Feedback function: retrieve
 @app.route('/RetrieveFeedback',methods=['GET','POST'])
 def RetrieveFeedback():
     try:
@@ -2115,6 +2113,7 @@ def RetrieveFeedback():
 
     return render_template('RetrieveFeedback.html', count=len(feedback_list),feedback_list=feedback_list)
 
+# Product Feedback function: update
 @app.route('/updateFeedback/<uuid:id>/', methods=['GET', 'POST'])
 def UpdateFeedback(id):
     UpdateFeedback_Form = CreateFeedbackForm(request.form)
@@ -2171,6 +2170,7 @@ def UpdateFeedback(id):
         
         return render_template('updateFeedback.html', form=UpdateFeedback_Form)
 
+# Product Feedback function: delete
 @app.route('/deleteFeedback/<uuid:id>', methods=['POST'])
 def DeleteFeedback(id):
     try:
@@ -2719,10 +2719,6 @@ def delivered_order(id):
 
         return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 
-
-
-
-
 @app.route('/fullpage_cart')
 def fullpage_cart():
     try:
@@ -2790,6 +2786,7 @@ def fullpage_wish():
    
     return render_template('fullpage_wish.html')
 
+# Contact Us(Enquiry): create
 @app.route('/createContact', methods=['GET', 'POST'])
 def create_contact():
     create_contact_form = CreateContactForm(request.form)
@@ -2813,15 +2810,24 @@ def create_contact():
 
         db.close()
 
+        flash("Your enquiry has been sent succesfully. Please look out for a email from us soon.", "success")
+
         return redirect(url_for('home_page'))
     return render_template('createContact.html', form=create_contact_form)
 
+# Contact Us(Enquiry): retrieve
 @app.route('/retrieveContact')
 def retrieve_contact():
-    contact_dict = {}
-    db = shelve.open('contact.db', 'r')
-    contact_dict = db['Contact']
-    db.close()
+    try:
+        contact_dict = {}
+        db = shelve.open('contact.db', 'r')
+        contact_dict = db['Contact']
+
+    except(IOError):
+        print('Unable to read data')
+
+    finally:
+        db.close()
 
     contact_list = []
     for key in contact_dict:
@@ -2865,19 +2871,7 @@ def retrieve_contact():
                             count4=len(others_list)
                             )
 
-@app.route('/deleteContact/<uuid:id>', methods=['POST'])
-def delete_contact(id):
-    contact_dict = {}
-    db = shelve.open('contact.db', 'w')
-    contact_dict = db['Contact']
-
-    contact_dict.pop(id)
-
-    db['Contact'] = contact_dict
-    db.close()
-
-    return redirect(url_for('retrieve_contact'))
-
+# Contact Us(Enquiry): reply to customer's enquiry + delete enquiry
 @app.route('/createContactReply/<uuid:id>/', methods=['GET', 'POST'])
 def create_contactReply(id):
     create_contactReply_form = CreateContactReplyForm(request.form)
@@ -2901,18 +2895,25 @@ def create_contactReply(id):
         contactReply_email(id)
 
         # deleting the query after reply
-        contact_dict = {}
-        db = shelve.open('contact.db', 'w')
-        contact_dict = db['Contact']
+        try:
+            contact_dict = {}
+            db = shelve.open('contact.db', 'w')
+            contact_dict = db['Contact']
 
-        contact_dict.pop(id)
+            contact_dict.pop(id)
 
-        db['Contact'] = contact_dict
-        db.close()
+            db['Contact'] = contact_dict
+
+        except(IOError):
+            print('Unable to read data')
+
+        finally:
+            db.close()
 
         return redirect(url_for('retrieve_contact'))
     return render_template('createContactReply.html', form=create_contactReply_form)
 
+# Contact Us(Enquiry): email
 def contactReply_email(id):
     try:
         contact_dict = {}
@@ -2970,6 +2971,7 @@ def contactReply_email(id):
             sender, reciever, message.as_string()
         )
 
+# Full product page
 @app.route('/fullProduct/<int:id>')
 def full_product_page(id):
     try:

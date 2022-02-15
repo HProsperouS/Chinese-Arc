@@ -1,8 +1,9 @@
 {% extends "base_home.html" %}
 {% block title %}The Chinese Arc{% endblock %}
 
+{% block content %}
+{% from "_formHelper.html" import render_field %}
 <body>
-    {% block content %}
     <div style="margin-left: 70px;  padding-top: 15px;">
         <nav aria-label="breadcrumb" class="main-breadcrumb">
           <ol class="breadcrumb">
@@ -14,7 +15,6 @@
           </ol>
         </nav>
       </div>
-    {% from "_formHelper.html" import render_field %}
   <h3 style="font-size: 45px; text-align: center; padding-top: 15px;"><strong>Product Feedback</strong></h3>
     <form class = "col-11" style="text-align: justify; margin-left: 70px;" method="POST" action="">
         
@@ -46,4 +46,4 @@
         <input type="submit" value="Submit" class="btn btn-primary" />
     </form>
 
-    {% endblock %}
+{% endblock %}

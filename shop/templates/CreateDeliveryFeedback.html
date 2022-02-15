@@ -9,9 +9,8 @@
 <body>
 {% block content %}
 {% from "_formHelper.html" import render_field %}
-<h3 style="font-size: 45px; text-align: center; padding-top: 15px;"><strong>Delivery Feedback</strong></h3>
-<form class = "col-11" style="text-align: justify; margin-left: 70px;" method="POST" action="">
-    
+<form class = "col-11" style="margin-left: 50px;" method="POST" action="">
+    <br><h2>Delivery Feedback</h2><br>
     <div class="form-group">
       {{ render_field(form.email_address, class="form-control") }}
     </div>

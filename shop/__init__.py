@@ -1,12 +1,8 @@
-import imp
-from json import load
-from openpyxl import Workbook, load_workbook
-from openpyxl.utils import get_column_letter
-
 from email.policy import default
 from itertools import count
 from math import prod
 from msilib import change_sequence
+from operator import methodcaller
 from re import split, sub, template
 from venv import create
 from flask_wtf import FlaskForm
@@ -756,31 +752,6 @@ def forgot_password_page():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-
-    wb = load_workbook('shop/static/data/testing.xlsx')
-    ws = wb.active
-    total_revenue = 0
-    for row in range(2,30):
-        chr = get_column_letter(4)
-        item_total = ws[chr + str(row)].value
-        
-        total_revenue += int(item_total)
-    
-    try:
-        earnings_dict = {}
-        db = shelve.open('Earnings.db', 'w')
-        earnings_dict = db['Earnings']
-    except:
-        print('earnings cant be opened')
-
-    
-
-    db['Earnings'] = earnings_dict
-    db.close()
-
-
-  
-    db['Vouchers'] = voucher_dict
     try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'r')
@@ -863,9 +834,7 @@ def dashboard():
                             admins_list=admins_list,
                             delete_order_list=delete_order_list,
                             product_list=product_list,
-                            revenue_list=revenue_list,
-                            earnings_dict=earnings_dict
-
+                            revenue_list=revenue_list
                             )
 
 
@@ -1524,17 +1493,20 @@ def create_subscriptions():
         except:
             print("Error in retrieving Subscriptions from subscriptions.db.")
 
-        subscriptions = Subscriptions(create_subscriptions_form.first_name.data, create_subscriptions_form.last_name.data, create_subscriptions_form.email.data)
+        subscriptions = Subscriptions(create_subscriptions_form.first_name.data, 
+                                        create_subscriptions_form.last_name.data, 
+                                        create_subscriptions_form.email.data)
         subscriptions_dict[subscriptions.get_subscriptions_id()] = subscriptions
         db['Subscriptions'] = subscriptions_dict
 
         create_subscriptions_form.email.data = subscriptions.get_email()
+        subscriptions_id = subscriptions.get_subscriptions_id()
         sender_email = "testingusers1236@gmail.com"
         receiver_email = subscriptions.get_email()
         password = "dG09#G.@Yg23G"
 
         message = MIMEMultipart("alternative")
-        message["Subject"] = "Newsletter Subscription"
+        message["Subject"] = 'Newsletter Subscription' + ' ( ' + str(subscriptions_id) + ' ) '
         message["From"] = sender_email
         message["To"] = receiver_email
 
@@ -1770,11 +1742,47 @@ def retrieve_subscriptions():
         unsubscribe = unsubscribe_dict.get(key)
         unsubscribe_list.append(unsubscribe)
 
+    #counting average rating for subscription:
+    rating_list = []
+    for key in unsubscribe_dict:
+        unsubscribe = unsubscribe_dict.get(key)
+        rating = unsubscribe.get_rating()
+        rating_list.append(int(rating))
+
+    #counting of each reason:
+    irrelevant_list = []
+    for key in unsubscribe_dict:
+        irrelevant = unsubscribe_dict.get(key)
+        if irrelevant.get_reason() == 'Irrelevant Content':
+            irrelevant_list.append(irrelevant)
+
+    many_list = []
+    for key in unsubscribe_dict:
+        many = unsubscribe_dict.get(key)
+        if many.get_reason() == 'Too many emails':
+            many_list.append(many)
+
+    preferences_list = []
+    for key in unsubscribe_dict:
+        preferences = unsubscribe_dict.get(key)
+        if preferences.get_reason() == 'Not tailored to my preferences':
+            preferences_list.append(preferences)
+
     return render_template('retrieveSubscriptions.html', 
                             count=len(subscriptions_list), 
                             subscriptions_list=subscriptions_list,
                             count1=len(unsubscribe_list), 
-                            unsubscribe_list=unsubscribe_list)
+                            unsubscribe_list=unsubscribe_list,
+                            count2=len(irrelevant_list), 
+                            irrelevant_list=irrelevant_list,
+                            count3=len(many_list), 
+                            many_list=many_list,
+                            count4=len(preferences_list), 
+                            preferences_list=preferences_list,
+                            count5=len(rating_list),
+                            sum1 = sum(rating_list), 
+                            rating_list=rating_list
+                            )
 
 @app.route('/updateSubscriptions/<uuid:id>/', methods=['GET', 'POST'])
 @login_required
@@ -1809,22 +1817,6 @@ def update_subscriptions(id):
 
         return render_template('updateSubscriptions.html', form=update_subscriptions_form)
 
-@app.route('/deleteSubscriptions/<uuid:id>', methods=['POST'])
-@login_required
-def delete_subscriptions(id):
-    subscriptions_dict = {}
-    db = shelve.open('subscriptions.db', 'w')
-    subscriptions_dict = db['Subscriptions']
-
-    subscriptions_dict.pop(id)
-
-    db['Subscriptions'] = subscriptions_dict
-    db.close()
-
-    flash("Subscription have been deleted")
-
-    return redirect(url_for('retrieve_subscriptions'))
-
 @app.route('/createUnsubscribe', methods=['GET', 'POST'])
 def create_unsubscribe():
     create_unsubscribe_form = CreateUnsubscribeForm(request.form)
@@ -1837,32 +1829,47 @@ def create_unsubscribe():
         except:
             print("Error in retrieving Unsubscribe from unsubscribe.db.")
 
-        unsubscribe = Unsubscribe(create_unsubscribe_form.email.data, 
-                                    create_unsubscribe_form.reason.data)
+        unsubscribe = Unsubscribe(create_unsubscribe_form.sub_id.data,
+                                    create_unsubscribe_form.email.data,
+                                    create_unsubscribe_form.rating.data, 
+                                    create_unsubscribe_form.reason.data,
+                                    create_unsubscribe_form.explaination.data)
 
         unsubscribe_dict[unsubscribe.get_unsubscribe_id()] = unsubscribe
         db['Unsubscribe'] = unsubscribe_dict
+
+        #getting the sub_id input from unsubscribe:
+        create_unsubscribe_form.sub_id.data = unsubscribe.get_sub_id()
+
+        #checking with the subscriptions_dict:
+        subscriptions_dict = {}
+        db = shelve.open('subscriptions.db', 'r')
+        subscriptions_dict = db['Subscriptions']
+        db.close()
+
+        subscriptions_list = []
+        for key in subscriptions_dict:
+            subscriptions = subscriptions_dict.get(key)
+            sub_uuid = subscriptions.get_subscriptions_id()
+            subscriptions_list.append(sub_uuid)
+
+        # removing those who requested to be unsubscribed:
+        for i in subscriptions_list:
+            if unsubscribe.get_sub_id() == str(i):
+                subscriptions_dict = {}
+                db = shelve.open('subscriptions.db', 'w')
+                subscriptions_dict = db['Subscriptions']
+
+                id = subscriptions.get_subscriptions_id()
+                subscriptions_dict.pop(id)
+
+                db['Subscriptions'] = subscriptions_dict
+                db.close()
 
         db.close()
 
         return redirect(url_for('home_page'))
     return render_template('createUnsubscribe.html', form=create_unsubscribe_form)
-
-@app.route('/deleteUnsubscribe/<uuid:id>', methods=['POST'])
-def delete_unsubscribe(id):
-    unsubscribe_dict = {}
-    db = shelve.open('unsubscribe.db', 'w')
-    unsubscribe_dict = db['Unsubscribe']
-
-    unsubscribe_dict.pop(id)
-
-    db['Unsubscribe'] = unsubscribe_dict
-    db.close()
-
-    flash("A subscription have been removed")
-
-    return redirect(url_for('retrieve_subscriptions'))
-
 
 @app.route('/createNewsletter', methods=['GET', 'POST'])
 @login_required
@@ -2247,7 +2254,6 @@ def createCustOrder():
         flash("Please login as customer first","info")
         return redirect(url_for("login_page"))
     else:
-        earnings_dict = {}
         cust_cart_dict = {}
         db = shelve.open('custCart.db', 'c')
         try:
@@ -2274,8 +2280,7 @@ def createCustOrder():
             db = shelve.open('ProductInfo.db', 'w')
             productinfo_dict = db['ProductInfo']
 
-            wb = load_workbook('shop/static/data/testing.xlsx')
-            ws = wb.active
+            
 
             for key in productinfo_dict:
                 product = productinfo_dict.get(key)
@@ -2284,30 +2289,13 @@ def createCustOrder():
                         stock = cust_cart_dict[key]['qty']
                         remain = product.get_product_stock() - stock
                         product.set_product_stock(remain)
-                        for row in range(1,20):
-                            for col in range(1,4):
-                                chr = get_column_letter(col)
-                                if ws[chr + str(row)].value == cust_cart_dict[key]['name']:
-                                    ws[get_column_letter(col+1) + str(row )] = ws[get_column_letter(col+1) + str(row )].value + int(cust_cart_dict[key]['qty'])
-                                    ws[get_column_letter(col+3) + str(row)] = ws[get_column_letter(col+1) + str(row )].value * ws[get_column_letter(col+2) + str(row)].value
-            wb.save('shop/static/data/testing.xlsx')
+                        print(remain)
             try:
                 db['ProductInfo'] =  productinfo_dict 
             except:
                 print('error in opening product.db')
             finally:
                 db.close()
-           
-        
-            earnings_dict = {}
-            db = shelve.open('Earnings.db', 'c')
-
-            try:
-                earnings_dict = db['Earnings']
-            except:
-                print("Error in retrieving Users from order.db.")
-            
-            
             
             cust_order_dict = {}
             db = shelve.open('CustOrder.db', 'c')
@@ -2362,6 +2350,7 @@ def createCustOrder():
            
             print(copy_cart_dict)
 
+            # Refund
             refund_order_dict = {}
             db = shelve.open('refundorder.db', 'c')
             try:
@@ -2372,6 +2361,7 @@ def createCustOrder():
             db['refundOrder'] = refund_order_dict 
             db.close()
 
+            # Delete
             delete_order_dict = {}
             db = shelve.open('deleteorder.db', 'c')
             try:
@@ -2382,12 +2372,29 @@ def createCustOrder():
             db['deleteOrder'] = delete_order_dict 
             db.close()
 
-             
+            # Delivered
+            delivered_order_dict = {}
+            db = shelve.open('deliveredorder.db', 'c')
+            try:
+                delivered_order_dict = db['deliveredOrder']
+            except:
+                print('Error in opening db')
             
-           
+            db['deliveredOrder'] = delivered_order_dict
+            db.close()
 
+            #  Earnings
+            earnings_dict = {}
+            db = shelve.open('Earnings.db', 'c')
 
-           
+            try:
+                earnings_dict = db['Earnings']
+            except :
+                print("Error in retrieving cust Orders from CustOrder.db.")
+        
+            db['Earnings'] = earnings_dict
+            db.close()
+
             flash("Order has been processed successfully! Thank you for shopping with Chinese Arc","info")
             return redirect(url_for('order_confirm'))
     
@@ -2484,7 +2491,7 @@ def delete_order(id):
     
     
     deleted_orders = (deleted_order_id['order'].get_custOrder_id(),deleted_order_id['order'].get_status())
-    delete_order_dict[deleted_order_id['order'].get_custOrder_id()] =  deleted_orders
+    delete_order_dict[deleted_order_id['order'].get_custOrder_id()] = deleted_orders
     
     db['deleteOrder'] = delete_order_dict 
 
@@ -2528,8 +2535,6 @@ def refund_order(id):
         print('An error occured when opening CustOrder.db')
     finally:
         db.close()
-
-    
     
     try:
         delete_order_dict = {}
@@ -2544,12 +2549,8 @@ def refund_order(id):
     
     db['deleteOrder'] = delete_order_dict 
 
-
-    
     refund_mail2(id)
     
-    
-     
     flash('Order has been refunded sucessfully','success')
 
     return render_template('refund.html', count=len(cust_order_list), cust_order_list=cust_order_list)
@@ -2636,9 +2637,8 @@ def fullpage_cart():
         order = voucher_dict.get(key)
         voucher_list.append(order)
 
-    
-    
     return render_template('fullpage_cart.html',count=len(voucher_list),voucher_list=voucher_list)
+
 @app.route('/order_confirm')
 def order_confirm():
 
@@ -2943,27 +2943,11 @@ def delivered_order(id):
 
     db['deleteOrder'] = delete_order_dict 
 
-    try:
-        cust_order_dict = {}
-        db = shelve.open('CustOrder.db', 'w')
-        cust_order_dict = db['CustOrder']
 
-        delivered_order_id = cust_order_dict.get(id)
-    flash('Order has been delivered successfully', 'success')
+
     return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
    
     
-        delivered_order_id['order'].set_status('Delivered')
-        print(delivered_order_id['order'].get_status())
-        print(delivered_order_id['order'].set_status('Delivered'))
-
-        db['CustOrder'] = cust_order_dict
-    except:
-        print('An error occured when opening CustOrder.db')
-    finally:
-        db.close()
-
-    return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
 
 @app.route('/fullProduct/<int:id>')
 def full_product_page(id):

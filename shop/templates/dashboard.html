@@ -38,10 +38,8 @@
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                     Earnings (Monthly)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800 " id="Revenue">
-                                  {% for total in earnings_dict %}
-                                  {{total.get_total_earnings()}}
-                                  {% endfor %}
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                  $ 1000
                                 </div>
                             </div>
                             <div class="col-auto btn btn-primary btn-user btn-sm">
@@ -62,8 +60,8 @@
                         <div class="row align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Orders ( Last 30 Days )</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{count}}</div>
+                                    Earnings (Annual)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
                             </div>
                             <div class="col-auto btn btn-primary btn-user btn-sm">
                                 <a href="{{ url_for('chart') }}"><i class="fas fa-chart-area fa-5x text-gray-300" ></i></a>
@@ -436,25 +434,6 @@
             return { years, temps };
           }
   
-    </script>
-    <script>
-        
-        var reader = new FileReader();
-
-        reader.readAsArrayBuffer(files['../static/data/testing.xlsx'])
-
-        reader.onload = function(event){
-            
-            var data = new Uint8Array(reader.result);
-
-            var work_book = XLSX.read(data, {type:'array'});
-
-            var sheeet_name = work_book.SheetNames;
-
-            var sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets)
-            console.log('how r u')
-        }
-        
     </script>
    
         

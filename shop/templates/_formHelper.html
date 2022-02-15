@@ -1,8 +1,8 @@
 {% macro render_field(field) %}
 <div class=" form-group">
   <label for="{{ field.name }}">{{ field.label.text }}</label>
-      {{ field(class='form-control', **kwargs)|safe }}
-      
+      {{ field(class='form-control', **kwargs)|safe }} 
+
 </div> <!-- form-group end.// -->
 {% endmacro %}
 
@@ -20,4 +20,9 @@
 
   </div>
 </div>
+{% endmacro %}
+
+{% macro render_field(field) %}
+{{ field.label }}
+{{ field(**kwargs)|safe }}
 {% endmacro %}

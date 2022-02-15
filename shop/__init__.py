@@ -2912,16 +2912,12 @@ def delivered_order(id):
         print('An error occured when opening CustOrder.db')
     finally:
         db.close()
-
     try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'w')
         cust_order_dict = db['CustOrder']
 
         delivered_order_id = cust_order_dict.get(id)
-        flash('Order has been delivered successfully', 'success')
-        return render_template('cust_order_history.html', count=len(cust_order_list), cust_order_list=cust_order_list)
-   
     
         delivered_order_id['order'].set_status('Delivered')
         print(delivered_order_id['order'].get_status())

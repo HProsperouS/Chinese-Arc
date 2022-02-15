@@ -13,138 +13,217 @@
 
 {% endfor %}
 
-<div>
-    {% if count == 0 %}
-    <p>There are no subscription.</p>
-    {% elif count == 1 %}
-    <p>There is 1 subscription.</p>
-    {% else %}
-    <p>There are {{ count }} subscriptions.</p>
-    {% endif %}
-</div>
+<section>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-sub-tab" data-toggle="tab"
+                            href="#nav-sub" role="tab" aria-controls="nav-sub"
+                            aria-selected="true">Active Subscription
+                            {% if count == 0 %}
+                            <button type="button" class="btn btn-danger">
+                                0
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-success">
+                                {{ count }}
+                            </button>
+                            {% endif %}
+                        </a>
 
-<div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>User ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for subscriptions in subscriptions_list %}
-            <tr>
-                <td>{{ subscriptions.get_subscriptions_id() }}</td>
-                <td>{{ subscriptions.get_first_name() }}</td>
-                <td>{{ subscriptions.get_last_name() }}</td>
-                <td>{{ subscriptions.get_email() }}</td>
-                <td><a href="/updateSubscriptions/{{subscriptions.get_subscriptions_id()}}" class="btn btn-warning"><i class="fas fa-pen"></i></a></td>
-                <td>
-                    <form action="{{url_for('delete_subscriptions', id=subscriptions.get_subscriptions_id())}}" method="POST">
-                        <!-- Button to Open the Modal -->
-                        <button type="button" title="Delete" class="btn btn-danger " data-bs-toggle="modal"
-                            data-bs-target="#myModal_{{subscriptions.get_subscriptions_id()}}">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                        
-                        <!-- The Modal -->
-                        <div class="modal" id="myModal_{{subscriptions.get_subscriptions_id()}}">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                        
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Delete Confirmation</h4>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                        
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                        Are you sure you want to delete {{subscriptions.get_email()}}?
-                                    </div>
-                        
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <input type="submit" value="Delete" class="btn btn-danger">
-                        
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a class="nav-item nav-link" id="nav-unsub-tab" data-toggle="tab" href="#nav-unsub" role="tab"
+                            aria-controls="nav-unsub" aria-selected="true">Unsubscription
+                            {% if count1 == 0 %}
+                            <button type="button" class="btn btn-success">
+                                0
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-danger">
+                                {{ count1 }}
+                            </button>
+                            {% endif %}
+                        </a>
+
+                        <a class="nav-item nav-link" id="nav-performance-tab" data-toggle="tab" href="#nav-performance" role="tab" aria-controls="nav-performance"
+                            aria-selected="true">Performance
+                        </a>
+
+                    </div>
+                </nav>
+
+                <div class="tab-content" id="nav-tabContent">
+
+                    <!-- Active Subscription -->
+                    <div class="tab-pane fade show active" id="nav-sub" role="tabpanel"
+                        aria-labelledby="nav-sub-tab">
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                {% if count == 0 %}
+                                <br>
+                                <h5 class="text-center">There is no active subscription.</h5>
+
+                                {% else %}
+                                <tr>
+                                    <th>Subscription ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                </tr>
+                                {% endif %}
+                            </thead>
+                            <tbody>
+                                {% if count == 0 %}
+                                <p> </p>
+
+                                {% else %}
+                                {% for subscriptions in subscriptions_list %}
+                                <tr>
+                                    <td>{{ subscriptions.get_subscriptions_id() }}</td>
+                                    <td>{{ subscriptions.get_first_name() }}</td>
+                                    <td>{{ subscriptions.get_last_name() }}</td>
+                                    <td>{{ subscriptions.get_email() }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!--Unsubscriptions -->
+                    <div class="tab-pane fade" id="nav-unsub" role="tabpanel" aria-labelledby="nav-sizing-tab">
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                {% if count1 == 0 %}
+                                <br>
+                                <h5 class="text-center">There is no unsubscriptions.</h5>
+
+                                {% else %}
+                                <tr>
+                                    <th>Subscription ID</th>
+                                    <th>Email</th>
+                                </tr>
+                                {% endif %}
+                            </thead>
+                            <tbody>
+                                {% if count1 == 0 %}
+                                <p> </p>
+
+                                {% else %}
+                                {% for unsubscribe in unsubscribe_list %}
+                                <tr>
+                                    <td>{{ unsubscribe.get_sub_id() }}</td>
+                                    <td>{{ unsubscribe.get_email() }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Newsletter Performance -->
+                    {% for unsubscribe in unsubscribe_list %}
+                    <div class="tab-pane fade show" id="nav-performance" role="tabpanel" aria-labelledby="nav-performance-tab">
+                        <br>
+                        <div>
+                            <div class="card shadow mb-4">
+                                <!-- Card Body -->
+                                <div class="card-body">
+
+                                    <!-- Border Left Utilities -->
+                                    <div>
+                                    
+                                        <div class="card mb-4 py-3 border-left-primary">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-danger">Average Newsletter Rating</h5>
+                                                <p class="card-text">{{ sum1/count5 }}</p>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="card mb-4 py-3 border-left-secondary">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-danger">Common Unsubscription Reasons</h5>
+                                                <p class="card-text">Irrelevant Content: {{ count2 }}</p>
+                                                <p class="card-text">Too many emails: {{ count3 }}</p>
+                                                <p class="card-text">Not tailored to preferences: {{ count4 }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="card mb-4 py-3 border-left-success">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-danger">Additional Comments</h5>
+                                                <p class="card-text">{{ unsubscribe.get_explaination() }}</p>
+                                            </div>
+                                        </div>
+        
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+                    </div>
+                    {% endfor %}
 
-<br>
-<br>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<h3>Subscribers to be Removed</h3>
 
-<div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>Reason For Unsubscribing</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for unsubscribe in unsubscribe_list %}
-            <tr>
-                <td>{{ unsubscribe.get_email() }}</td>
-                <td>{{ unsubscribe.get_reason() }}</td>
-                <td></td>
-                <td>
-                    <form action="{{url_for('delete_unsubscribe', id=unsubscribe.get_unsubscribe_id())}}" method="POST">
-                        <!-- Button to Open the Modal -->
-                        <button type="button" title="Delete" class="btn btn-primary " data-bs-toggle="modal"
-                            data-bs-target="#myModal_{{unsubscribe.get_unsubscribe_id()}}">
-                            <i class="fas fa-check-square"></i>
-                        </button>
-                
-                        <!-- The Modal -->
-                        <div class="modal" id="myModal_{{unsubscribe.get_unsubscribe_id()}}">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Confirmation</h4>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                        Are you sure you have removed {{unsubscribe.get_email()}} from the newsletter subscription?
-                                    </div>
-                
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <input type="submit" value="Confirm" class="btn btn-danger">
-                
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+
+
+
+
+<style>
+    .project-tab {
+        padding: 10%;
+        margin-top: -8%;
+    }
+
+    .project-tab #tabs {
+        background: #007b5e;
+        color: #eee;
+    }
+
+    .project-tab #tabs h6.section-title {
+        color: #eee;
+    }
+
+    .project-tab #tabs .nav-tabs .nav-item.show .nav-link,
+    .nav-tabs .nav-link.active {
+        color: #0062cc;
+        background-color: transparent;
+        border-color: transparent transparent #f3f3f3;
+        border-bottom: 3px solid !important;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .project-tab .nav-link {
+        border: 1px solid transparent;
+        border-top-left-radius: .25rem;
+        border-top-right-radius: .25rem;
+        color: #0062cc;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .project-tab .nav-link:hover {
+        border: none;
+    }
+
+    .project-tab thead {
+        background: #f3f3f3;
+        color: #333;
+    }
+
+    .project-tab a {
+        text-decoration: none;
+        color: rgb(255, 255, 255);
+        font-weight: 600;
+    }
+</style>
 
 
 <!-- JavaScript Bundle with Popper -->

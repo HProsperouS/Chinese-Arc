@@ -231,12 +231,12 @@ def login_admin():
                         session['login'] = admin.id
                         session['loggedIn'] = admin.username
                         session['acctype'] = admin.roles
-                        flash("Hi," + session.get('loggedIn') + ", "+"Welcome to Chinese Arc ",'success')
+                        flash("Welcome back, " + session.get('loggedIn')+ "!",'success')
                         return redirect(url_for('dashboard',userid=session['login']))
                     else:
                         flash('Please enter correct account or password','danger')
                 else:
-                    flash("Hi, Your Account is disaled, Please Contact Chinese Arc for more information", 'info')
+                    flash("Your Account is disabled, please contact The Chinese Arc for more information", 'info')
 
     return render_template('login_admin.html', form=login_admin_form)
 

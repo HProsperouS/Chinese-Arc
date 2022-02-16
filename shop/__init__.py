@@ -2348,15 +2348,37 @@ def createCustOrder():
             finally:
                 db.close()
 
-            
-            productinfo_dict = {}
-            db = shelve.open('ProductInfo.db', 'w')
-            productinfo_dict = db['ProductInfo']
+            try:
+                productinfo_dict = {}
+                db = shelve.open('ProductInfo.db', 'r')
+                productinfo_dict = db['ProductInfo']
+            except:
+                print('error in db_product')
+            finally:
+                db.close()
+
 
             for key in productinfo_dict:
                 product = productinfo_dict.get(key)
                 for key in list(cust_cart_dict):                   
                     if product.get_product_name() == cust_cart_dict[key]['name']:
+                      
+                        productinfo_dict = {}
+                        db = shelve.open('ProductInfo.db', 'w')
+                        productinfo_dict = db['ProductInfo']
+                    
+                        stock = cust_cart_dict[key]['qty']
+                        remain = product.get_product_stock() - stock
+                        product.set_product_stock(remain)
+                        print(product.get_product_stock())
+
+                        try:
+                            db['ProductInfo'] =  productinfo_dict 
+                        except:
+                            print('error in opening product.db_2')
+                        finally:
+                            db.close()
+                            
                         try:
                             top_selling_dict = {}
                             db = shelve.open('Top_selling.db', 'r')
@@ -2408,18 +2430,6 @@ def createCustOrder():
 
                         
 
-                       
-
-                        
-                        
-                        
-                        
-
-
-                        stock = cust_cart_dict[key]['qty']
-                        remain = product.get_product_stock() - stock
-                        product.set_product_stock(remain)
-                        print(remain)
                         with open('shop/static/data/Total.csv','r') as csv_file:
                             l=[]
                             csv_reader = csv.reader(csv_file)
@@ -2443,12 +2453,9 @@ def createCustOrder():
                                     print(row)
                                 csv_file_2.close()
 
-            try:
-                db['ProductInfo'] =  productinfo_dict 
-            except:
-                print('error in opening product.db')
-            finally:
-                db.close()
+                        
+
+          
             
             cust_order_dict = {}
             db = shelve.open('CustOrder.db', 'c')
@@ -2680,6 +2687,8 @@ def refund_order(id):
         refund_order_id['order'].set_status('Refunded')
         print(refund_order_id['order'].get_status())
         print(refund_order_id['order'].set_status('Refunded'))
+
+         
 
         db['CustOrder'] = cust_order_dict
     except:

@@ -16,11 +16,6 @@
 </div>
 
 {% endfor %}
-
-<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <a href="/createNewsletter" class="btn btn-primary"><i class="fas fa-plus-square"></i></a>
-</div>
-
 <div>
     {% if count == 0 %}
     <p>There are no newsletter.</p>
@@ -30,6 +25,28 @@
     <p>There are {{ count }} newsletters.</p>
     {% endif %}
 </div>
+
+<div class="row col-12 ">
+    <div class="col-10 col-md-8 col-sm-2">
+      <form>
+        <div class="d-none d-sm-inline-block form-inline navbar-search " style='padding-bottom: 20px;'>
+        <div class="input-group">
+            <input type="text" class="form-control bg-light bvoucher-0 small" placeholder="Newsletter ID..."
+              aria-label="Search" aria-describedby="basic-addon2" id='search-voucher'>
+          <div class="input-group-append">
+                <button class="btn btn-primary voucher-search-button" type="button">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+          </div>
+        </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-2 col-md-4 col-sm-10 text-right">
+      <a href="/createNewsletter" class="btn btn-outline-primary ">Create Newsletter</a>
+    </div>
+</div>
+
 
 <div>
     <table class="table table-striped">

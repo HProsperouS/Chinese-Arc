@@ -75,9 +75,9 @@ class CreateDeliveryFeedbackForm(Form):
     rating = RadioField('Rating',[validators.DataRequired()], choices=[('1','1 Star'),('2','2 Stars'),('3','3 Stars'),('4','4 Stars'),('5','5 Stars')])
     product = StringField('Product Name', [validators.Length(min=1, max=50), validators.DataRequired(message='String only')])
     message1 = RadioField('Was the delivery person polite and courteous?', [validators.DataRequired()], choices=[('Yes', 'Yes, was polite and courteous'), ('Soso', 'Somewhat'), ('No', 'No, was rude')], default='Yes')
-    message2 = RadioField('Was the box size and pakaging approprite for the items?', [validators.DataRequired()], choices=[('Too Small', 'Too Small'), ('About Right', 'About Right'), ('Too Big', 'Too big')], default='About Right')
+    message2 = RadioField('Was the box size and pakaging appropriate for the items?', [validators.DataRequired()], choices=[('Too Small', 'Too Small'), ('About Right', 'About Right'), ('Too Big', 'Too big')], default='About Right')
     message3 = RadioField('Was the item difficult to open?', [validators.DataRequired()], choices=[('Yes', 'Yes'), ('No', 'No')], default='Yes')
-    message4 = RadioField('Was the process of receiving delivery quick and hassle-free?', [validators.DataRequired()], choices=[('Yes', 'Yes, It was quick and simple'),('No', 'No, not as convinient as expected')], default='Yes')
+    message4 = RadioField('Was the process of receiving delivery quick and hassle-free?', [validators.DataRequired()], choices=[('Yes', 'Yes, It was quick and simple'),('No', 'No, not as convenient as expected')], default='Yes')
     remarks = TextAreaField('Remarks', [validators.Length(min=1, max=150),validators.Optional()])
     create_date= DateField('Date Of Creation', [validators.DataRequired()],format="%Y-%m-%d", default=datetime.datetime.now())
     

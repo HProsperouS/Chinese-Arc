@@ -54,7 +54,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-3">
-                    <h6 class="mb-0">Full Name:</h6>
+                    <h6 class="mb-0">Full Name</h6>
                   </div>
                   <div class="col-sm-9 text-secondary">
                     {{ Customer.get_first_name() }} &nbsp; {{ Customer.get_last_name() }}
@@ -84,7 +84,8 @@
                     <h6 class="mb-0">Birthdate</h6>
                   </div>
                   <div class="col-sm-9 text-secondary">
-                 
+                    {{ Customer.get_birthdate() }}
+
                   </div>
                 </div>
                 <hr>
@@ -95,7 +96,7 @@
                   <div class="col-sm-9 text-secondary">
                     {{ Customer.get_city() }} &nbsp; {{ Customer.get_postal_code() }} &nbsp; 
                 </div>
-                <hr>
+                
                 <div class="row">
                   </div>
                   

@@ -144,18 +144,50 @@
                                         <div class="card mb-4 py-3 border-left-secondary">
                                             <div class="card-body">
                                                 <h5 class="card-title text-danger">Common Unsubscription Reasons</h5>
-                                                <p class="card-text">Irrelevant Content: {{ count2 }}</p>
-                                                <p class="card-text">Too many emails: {{ count3 }}</p>
-                                                <p class="card-text">Not tailored to preferences: {{ count4 }}</p>
+                                                <table class="table" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">Irrelevant Content</th>
+                                                            <th class="text-center">Too many emails</th>
+                                                            <th class="text-center">Not tailored to preferences</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-center">{{ count2 }}</td>
+                                                            <td class="text-center">{{ count3 }}</td>
+                                                            <td class="text-center">{{ count4 }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
 
+                                        
                                         <div class="card mb-4 py-3 border-left-success">
                                             <div class="card-body">
                                                 <h5 class="card-title text-danger">Additional Comments</h5>
-                                                <p class="card-text">{{ unsubscribe.get_explaination() }}</p>
+                                                <table class="table" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Rating</th>
+                                                            <th>Comment</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for unsubscribe in unsubscribe_list %}
+                                                        {% if unsubscribe.get_explaination() != "" %}
+                                                        <tr>
+                                                            <td>{{ unsubscribe.get_rating() }}</td>
+                                                            <td>{{ unsubscribe.get_explaination() }}</td>
+                                                        </tr>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
+                                       
         
                                     </div>
                                 </div>

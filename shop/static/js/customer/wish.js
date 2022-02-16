@@ -74,13 +74,13 @@ function Remove(){
 }
 
 function updateProductsInWish(wishproduct) { // 2
-	document.getElementById('flash_2').textContent = 'Item added to Wishlist!'
+	document.getElementById('flash').textContent = 'Item added to Wishlist!'
 		const showFlash = () => {
-			flash.classList.add("flash--visible_2")  
+			flash.classList.add("flash--visible")  
 			}
 		const hideFlash = () => {
-			flash.classList.remove("flash--visible_2")
-			document.getElementById('flash_2').innerHTML = ''
+			flash.classList.remove("flash--visible")
+			document.getElementById('flash').innerHTML = ''
 			}
 		// const btn = document.getElementById('checkout')
 

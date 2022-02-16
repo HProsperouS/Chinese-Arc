@@ -225,6 +225,7 @@
 
 
                     <td>
+                      {% if cust_orders['order'].get_status() != 'Delivered' %}
                       <form action="{{url_for('delivered_order', id = cust_orders['order'].get_custOrder_id())}}"  method="POST">
                         <!-- Order received button -->
                         <button type="button" class='btn btn-success' style="background-color: orange; border:none; " data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Product Received'>
@@ -257,6 +258,9 @@
                           </div>
                         </div>
                       </form>
+                      {% elif cust_orders['order'].get_status() == 'Delivered'  %}
+                      <div></div>
+                      {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

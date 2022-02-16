@@ -753,9 +753,11 @@ def dashboard():
         print(top_selling_list)
     
     def getTopselling(top_selling_list):
-        return nlargest(3, top_selling_list, key = lambda product:product.getQuantity())
+        return nlargest(10, top_selling_list, key = lambda product:product.getQuantity())
 
     top = getTopselling(top_selling_list)
+
+    # revenue and quantity stuff
     top_selling_dict_2 = {}
 
     top_selling_list_2 = []
@@ -2357,6 +2359,7 @@ def createCustOrder():
                 product = productinfo_dict.get(key)
                 for key in list(cust_cart_dict):                   
                     if product.get_product_name() == cust_cart_dict[key]['name']:
+                        # put customer order prodcut inside the top selling data base
                         try:
                             top_selling_dict = {}
                             db = shelve.open('Top_selling.db', 'r')
@@ -2405,17 +2408,6 @@ def createCustOrder():
                             
 
                             print(top_selling_dict)
-
-                        
-
-                       
-
-                        
-                        
-                        
-                        
-
-
                         stock = cust_cart_dict[key]['qty']
                         remain = product.get_product_stock() - stock
                         product.set_product_stock(remain)

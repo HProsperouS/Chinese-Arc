@@ -2910,6 +2910,8 @@ def create_contactReply(id):
         finally:
             db.close()
 
+        flash("Reply has been sent successfully to customer.", 'success')
+
         return redirect(url_for('retrieve_contact'))
     return render_template('createContactReply.html', form=create_contactReply_form)
 

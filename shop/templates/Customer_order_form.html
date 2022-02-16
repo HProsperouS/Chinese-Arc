@@ -51,21 +51,24 @@
                 <div class="form-group" style= "padding-right:20px; padding-left: 20px;" >
                   {% for Customer in cust_list %}
                     <h5 id="first_name" style="display: none;"> {{ Customer.get_first_name() }} </h5>
+                    {% endfor %}
                     {{ render_field(form.first_name, id='first_name_2', class="form-control", required="", placeholder="Eg: Mary") }}
-                  {% endfor %}
+                  
                 </div>
                 <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
                   {% for Customer in cust_list %}
                     <h5 id="last_name" style="display: none;"> {{ Customer.get_last_name() }} </h5>
+                    {% endfor %}
                     {{ render_field(form.last_name, id='last_name_2', class="form-control", required="", placeholder="Eg: Koh") }}
-                  {% endfor %}
+                  
                 </div>
               </div>
               <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
                 {% for Customer in cust_list %}
                     <h5 id="email" style="display: none;"> {{ Customer.get_email() }} </h5>
+                    {% endfor %}
                   {{ render_field(form.email, id='email_2', class="form-control", required="", placeholder="Eg: 12345678") }}
-                {% endfor %}
+                
                 </div>
               <br>
             </div>
@@ -123,15 +126,17 @@
                 
                 <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
                   {% for Customer in cust_list %}
-                    <h5 id="address" style="display: none;"> {{ Customer.get_address() }} </h5> 
+                    <h5 id="address" style="display: none;"> {{ Customer.get_address() }} </h5>
+                    {% endfor %}
                     {{ render_field(form.unit_number,id='address_2', class="form-control", required="", placeholder="Eg: #00-00") }}
-                  {% endfor %}
+                  
                 </div>
                 <div class="form-group" style= "padding-right:20px; padding-left: 20px;">
                   {% for Customer in cust_list %}
-                    <h5 id="postal_code" style="display: none;"> {{ Customer.get_postal_code() }} </h5> 
+                    <h5 id="postal_code" style="display: none;"> {{ Customer.get_postal_code() }} </h5>
+                    {% endfor %}
                     {{ render_field(form.postal_code, id='postal_code_2', class="form-control", required="", placeholder="Eg: 000 000") }}
-                  {% endfor %}
+                  
                 </div>
               </div>
               <div class="form-group" style="display: none;"  >

@@ -25,11 +25,11 @@ from Order_form import CreateCustOrder
 from Newsletter import Newsletter
 from Voucher_form import CreateVoucherForm
 from EditHomeAnnouncement import CreateHomeAnnouncementForm, UpdateHomeAnnouncementForm
-# from EditProduct import UpdateProductForm, CreateProductForm, photos
+from EditProduct import UpdateProductForm, CreateProductForm, photos
 from Contact import Contact
 from ContactReply import ContactReply
 from earnings import Revenue
-# from flask_uploads import configure_uploads,UploadSet,IMAGES
+from flask_uploads import configure_uploads,UploadSet,IMAGES
 from Order_form import CreateCustOrder
 from Forms import Registration, CreateSubscriptionsForm, CreateFAQForm, Register_AdminForm, Login_AdminForm, CreateNewsletterForm, UpdateAdminForm, CreateUnsubscribeForm, CreateContactForm, CreateContactReplyForm,CreateDeliveryFeedbackForm, CreateFeedbackForm,Registration,  CreateFAQForm, Login,CreateOrderForm, Registration, CreateFAQForm, CreateFeedbackForm
 from DeliveryFeedback import DeliveryFeedback
@@ -57,8 +57,8 @@ app.config['SECRET_KEY'] = 'Chinese ARC'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images/')
 
 app.config['UPLOAD_EXTENSIONS'] = ['.jpeg', '.jpg', '.png', '.gif']
-# photos = UploadSet('photos', IMAGES)
-# configure_uploads(app, photos)
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -1156,15 +1156,6 @@ def update_product(id):
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:
                 return "Invalid Image", 400
             else:
-                if UpdateProduct_Form.product_category.data == 'Cheongsam':
-                    UpdateProduct_Form.product_image.data.save(os.path.join(basedir, 'static/images/Cheongsam', filename))
-                elif UpdateProduct_Form.product_category.data == 'TangZhaung':
-                    UpdateProduct_Form.product_image.data.save(os.path.join(basedir, 'static/images/TangZhuang', filename))
-                elif UpdateProduct_Form.product_category.data == 'Accessories':
-                    UpdateProduct_Form.product_image.data.save(os.path.join(basedir, 'static/images/Accessories', filename))
-                else:
-                    UpdateProduct_Form.product_image.data.save(os.path.join(basedir, 'static/images/Featured', filename))
-
                 productinfo_dict = {}
                 db = shelve.open('ProductInfo.db', 'w')
                 productinfo_dict = db['ProductInfo']
@@ -1181,6 +1172,15 @@ def update_product(id):
                 productinfo.set_modified_date(UpdateProduct_Form.modified_date.data)
                 productinfo.set_modified_by(UpdateProduct_Form.modified_by.data)
                 db['ProductInfo'] = productinfo_dict
+                # The images uploaded will put it to static/images
+                if UpdateProduct_Form.product_category.data == 'Cheongsam':
+                    UpdateProduct_Form.product_image.data.save(os.path.join(basedir, 'static/images/Cheongsam', filename))
+                elif UpdateProduct_Form.product_category.data == 'TangZhuang':
+                    UpdateProduct_Form.product_image.data.save(os.path.join(basedir, 'static/images/TangZhuang', filename))
+                elif UpdateProduct_Form.product_category.data == 'Accessories':
+                    UpdateProduct_Form.product_image.data.save(os.path.join(basedir, 'static/images/Accessories', filename))
+                else:
+                    UpdateProduct_Form.product_image.data.save(os.path.join(basedir, 'static/images/Featured', filename))
                 db.close()
                 flash('Product has updated sucessfully','success')
                 return redirect(url_for('catalog'))

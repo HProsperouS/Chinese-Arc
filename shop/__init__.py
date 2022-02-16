@@ -1,5 +1,7 @@
+from ast import keyword
 import imp
 import csv
+from top_selling import Top_selling
 from json import load
 from email.policy import default
 from itertools import count
@@ -734,6 +736,48 @@ def forgot_password_page():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    
+    try:
+        top_selling_dict = {}
+        db = shelve.open('Top_selling.db','r')
+        top_selling_dict = db['Top_selling']
+    except:
+        print("Error in retrieving data from Feedback.db.")
+    finally:
+        db.close()
+
+    top_selling_list = []
+    for key in top_selling_dict:
+        top = top_selling_dict.get(key)
+        top_selling_list.append(top)
+        print(top_selling_list)
+    
+    def getTopselling(top_selling_list):
+        return nlargest(3, top_selling_list, key = lambda product:product.getQuantity())
+
+    top = getTopselling(top_selling_list)
+    top_selling_dict_2 = {}
+
+    top_selling_list_2 = []
+    top_selling_list_3 = []
+    sum = 0
+    qty = 0
+    for x in top_selling_dict:
+        total = top_selling_dict.get(x)
+        sum += total.getPrice()
+    for y in top_selling_dict:
+        total = top_selling_dict.get(y)
+        qty += total.getQuantity()
+    top_selling_list_2.append(sum)
+    top_selling_list_3.append(qty)
+    print(top_selling_list_2)
+    
+
+     
+    for i in top:
+        top_selling_dict_2[i.getName()] = i.getQuantity()
+        print(i.getName(),':',i.getQuantity())
+
     try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'r')
@@ -816,7 +860,10 @@ def dashboard():
                             admins_list=admins_list,
                             delete_order_list=delete_order_list,
                             product_list=product_list,
-                            revenue_list=revenue_list
+                            revenue_list=revenue_list,
+                            top_selling_dict_2=top_selling_dict_2,
+                            top_selling_list_2=top_selling_list_2,
+                            top_selling_list_3=top_selling_list_3
                             )
 
 
@@ -2170,6 +2217,27 @@ def DeleteFeedback(id):
 
     return redirect(url_for('RetrieveFeedback'))
 
+class Top_selling:
+    def __init__(self, name, quantity,price):
+        self.name = name
+        self.quantity = quantity
+        self.price = price
+    def getName(self):
+        return self.name
+    def getQuantity(self):
+        return self.quantity
+    def getPrice(self):
+        return self.price
+    def setName(self,name):
+        self.name = name
+    def setQuantity(self, quantity):
+        self.quantity = quantity
+    def setPrice(self, price):
+        self.price = price
+
+    def getTopSelling(productList):
+        top = nlargest(3, productList, key= lambda product:product.getQuantity())
+
 @app.route('/createCustOrder', methods = ['GET', 'POST'])
 def createCustOrder():
     try:
@@ -2185,6 +2253,10 @@ def createCustOrder():
     for key in cust_dict:
         customer = cust_dict.get(key)
         cust_list.append(customer)
+    
+    
+  
+
     try:  
         req = request.get_json()
         name = req['product_name']
@@ -2285,6 +2357,65 @@ def createCustOrder():
                 product = productinfo_dict.get(key)
                 for key in list(cust_cart_dict):                   
                     if product.get_product_name() == cust_cart_dict[key]['name']:
+                        try:
+                            top_selling_dict = {}
+                            db = shelve.open('Top_selling.db', 'r')
+                            top_selling_dict = db['Top_selling']
+                        except:
+                            print('error in top db')
+                        finally:
+                            db.close()
+                        
+                        if product.get_product_name() in top_selling_dict:
+                            print('write')
+                            try:
+                                top_selling_dict = {}
+                                db = shelve.open('Top_selling.db', 'w')
+                                top_selling_dict = db['Top_selling']
+                                top_selling_id = top_selling_dict.get(product.get_product_name())
+                                qty = int(top_selling_id.getQuantity() + cust_cart_dict[key]['qty'])
+                                price = int(top_selling_id.getPrice() +  cust_cart_dict[key]['price'])
+                                top_selling_id.setQuantity(qty)
+                                top_selling_id.setPrice(price)
+                                print(top_selling_id.getQuantity())
+                                print(top_selling_id.getPrice())
+                               
+                            except:
+                                print('error in top db')
+                            
+                            db['Top_selling'] = top_selling_dict
+                            db.close()
+
+                            print(top_selling_dict)
+                        elif product.get_product_name() not in top_selling_dict:
+                            print('create')
+                            try:
+                                top_selling_dict = {}
+                                db = shelve.open('Top_selling.db', 'c')
+                                top_selling_dict = db['Top_selling']
+                                top_selling = Top_selling(product.get_product_name(),cust_cart_dict[key]['qty'],cust_cart_dict[key]['price'])
+                                top_selling_dict[product.get_product_name()] = top_selling
+                                
+                            except:
+                                print('error in top db')
+
+
+                            db['Top_selling'] = top_selling_dict
+                            db.close()
+                            
+
+                            print(top_selling_dict)
+
+                        
+
+                       
+
+                        
+                        
+                        
+                        
+
+
                         stock = cust_cart_dict[key]['qty']
                         remain = product.get_product_stock() - stock
                         product.set_product_stock(remain)

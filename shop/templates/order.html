@@ -40,6 +40,7 @@
   </div>
   </div>
 </form>
+
 <div class="wrapper">
     
   <input type="radio" name="slider" checked id="home">
@@ -69,41 +70,43 @@
           </tr>
         </thead>
         <tbody>
-          {% for cust_orders in cust_order_list %}
-          <tr class='order-data {{ cust_orders["order"].get_status() }}' id='order-data'>
-            <td>{{ cust_orders['order'].get_custOrder_id() }}</td>
-            <td >{{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</td>
+          
+          {% for key in cust_order_dict %}
+         
+          <tr class='order-data {{ cust_order_dict[key]["order"].get_status() }}' id='order-data'>
+            <td>cust_order_dict[key]['order'].get_custOrder_id() }}</td>
+            <td >{{ cust_order_dict[key]['order'].get_first_name() }} {{ cust_order_dict[key]['order'].get_last_name() }}</td>
             
             
-            {% if cust_orders['order'].get_status() == 'Refunded' %}
+            {% if cust_order_dict[key]['order'].get_status() == 'Refunded' %}
             <td>
-              <h5 class="badge bg-warning" style="font-size: 15px;">{{ cust_orders['order'].get_status() }}</h5>
+              <h5 class="badge bg-warning" style="font-size: 15px;">{{ cust_order_dict[key]['order'].get_status() }}</h5>
             </td>
-            {% elif cust_orders['order'].get_status() == 'Pending' %}
+            {% elif cust_order_dict[key]['order'].get_status() == 'Pending' %}
             <td>
-              <h5 class="badge bg-secondary" style="font-size: 15px;">{{ cust_orders['order'].get_status() }}</h5>
+              <h5 class="badge bg-secondary" style="font-size: 15px;">{{ cust_order_dict[key]['order'].get_status() }}</h5>
             </td>
            
             {% else %}
             <td>
-              <h5 class="badge bg-success" style="font-size: 15px;">{{ cust_orders['order'].get_status() }}</h5>
+              <h5 class="badge bg-success" style="font-size: 15px;">{{ cust_order_dict[key]['order'].get_status() }}</h5>
             </td>
             {% endif %}
-            <td>{{ cust_orders['order'].get_create_date() }}</td>
+            <td>{{ cust_order_dict[key]['order'].get_create_date() }}</td>
             <td>
               <div class="row">
                 
                   <div class="col-2">
-                    <form action="{{url_for('delete_order', id = cust_orders['order'].get_custOrder_id())}}"  method="POST">
+                    <form action="{{url_for('delete_order', id = cust_order_dict[key]['order'].get_custOrder_id())}}"  method="POST">
                   
                       <!-- Button to Open the Modal -->
-                      <button type="button" class='btn btn-danger' data-bs-toggle="modal" data-bs-target="#myModal_{{cust_orders['order'].get_custOrder_id()}}" title='Delete'>
+                      <button type="button" class='btn btn-danger' data-bs-toggle="modal" data-bs-target="#myModal_{{cust_order_dict[key]['order'].get_custOrder_id()}}" title='Delete'>
                         <i class="fas fa-trash-alt"></i>
                       </button>
                       
                       
                       <!-- The Modal -->
-                      <div class="modal" id="myModal_{{cust_orders['order'].get_custOrder_id()}}">
+                      <div class="modal" id="myModal_{{cust_order_dict[key]['order'].get_custOrder_id()}}">
                         <div class="modal-dialog">
                           <div class="modal-content">
           
@@ -115,7 +118,7 @@
           
                             <!-- Modal body -->
                             <div class="modal-body">
-                              Are you sure you want to delete Order ID {{ cust_orders['order'].get_custOrder_id() }} ?
+                              Are you sure you want to delete Order ID {{ cust_order_dict[key]['order'].get_custOrder_id() }} ?
                             </div>
           
                             <!-- Modal footer -->
@@ -131,19 +134,19 @@
                     </form>
                   </div>
                   <div class="col-2 summary" >
-                    <button type="button"  class='btn btn-info summary' data-bs-toggle="modal" data-bs-target="#myModal_2{{cust_orders['order'].get_custOrder_id()}}" title='View More' >
+                    <button type="button"  class='btn btn-info summary' data-bs-toggle="modal" data-bs-target="#myModal_2{{cust_order_dict[key]['order'].get_custOrder_id()}}" title='View More' >
                       <i class="fas fa-eye" style="color: white;"></i>
                     </button> 
 
                     <!-- the modal -->
-                    <div class="modal"   id="myModal_2{{cust_orders['order'].get_custOrder_id()}}">
+                    <div class="modal"   id="myModal_2{{cust_order_dict[key]['order'].get_custOrder_id()}}">
                       <div class="modal-dialog">
                         <div class="modal-content" style="width: 50rem; ">
 
                           <!-- modal header -->
                           <div class="modal-header">
                             <h4 class="modal-title" style="font-size: 35px; font-weight: 400;">Order Information 
-                              <div > <h6> Order ID: {{ cust_orders['order'].get_custOrder_id() }}</h6></div>
+                              <div > <h6> Order ID: {{ cust_order_dict[key]['order'].get_custOrder_id() }}</h6></div>
                            </h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                           </div>
@@ -157,20 +160,21 @@
                                 <div class="card-body">
                                   <h5 class="card-title">Customer Details</h5>
                                   
-                             
-                                  <p class="card-text">Name: {{ cust_orders['order'].get_first_name() }} {{ cust_orders['order'].get_last_name() }}</p>
-                                  <p class="card-text">Email: {{ cust_orders['order'].get_email() }}</p>
+                                  
+                                  <p class="card-text">Name: {{ cust_order_dict[key]['order'].get_first_name() }} {{ cust_order_dict[key]['order'].get_last_name() }}</p>
+                                  <p class="card-text">Email: {{cust_order_dict[key]['order'].get_email()}} </p>
                                   <h5 class="card-title" style="color: black;">Card Info</h5>
-                                  <p class="card-text">Card Name: {{ cust_orders['order'].get_holder_name() }}</p>
-                                  <p class="card-text">Card Type: {{ cust_orders['order'].get_card_type() }}</p>
-                                  <p class="card-text">Card Num: {{ cust_orders['order'].get_card_num() }}</p>
-                                  <p class="card-text">CVV: {{ cust_orders['order'].get_cvv() }}</p>
+                                  <p class="card-text">Card Name: {{ cust_order_dict[key]['order'].get_holder_name() }}</p>
+                                  <p class="card-text">Card Type: {{ cust_order_dict[key]['order'].get_card_type() }}</p>
+                                  <p class="card-text">Card Num: {{ cust_order_dict[key]['order'].get_card_num() }}</p>
+                                  <p class="card-text">CVV: {{ cust_order_dict[key]['order'].get_cvv() }}</p>
                                   <h5 class="card-title" style="color: black;">Address</h5>
-                                  <p class="card-text">Address: {{ cust_orders['order'].get_postal_code() }} #{{ cust_orders['order'].get_unit_number() }}</p>
+                                  <p class="card-text">Address: {{ cust_order_dict[key]['order'].get_postal_code() }} #{{ cust_order_dict[key]['order'].get_unit_number() }}</p>
                                   <h5 class="card-title" style="color: black;">Status</h5>
-                                  <p class="card-text">Status: {{ cust_orders['order'].get_status() }}</p>
-                                  <p class="card-text">Created On: {{ cust_orders['order'].get_create_date() }}</p>                                   
+                                  <p class="card-text">Status: {{ cust_order_dict[key]['order'].get_status() }}</p>
+                                  <p class="card-text">Created On: {{ cust_order_dict[key]['order'].get_create_date() }}</p>                                   
                                   <br>
+                                  
                                 </div>
                               </div>
 
@@ -182,66 +186,66 @@
                                   <hr>
 
                                   
-                                  {% if cust_orders['cart'][1] %} 
-                                  Name: {{cust_orders['cart'][1]['name']}}
+                                  {% if cust_order_dict[key]['cart'][1] %} 
+                                  Name: {{cust_order_dict[key]['cart'][1]['name']}}
                                   <br>
-                                  Total: ${{cust_orders['cart'][1]['price']}}
+                                  Total: ${{cust_order_dict[key]['cart'][1]['price']}}
                                   <br>
-                                  Quantity: {{cust_orders['cart'][1]['qty']}}
-                                  <br>
-                                  <hr>
-                                  {% endif %}
-                                  {% if cust_orders['cart'][2] %}
-                                  Name: {{cust_orders['cart'][2]['name']}}
-                                  <br>
-                                  Total: ${{cust_orders['cart'][2]['price']}}
-                                  <br>
-                                  Quantity: {{cust_orders['cart'][2]['qty']}}
+                                  Quantity: {{cust_order_dict[key]['cart'][1]['qty']}}
                                   <br>
                                   <hr>
                                   {% endif %}
-                                  {% if cust_orders['cart'][3] %}
-                                  Name: {{cust_orders['cart'][3]['name']}}
+                                  {% if cust_order_dict[key]['cart'][2] %}
+                                  Name: {{cust_order_dict[key]['cart'][2]['name']}}
                                   <br>
-                                  Total: ${{cust_orders['cart'][3]['price']}}
+                                  Total: ${{cust_order_dict[key]['cart'][2]['price']}}
                                   <br>
-                                  Quantity: {{cust_orders['cart'][3]['qty']}}
-                                  <br>
-                                  <hr>
-                                  {% endif %}
-                                  {% if cust_orders['cart'][4] %}
-                                  Name: {{cust_orders['cart'][4]['name']}}
-                                  <br>
-                                  Total: ${{cust_orders['cart'][4]['price']}}
-                                  <br>
-                                  Quantity: {{cust_orders['cart'][4]['qty']}}
+                                  Quantity: {{cust_order_dict[key]['cart'][2]['qty']}}
                                   <br>
                                   <hr>
                                   {% endif %}
-                                  {% if cust_orders['cart'][5] %}
-                                  Name: {{cust_orders['cart'][5]['name']}}
+                                  {% if cust_order_dict[key]['cart'][3] %}
+                                  Name: {{cust_order_dict[key]['cart'][3]['name']}}
                                   <br>
-                                  Total: ${{cust_orders['cart'][5]['price']}}
+                                  Total: ${{cust_order_dict[key]['cart'][3]['price']}}
                                   <br>
-                                  Quantity: {{cust_orders['cart'][5]['qty']}}
-                                  <br>
-                                  <hr>
-                                  {% endif %}
-                                  {% if cust_orders['cart'][6] %}
-                                  Name: {{cust_orders['cart'][6]['name']}}
-                                  <br>
-                                  Total: ${{cust_orders['cart'][6]['price']}}
-                                  <br>
-                                  Quantity: {{cust_orders['cart'][6]['qty']}}
+                                  Quantity: {{cust_order_dict[key]['cart'][3]['qty']}}
                                   <br>
                                   <hr>
                                   {% endif %}
-                                  {% if cust_orders['cart'][7] %}
-                                  Name: {{cust_orders['cart'][7]['name']}}
+                                  {% if cust_order_dict[key]['cart'][4] %}
+                                  Name: {{cust_order_dict[key]['cart'][4]['name']}}
                                   <br>
-                                  Total: ${{cust_orders['cart'][7]['price']}}
+                                  Total: ${{cust_order_dict[key]['cart'][4]['price']}}
                                   <br>
-                                  Quantity: {{cust_orders['cart'][7]['qty']}}
+                                  Quantity: {{cust_order_dict[key]['cart'][4]['qty']}}
+                                  <br>
+                                  <hr>
+                                  {% endif %}
+                                  {% if cust_order_dict[key]['cart'][5] %}
+                                  Name: {{cust_order_dict[key]['cart'][5]['name']}}
+                                  <br>
+                                  Total: ${{cust_order_dict[key]['cart'][5]['price']}}
+                                  <br>
+                                  Quantity: {{cust_order_dict[key]['cart'][5]['qty']}}
+                                  <br>
+                                  <hr>
+                                  {% endif %}
+                                  {% if cust_order_dict[key]['cart'][6] %}
+                                  Name: {{cust_order_dict[key]['cart'][6]['name']}}
+                                  <br>
+                                  Total: ${{cust_order_dict[key]['cart'][6]['price']}}
+                                  <br>
+                                  Quantity: {{cust_order_dict[key]['cart'][6]['qty']}}
+                                  <br>
+                                  <hr>
+                                  {% endif %}
+                                  {% if cust_order_dict[key]['cart'][7] %}
+                                  Name: {{cust_order_dict[key]['cart'][7]['name']}}
+                                  <br>
+                                  Total: ${{cust_order_dict[key]['cart'][7]['price']}}
+                                  <br>
+                                  Quantity: {{cust_order_dict[key]['cart'][7]['qty']}}
                                   <br>
                                   <hr>
                                   {% endif %}
@@ -249,14 +253,14 @@
                                   <strong>
                                     <span class="card-text">SubTotal: </span>
                                     
-                                    <span class="card-text" style="float:right;">$<span id="subtotal">{{ cust_orders['order'].get_total() }}</span>.00</span>
+                                    <span class="card-text" style="float:right;">$<span id="subtotal"></span>.00</span>
                                     <hr>
                                     <span class="card-text">Discount: </span>
-                                    <span class="card-text" style="float:right;">- $<span id="order-discount">{{ cust_orders['order'].get_discount() }}</span>0</span>
+                                    <span class="card-text" style="float:right;">- $<span id="order-discount">{{ cust_order_dict[key]['order'].get_discount() }}</span>0</span>
                                     <hr>
                                     <span class="card-text">Grand Total: </span>
                                    
-                                    <span class="card-text" style="float:right;">$<span id="grand-total">{{ cust_orders['order'].get_total() }}</span>0</span>
+                                    <span class="card-text" style="float:right;">$<span id="grand-total">{{ cust_order_dict[key]['order'].get_total() }}</span>0</span>
                                   </strong>
                                  
                                 </div>
@@ -273,13 +277,13 @@
                     </div>
                   </div>
                   <div class="col-2">
-                    <form action="{{url_for('refund_order', id = cust_orders['order'].get_custOrder_id())}}"  method="POST">
-                      <button type="button"  class='btn btn-warning' data-bs-toggle="modal" data-bs-target="#myModal_1{{cust_orders['order'].get_custOrder_id()}}" title='Refund' >
+                    <form action="{{url_for('refund_order', id = cust_order_dict[key]['order'].get_custOrder_id())}}"  method="POST">
+                      <button type="button"  class='btn btn-warning' data-bs-toggle="modal" data-bs-target="#myModal_1{{cust_order_dict[key]['order'].get_custOrder_id()}}" title='Refund' >
                         <i class="fas fa-hand-holding-usd" alt='refund'></i>
                       </button>
           
                     
-                      <div class="modal" id="myModal_1{{cust_orders['order'].get_custOrder_id()}}">
+                      <div class="modal" id="myModal_1{{cust_order_dict[key]['order'].get_custOrder_id()}}">
                         <div class="modal-dialog">
                           <div class="modal-content">
             
@@ -291,7 +295,7 @@
             
                           
                             <div class="modal-body">
-                              Are you sure you want to Refund Order ID {{cust_orders['order'].get_custOrder_id()}}?
+                              Are you sure you want to Refund Order ID {{cust_order_dict[key]['order'].get_custOrder_id()}}?
                             </div>
             
                             

@@ -2492,8 +2492,11 @@ def createCustOrder():
                                     create_custorder_form.status.data,
                                     create_custorder_form.total.data,
                                     create_custorder_form.discount.data)
-            
+            print(create_custorder_form.email.data)
             cust_order_dict[Cust_orders.get_custOrder_id()] = {'order':Cust_orders,'cart':copy_cart_dict} 
+
+            print(cust_order_dict[Cust_orders.get_custOrder_id()]['order'].get_email())
+            
 
             db['CustOrder'] = cust_order_dict
             db.close()
@@ -2593,9 +2596,14 @@ def retrieve_cust_orders():
         db.close()
 
     cust_order_list = []
+   
     for key in cust_order_dict:
         cust_order = cust_order_dict.get(key)
+        email = cust_order_dict[key]['order'].get_email()
+        
         cust_order_list.append(cust_order)
+      
+  
 
     cust_cart_dict = {}
     db = shelve.open('custCart.db', 'r')
@@ -2628,7 +2636,7 @@ def retrieve_cust_orders():
 
     
    
-    return render_template('order.html', count=len(cust_order_list), cust_order_list=cust_order_list,count3=len(cust_cart_list),cust_cart_list=cust_cart_list,count4=len(delete_order_list),delete_order_list=delete_order_list)
+    return render_template('order.html', count=len(cust_order_list), cust_order_list=cust_order_list,count3=len(cust_cart_list),cust_cart_list=cust_cart_list,count4=len(delete_order_list),delete_order_list=delete_order_list,cust_order_dict=cust_order_dict)
 
 
 @app.route('/deleteOrder/<uuid:id>', methods=['POST'])

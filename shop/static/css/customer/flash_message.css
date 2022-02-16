@@ -1,7 +1,7 @@
 .flash {
     width: 100%;
     position: fixed;
-    background: crimson;
+    background: rgb(91, 209, 184);
     color: white;
     display: flex;
     justify-content: center;

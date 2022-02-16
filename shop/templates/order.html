@@ -74,7 +74,7 @@
           {% for key in cust_order_dict %}
          
           <tr class='order-data {{ cust_order_dict[key]["order"].get_status() }}' id='order-data'>
-            <td>cust_order_dict[key]['order'].get_custOrder_id() }}</td>
+            <td>{{ cust_order_dict[key]['order'].get_custOrder_id() }}</td>
             <td >{{ cust_order_dict[key]['order'].get_first_name() }} {{ cust_order_dict[key]['order'].get_last_name() }}</td>
             
             

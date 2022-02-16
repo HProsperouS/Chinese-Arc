@@ -464,6 +464,7 @@ def login_page():
                         session['true'] = True
                         session['logged_in'] = customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name()
                         session['user_id'] = key
+                        session['email'] = customer_loggedin.get_email()
                         customer.append(customer_loggedin)
                         flash('Hi' + " " + customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name() + ", You have successfully logged in","success")
                         return redirect(url_for('home_page'))
@@ -2801,7 +2802,7 @@ def cust_order_history():
 
     cust_order_list = []
     for key in cust_order_dict:
-        if key == session.get('user_id'):
+        if key == session.get('email'):
             cust_order = cust_order_dict.get(key)
             cust_order_list.append(cust_order)
 

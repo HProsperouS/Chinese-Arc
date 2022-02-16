@@ -67,11 +67,11 @@ const updateWishListHTML = function () {
 
 
 
-function Remove(){
-	var elem = document.getElementById('remove');
-        elem.parentNode.removeChild(elem);
-        return false;
-}
+// function Remove(){
+// 	var elem = document.getElementById('remove');
+//         elem.parentNode.removeChild(elem);
+//         return false;
+// }
 
 function updateProductsInWish(wishproduct) { // 2
 	document.getElementById('flash').textContent = 'Item added to Wishlist!'

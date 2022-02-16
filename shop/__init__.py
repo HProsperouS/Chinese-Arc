@@ -753,9 +753,11 @@ def dashboard():
         print(top_selling_list)
     
     def getTopselling(top_selling_list):
-        return nlargest(3, top_selling_list, key = lambda product:product.getQuantity())
+        return nlargest(10, top_selling_list, key = lambda product:product.getQuantity())
 
     top = getTopselling(top_selling_list)
+
+    # revenue and quantity stuff
     top_selling_dict_2 = {}
 
     top_selling_list_2 = []

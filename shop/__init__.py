@@ -2799,6 +2799,7 @@ def refund_mail2(id):
 
 @app.route('/cust_order_history', methods = ['GET','POST'])
 def cust_order_history():
+
     try:
         cust_order_dict = {}
         db = shelve.open('CustOrder.db', 'r')
@@ -2808,9 +2809,14 @@ def cust_order_history():
     finally:
         db.close()
 
+  
+
     cust_order_list = []
+    print(cust_order_dict)
     for key in cust_order_dict:
-        if key == session.get('email'):
+        print(cust_order_dict[key]['order'].get_email())
+        print(session.get('email'))
+        if cust_order_dict[key]['order'].get_email() == session.get('email'):
             cust_order = cust_order_dict.get(key)
             cust_order_list.append(cust_order)
 

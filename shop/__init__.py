@@ -1,7 +1,6 @@
 from ast import keyword
 import imp
 import csv
-from top_selling import Top_selling
 from json import load
 from email.policy import default
 from itertools import count

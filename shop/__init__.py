@@ -47,7 +47,7 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from heapq import nlargest
-
+from flask_bcrypt import Bcrypt
 # flask uploads
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -65,7 +65,7 @@ login_manager.init_app(app)
 login_manager.session_protection = "strong"
 login_manager.login_view = 'login_admin'
 login_manager.login_message = 'Please login as admin'
-
+bcrypt=Bcrypt(app)
 
 class Admin(UserMixin):
 
@@ -411,6 +411,7 @@ def register_page():
         except:
             print("Error in retrieving Users from customer.db.")
 
+        hashed_password = bcrypt.generate_password_hash(register.password.data)
         customer = Customer.Customer(
                                     register.first_name.data,
                                     register.last_name.data,
@@ -420,7 +421,7 @@ def register_page():
                                     register.city.data,
                                     register.postal_code.data,
                                     register.address.data,
-                                    register.password.data
+                                    hashed_password
                                     )
         cust_dict[customer.get_customer_id()] = customer
         db['customers'] = cust_dict
@@ -430,9 +431,8 @@ def register_page():
 
 
 
-@app.route('/login_page', methods=['POST','GET'])
+@app.route('/login_page', methods=['POST', 'GET'])
 def login_page():
-
     customer = []
 
     login_page = Login(request.form)
@@ -443,28 +443,35 @@ def login_page():
             cust_dict = {}
             db = shelve.open('customer.db', 'r')
             cust_dict = db['customers']
-        except:
-            print('Error in retrieving Users from account.db.')
-
-        finally:
             db.close()
-
-        for key in cust_dict:
-            customer_loggedin = cust_dict.get(key)
-            print(key)
-            print(customer_loggedin.get_email())
-            print(customer_loggedin.get_password())
-            if login_page.email.data == customer_loggedin.get_email() and login_page.password.data == customer_loggedin.get_password():
-                session['true'] = True
-                session['logged_in'] = customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name()
-                session['user_id'] = key
-                customer.append(customer_loggedin)
-
-                flash('Hi'+ " " + customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name() + ", You have successfully logged in","success")
-                return redirect(url_for('home_page'))
-
+        except:
+            print('Error in retrieving Users from customer.db.')
+        customer_email_list = []
+        for cust_id in cust_dict:
+            customer_email_list.append((cust_dict.get(cust_id)).get_email())
+        num = True
+        while num == True:
+            if login_page.email.data in customer_email_list:
+                for key in cust_dict:
+                    customer_loggedin = cust_dict.get(key)
+                    # print(key)
+                    # print(customer_loggedin.get_email())
+                    print(customer_loggedin.get_password())
+                    if login_page.email.data == customer_loggedin.get_email():
+                        #check hash
+                        hashed_password = bcrypt.generate_password_hash(login_page.password.data)
+                        bcrypt.check_password_hash(customer_loggedin.get_password(), hashed_password)
+                        session['true'] = True
+                        session['logged_in'] = customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name()
+                        session['user_id'] = key
+                        customer.append(customer_loggedin)
+                        flash('Hi' + " " + customer_loggedin.get_first_name() + ' ' + customer_loggedin.get_last_name() + ", You have successfully logged in","success")
+                        return redirect(url_for('home_page'))
+                    else:
+                        print('Incorrect login details, please try again.','danger')
             else:
-                print('Account or Password is wrong, Please try again.')
+                flash('Incorrect login details please try again','danger')
+
     return render_template('login.html', form=login_page)
 
 @app.route('/update_profile_page')
@@ -501,9 +508,10 @@ def update_profile_page():
                            cust_list=cust_list, count2=len(cust_order_list), cust_order_list=cust_order_list)
                            
 @app.route('/update_customer_info/<int:id>', methods=['GET', 'POST'])
-def update_cust_info(id):
+def update_customer_info(id):
     update_cust_form=Registration(request.form)
     if request.method == 'POST' and update_cust_form.validate():
+        hashed_pw = bcrypt.generate_password_hash(update_cust_form.password.data)
         cust_dict = {}
         db = shelve.open('customer.db', 'w')
         cust_dict = db['customers']
@@ -517,12 +525,11 @@ def update_cust_info(id):
         customer.set_postal_code(update_cust_form.postal_code.data)
         customer.set_address(update_cust_form.address.data)
         customer.set_email(update_cust_form.email.data)
-        customer.set_password(update_cust_form.password.data)
-
+        customer.set_password(hashed_pw)
         db['customers'] = cust_dict
         db.close()
 
-        flash('Profile has been updated successfully',"success")
+        flash('Info has been updated sucessfully',"info")
         return redirect(url_for('update_profile_page'))
     else:
         cust_dict = {}
@@ -540,9 +547,9 @@ def update_cust_info(id):
         (update_cust_form.postal_code.data) = customer.get_postal_code()
         (update_cust_form.address.data) = customer.get_address()
         (update_cust_form.email.data) = customer.get_email()
-        (update_cust_form.password.data) = customer.get_password()
 
         return render_template('updateprofile.html', form=update_cust_form)
+
 
 
 @app.route('/logout_page')

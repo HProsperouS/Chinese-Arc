@@ -84,13 +84,26 @@
       </tr>
       {% endfor %}
     </tbody>
-    <form action="{{url_for('CreateFAQ')}}"  method="POST">
-      <div class="text-right">
-          <button type="submit" class="btn btn-primary" data-toggle="modal" style="background-color:orange; border: none;"  >
-            <i class="fas fa-plus"></i>
-          </button>
+    <div class="row col-12 ">
+      <div class="col-10 col-md-8 col-sm-2">
+        <form>
+          <div class="d-none d-sm-inline-block form-inline navbar-search " style='padding-bottom: 20px;'>
+          <div class="input-group">
+              <input type="text" class="form-control bg-light bvoucher-0 small" placeholder="FAQ ID..."
+                aria-label="Search" aria-describedby="basic-addon2" id='search-voucher'>
+            <div class="input-group-append">
+                  <button class="btn btn-primary voucher-search-button" type="button">
+                      <i class="fas fa-search fa-sm"></i>
+                  </button>
+            </div>
+          </div>
+          </div>
+        </form>
       </div>
-    </form>
+      <div class="col-2 col-md-4 col-sm-10 text-right">
+        <a href="/CreateFAQ" class="btn btn-outline-primary ">Create FAQ</a>
+      </div>
+    </div>
   </table>
 </div>
 

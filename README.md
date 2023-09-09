@@ -9,5 +9,10 @@ Chinese ARC is an E-commerce website that specializes in selling traditional Chi
 - Python-Flask
 - Python-Shelf
 - Jinja
+- HTML
+- CSS
+- JavaScript
+- Bootstrap
+- Font Awesome
 
 
